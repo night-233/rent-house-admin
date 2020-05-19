@@ -30,16 +30,7 @@ let authRoutes = [
     path: "/",
     component: Home,
     exact: true,
-    requiresAuth: true,
-    // routes: [
-    //   {
-    //     path: "/",
-    //     exact: true,
-    //     // render: () => (
-    //     //    <Redirect to={"/login"} />
-    //     // )
-    //   },
-    // ]
+    requiresAuth: true
   }
 ]
 constantRoutes = constantRoutes.map((item) => ({ ...item, requiresAuth: false }))
