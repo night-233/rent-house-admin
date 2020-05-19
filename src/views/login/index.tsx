@@ -17,12 +17,14 @@ function Login () {
     wrapperCol: { span: 16 },
   };
   const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
+    wrapperCol: { offset: 17, span: 8 },
   };
   const onFinish = values => {
     const data = JSON.parse(JSON.stringify(values))
     dispatch(login(data)).then(() => {
-      history.push('/')
+      message.success('登录成功正跳转到主页', 2, onclose = () => {
+        history.push('/')
+      })
     })
   };
   const onFinishFailed = errorInfo => {
@@ -33,54 +35,84 @@ function Login () {
   })
   return (
     <LoginWrap>
-      <div className="root-wrap">
-        <Form
-          {...layout}
-          name="basic"
-          form={form}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
-          >
-            <Input />
-          </Form.Item>
+      <section className="login-box">
+        <div className="root-wrap">
+          <div className="title">登录房东管理系统</div>
+          <section className="login-block">
+            <Form
+              {...layout}
+              name="basic"
+              form={form}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+            >
+              <Form.Item
+                label="Username"
+                name="username"
+                rules={[{ required: true, message: 'Please input your username!' }]}
+              >
+                <Input />
+              </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
-          >
-            <Input.Password />
-          </Form.Item>
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: 'Please input your password!' }]}
+              >
+                <Input.Password />
+              </Form.Item>
 
-          <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              Submit
+              <Form.Item {...tailLayout}>
+                <Button type="primary" htmlType="submit">
+                  Submit
             </Button>
-          </Form.Item>
-        </Form>
-      </div>
+              </Form.Item>
+            </Form>
+          </section>
+
+        </div>
+      </section>
+
     </LoginWrap>
   );
 }
 
 const LoginWrap = styled.div`
-  background: ${style["theme-color"]};
+  background: #f4f7ed;
   height: calc(100vh);
-  padding-top: 15%;
+  display: flex;
+  justify-content: center;
+  .login-box {
+    padding-top: 20px;
+   .title {
+     padding-top: 48px;
+     text-align: center;
+     font-size: 20px;
+     margin-bottom: 24px;
+     color: ${style["theme-color"]};
+   }
+  }
   .root-wrap {
-    border-radius: 4px;
-    background:#fff;
-    width: 350px;
-    height: 400px;
-    margin: auto;
-    display: flex;
+    border-radius: 8px;
+    width: 420px;
+    margin-top: 200px;
+    height: 300px;
+    /* background: ${style["theme-aniyu"]}; */
+    background: #fff;
+    box-shadow: 0 10px 30px 0 rgba(0,0,0,.05);
+    &:hover {
+  
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    }
+  }
+  .login-block {
+     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .submit-btn {
+    border-radius: 8px;
+    background: ${style["theme-apricot"]};
   }
   &>span {
     line-height: 40px;

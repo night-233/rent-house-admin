@@ -19,7 +19,12 @@ const noWrap = () => {
 }
 
 export default {
-  'theme-color': '#1890ff',
+  'theme-color': '#51c6cf',
+  'theme-green': '#b8f1cc',
+  'theme-blue': '#b8f1ed',
+  'theme-aniyu': '#e7dac9',
+  'theme-yellow': '#f1f1b8',
+  'theme-apricot': '#f1ccb8',
   'height': '100%',
   'theme-color-shadow': 'rgba (212, 68, 57, .5)',
   'font-color-light': '#f1f1f1',
