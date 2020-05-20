@@ -26,6 +26,7 @@ export function loginIn (payload) {
   return { type: LOGIN_IN, payload }
 }
 
+// export function getUserInfo ()
 
 export function login (data) {
   return (dispatch, getState) => {

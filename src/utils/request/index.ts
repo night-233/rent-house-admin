@@ -1,5 +1,8 @@
 import axios from 'axios'
 import { dealResError, dealResStatus, dealAxiosRequestConfig } from './dealMethod'
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+
 
 axios.create({
   baseURL: "",
@@ -9,6 +12,7 @@ axios.create({
 // 响应拦截
 axios.interceptors.response.use(
   response => {
+    NProgress.done()
     const dataAxios = response.data
     const dealData = dealResStatus(dataAxios)
     if (dealData) return dealData
@@ -22,6 +26,7 @@ axios.interceptors.response.use(
 // 请求拦截
 axios.interceptors.request.use(
   (config) => {
+    NProgress.start()
     const preConfig = dealAxiosRequestConfig(config);
     return preConfig;
   },

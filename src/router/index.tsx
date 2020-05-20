@@ -1,9 +1,21 @@
-// import { Redirect } from "react-router-dom";
-import Home from '../views/home';
-import Test1 from '../views/test1';
-import Test2 from '../views/test2';
+import { Redirect } from "react-router-dom";
+
+import React, { lazy, Suspense } from "react";
+
 import Login from '../views/login/index';
-import * as React from 'react';
+
+const SuspenseComponent = Component => props => {
+  return (
+    <Suspense fallback={null}>
+      <Component {...props}></Component>
+    </Suspense>
+  )
+}
+
+const Layout = lazy(() => import("../views/layout"));
+const Test1 = lazy(() => import("../views/test1"));
+const Test2 = lazy(() => import("../views/test2"));
+const Home = lazy(() => import("../views/home"));
 
 // 公用页面，不需要权限验证的
 let constantRoutes = [
@@ -28,14 +40,27 @@ let constantRoutes = [
 let authRoutes = [
   {
     path: "/",
-    component: Home,
-    exact: true,
-    requiresAuth: true
+    component: SuspenseComponent(Layout),
+    requiresAuth: true,
+    routes: [
+      {
+        path: "/",
+        exact: true,
+        render: () => <Redirect to={"/home"} />
+      },
+      {
+        path: "/home",
+        component: SuspenseComponent(Home),
+      },
+      {
+        path: "/test1",
+        component: SuspenseComponent(Test1)
+      },
+    ]
   }
 ]
 constantRoutes = constantRoutes.map((item) => ({ ...item, requiresAuth: false }))
 authRoutes = authRoutes.map((item) => ({ ...item, requiresAuth: true }))
-
 export default [
   ...constantRoutes,
   ...authRoutes

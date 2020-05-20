@@ -1,0 +1,23 @@
+{
+  "id": "1829192",
+  "name": "rent-house",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "rent-house-admin",
+  "glyphs": [
+    {
+      "icon_id": "13861679",
+      "name": "user",
+      "font_class": "user",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "3328236",
+      "name": "password",
+      "font_class": "wodemima",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}
