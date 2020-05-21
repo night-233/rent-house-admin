@@ -92,24 +92,30 @@ const LoginWrap = styled.div`
     margin: -.1em 0 0;
     animation: skew 2s ease-in-out alternate infinite;
     transform-origin: bottom;
+    box-sizing: border-box;
   }
   .threeD-txt {
     font-family: Montserrat;
     font-weight: 700;
     position: absolute;
     text-align: center;
-    text-transform: uppercase;
     font-size: 12em;
     color: rgba(249, 249, 249, .7);
     animation: rotate 2s ease-in-out alternate infinite;
     z-index: 0;
     transform: translateZ(-888px) !important;
+    text-shadow: rgb(208, 230, 231) -1px 1px, rgb(208, 230, 231) -2px 2px, rgb(208, 230, 231) -3px 3px, rgb(208, 230, 231) -4px 4px, rgb(208, 230, 231) -5px 5px, rgb(208, 230, 231) -6px 6px, rgb(208, 230, 231) -7px 7px, rgb(208, 230, 231) -8px 8px, rgb(208, 230, 231) -9px 9px, rgb(189, 214, 218) -10px 10px 40px;
+  }
+  .threeD-txt--index-about {
+    color: rgba(255, 255, 255, .8);
+    animation: rotate-white 2s ease-in-out alternate infinite;
   }
   .threeD-txt--index-about {
     animation: rotate-white 1.5s ease-in-out alternate infinite;
     top: 70px;
     color: rgba(255, 255, 255, .8);
     position: absolute;
+    text-transform: uppercase;
     left:50px;
     font-size: 8em;
   }

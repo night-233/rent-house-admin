@@ -6,7 +6,7 @@ import Login from '../views/login/index';
 
 const SuspenseComponent = Component => props => {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<div></div>}>
       <Component {...props}></Component>
     </Suspense>
   )
@@ -46,7 +46,7 @@ let authRoutes = [
       {
         path: "/",
         exact: true,
-        render: () => <Redirect to={"/home"} />
+        render: () => <Redirect to={"/test1"} />
       },
       {
         path: "/home",
