@@ -35,7 +35,7 @@ export default function Layout (props) {
 const LayoutStyle = styled.div`
   background: #f4f7ed;
 .main-content-box {
-  width: 960px;
+  width: 80%;
   margin: auto;
   padding: 24px 0px;
   .nav-tip {
@@ -43,7 +43,7 @@ const LayoutStyle = styled.div`
     background-color: #f6f6f6;
     border-radius: 4px;
     box-shadow: 0 8px 12px 0 rgba(0,0,0,.12);
-    width: 948px;
+    width: 96%;
     min-height: 46px;
     display: block;
     padding: 0 30px;
@@ -57,7 +57,7 @@ const LayoutStyle = styled.div`
   .main-content {
     padding: 30px;
     margin-top: -5px;
-    width: 960px;
+    width: 100%;
     background: #fff;
     min-height: calc(100vh - 150px);
     border-radius: 4px;

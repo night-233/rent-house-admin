@@ -95,7 +95,7 @@ const Top = styled.div`
   }
   .content-box {
     display:flex;
-    width: 960px;
+    width: 80%;
     position: relative;
     margin: auto;
     align-items: center;
