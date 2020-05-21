@@ -13,8 +13,7 @@ export default {
     return Cookies.set(currentTokenKey, option.value, option.config);
   },
 
-  removeCookie (key: string) {
-    const currentTokenKey = key || TokenKey;
-    return Cookies.remove(currentTokenKey);
+  removeCookie (key: string = TokenKey) {
+    return Cookies.remove(key);
   }
 };

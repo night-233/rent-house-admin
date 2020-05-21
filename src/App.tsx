@@ -16,7 +16,7 @@ function App () {
     <Provider store={store}>
       <BrowserRouter>
         <GlobalStyle></GlobalStyle>
-        {renderRoutes(routes, false, authPath)}
+        {renderRoutes(routes, authPath)}
       </BrowserRouter>
     </Provider>
   );

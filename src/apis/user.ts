@@ -1,5 +1,7 @@
 import request from '@/utils/request';
 
+
+
 const base = '/dev';
 
 export default {
@@ -10,18 +12,18 @@ export default {
       test: `${base}/address/support/cities`
     };
   },
-  getUserInfo () {
-    return request({
-      url: this.urls().getUserInfo,
-      method: 'get',
-    });
-  },
   adminLogin (data: Object) {
     return request({
       url: this.urls().adminLogin,
       method: 'post',
       data,
       noJweToken: true
+    });
+  },
+  getUserInfo () {
+    return request({
+      url: this.urls().getUserInfo,
+      method: 'get',
     });
   },
   test () {

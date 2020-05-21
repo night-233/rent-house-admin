@@ -3,7 +3,7 @@ const path = require('path')
 
 
 const mockIp = '10.0.5.199:13000/mock';
-const IP = 'house.touchfish.top';
+const IP = 'rent-house.touchfish.top';
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {

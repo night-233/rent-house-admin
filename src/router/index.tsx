@@ -1,7 +1,7 @@
 import { Redirect } from "react-router-dom";
 
 import React, { lazy, Suspense } from "react";
-
+import homeRoutes from './homeRoutes'
 import Login from '../views/login/index';
 
 const SuspenseComponent = Component => props => {
@@ -43,19 +43,7 @@ let authRoutes = [
     component: SuspenseComponent(Layout),
     requiresAuth: true,
     routes: [
-      {
-        path: "/",
-        exact: true,
-        render: () => <Redirect to={"/test1"} />
-      },
-      {
-        path: "/home",
-        component: SuspenseComponent(Home),
-      },
-      {
-        path: "/test1",
-        component: SuspenseComponent(Test1)
-      },
+      ...homeRoutes
     ]
   }
 ]

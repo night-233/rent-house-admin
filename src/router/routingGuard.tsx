@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import cookie from '@utils/cookie'
 
-const renderRoutes = (routes, authed = false, authPath = '/login', extraProps = {}, switchProps = {}) => routes ? (
+const renderRoutes = (routes, authPath = '/login', extraProps = {}, switchProps = {}) => routes ? (
   <Switch {...switchProps}>
     {routes.map((route, i) => (
       <Route

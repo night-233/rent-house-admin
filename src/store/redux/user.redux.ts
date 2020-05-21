@@ -16,7 +16,7 @@ export function user (state = initState, action) {
     case LOGIN_IN:
       return { ...state, authed: true, ...action.payload };
     case LOGIN_OUT:
-      return { ...state, authed: false, ...action.payload };
+      return initState;
     default:
       return state;
   }
@@ -26,6 +26,24 @@ export function loginIn (payload) {
   return { type: LOGIN_IN, payload }
 }
 
+
+export async function loginOut () {
+  return { type: LOGIN_OUT }
+}
+
+
+
+export function getUserInfo () {
+  return (dispatch, getState) => {
+    return loginApi.getUserInfo()
+      .then(res => {
+        console.log(res)
+        if (res) {
+          dispatch(loginIn(res))
+        }
+      })
+  }
+}
 // export function getUserInfo ()
 
 export function login (data) {
