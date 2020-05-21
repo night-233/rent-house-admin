@@ -57,14 +57,33 @@ function Header (props) {
 const Top = styled.div`
   padding: 5px 10px;
   text-align: center;
-  background: ${style["theme-color"]};
+  background: #41989e;
   height: 56px;
   display: flex;
   color: #fff;
   align-items: center;
   box-sizing: border-box;
+  box-shadow: 0 6px 6px 0 rgba(0,0,0,.12);
   .nav-item {
     margin-right: 10px;
+    position: relative;
+    &::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #fff;
+    border-radius: 1px;
+    -webkit-transition: width .3s;
+    transition: width .3s;
+    will-change: width;
+    }
+    &:hover::after {
+      width: 100%;
+    }
   }
   .add-new {
     cursor: pointer;
