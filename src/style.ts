@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-
+import style from '@assets/global-style'
 export const GlobalStyle = createGlobalStyle`
 	html, body, div, span, applet, object, iframe,
 	h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -25,12 +25,15 @@ export const GlobalStyle = createGlobalStyle`
 	article, aside, details, figcaption, figure, 
 	footer, header, hgroup, menu, nav, section {
 		display: block;
-	}
+  }
 	body {
 		line-height: 1;
 	}
 	html, body {
-		background: #f2f3f4;;
+    background: #f2f3f4;
+    width: 100%;
+    height: 100%;
+    font-family: Avenir,-apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,noto sans,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol,noto color emoji,sans-serif;
 	}
 	ol, ul {
 		list-style: none;
@@ -50,5 +53,9 @@ export const GlobalStyle = createGlobalStyle`
 	a {
 		text-decoration: none;
 		color: #fff;
-	}
+  }
+  .plain-btn {
+    border: 1px solid ${style['theme-color']};
+    color: ${style['theme-color']}
+  }
 `

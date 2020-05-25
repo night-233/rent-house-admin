@@ -6,6 +6,9 @@ interface Avatar {
 }
 export default {
   calcUserIcon (nickname: string, splitNumber: number = 2): Avatar {
+    let pattern = new RegExp("[\u4E00-\u9FA5]+");
+    splitNumber = pattern.test(nickname) ? 1 : 2
+    console.log('dd', splitNumber)
     const base = [
       '#F0B949',
       '#F78E59',
@@ -21,11 +24,12 @@ export default {
     const hash = md5(nickname);
     const middleChar = hash[16];
     const index = Number(middleChar);
+    let name = splitNumber === 1 ? nickname.slice(-1) : nickname.slice(0, splitNumber)
     if (isNaN(index)) {
       const charCode = middleChar.charCodeAt();
       const index = charCode % 10;
-      return { color: base[index], name: nickname.split('').splice(0, splitNumber).join('') };
+      return { color: base[index], name };
     }
-    return { color: base[index], name: nickname.split('').splice(0, splitNumber).join('') };
+    return { color: base[index], name };
   },
 }

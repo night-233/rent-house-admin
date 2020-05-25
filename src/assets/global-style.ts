@@ -18,6 +18,15 @@ const noWrap = () => {
   `
 }
 
+const themeColor = '#51c6cf'
+
+const plainBtn = () => {
+  return `
+  color: ${themeColor},
+  border: ${themeColor}
+  `
+}
+
 export default {
   'theme-color': '#51c6cf',
   'theme-green': '#b8f1cc',
@@ -40,5 +49,6 @@ export default {
   'background-color-shadow': 'rgba (0, 0, 0, 0.3)',
   'highlight-background-color': '#fff',
   extendClick,
-  noWrap
+  noWrap,
+  plainBtn
 }

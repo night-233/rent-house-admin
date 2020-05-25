@@ -13,14 +13,12 @@ function Header (props) {
   const user = useSelector(state => state.get('user'))
   const dispatch = useDispatch()
   const history = useHistory()
-  console.log('user', user)
   const handleLoginOut = () => {
     cookie.removeCookie()
     dispatch(loginOut).then(() => {
       history.push('/login')
     })
   }
-  const linkToUserInfo = () => history.push('/UserSetting')
   const menu = () => {
     return (
       <Menu>
@@ -44,7 +42,7 @@ function Header (props) {
         <section className='user-block'>
           <Dropdown overlay={menu}>
             <div>
-              <Avatar name={user.name || 'admin'}></Avatar>
+              <Avatar name={user.nickName || 'admin'}></Avatar>
             </div>
           </Dropdown>
         </section>

@@ -1,88 +1,50 @@
 
-import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, message, Spin } from 'antd';
-import { login } from '@/store/redux/user.redux'
-import { useDispatch } from 'react-redux'
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import style from '@assets/global-style';
-import { useHistory } from 'react-router-dom';
+import LoginBlock from './login'
+import Register from './register'
 
 function Login () {
-  const dispatch = useDispatch()
-  const [loading, setLoading] = useState(false)
-  const [form] = Form.useForm();
-  const history = useHistory();
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-  const tailLayout = {
-    wrapperCol: { offset: 17, span: 8 },
-  };
-  const onFinish = values => {
-    const data = JSON.parse(JSON.stringify(values))
-    setLoading(true)
-    dispatch(login(data)).then(() => {
-      setLoading(false)
-      history.push('/')
-    })
-  };
-  const onFinishFailed = errorInfo => {
-    message.error('请完成校验再登录')
-  };
+
+  const [block, setBlock] = useState('login')
+  const changeBlock = (value) => {
+    setBlock(value)
+  }
   return (
-    <LoginWrap>
+    <Layout>
       <section className="login-box">
         <div className="threeD-txt threeD-txt--index-about"></div>
         <div className="root-wrap">
-          <div className="title">登录房东管理系统</div>
-          <section className="login-block">
-            {!loading ? (
-              <Form
-                {...layout}
-                name="basic"
-                form={form}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-              >
-                <Form.Item
-                  label="Username"
-                  name="username"
-                  rules={[{ required: true, message: 'Please input your username!' }]}
-                >
-                  <Input />
-                </Form.Item>
-
-                <Form.Item
-                  label="Password"
-                  name="password"
-                  rules={[{ required: true, message: 'Please input your password!' }]}
-                >
-                  <Input.Password />
-                </Form.Item>
-
-                <Form.Item {...tailLayout}>
-                  <Button type="primary" htmlType="submit">
-                    Submit
-                  </Button>
-                </Form.Item>
-              </Form>) : <Spin />}
-          </section>
-
+          {
+            block === 'login' ? <LoginBlock goToRegister={changeBlock} /> : <Register goToLogin={changeBlock} />
+          }
         </div>
-
       </section>
 
-    </LoginWrap>
+    </Layout>
   );
 }
 
-const LoginWrap = styled.div`
+const Layout = styled.div`
   background: #f4f7ed;
   height: calc(100vh);
   display: flex;
   justify-content: center;
   position: relative;
+  .register-form-button {
+    margin-left: 10px;
+  }
+  .login-form-button {
+    
+  }
+  .footer-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: auto;
+    width: 100%;
+  }
   .threeD-txt:before {
     content: 'login in';
     text-shadow: 0 0 15px #658e8c;
@@ -138,12 +100,15 @@ const LoginWrap = styled.div`
      margin-bottom: 24px;
      color: ${style["theme-color"]};
    }
+   .register-btn {
+     border: 1px solid red;
+   }
   }
   .root-wrap {
     border-radius: 8px;
     width: 420px;
+    padding-bottom: 48px;
     margin-top: 200px;
-    min-height: 300px;
     /* background: ${style["theme-aniyu"]}; */
     background: #fff;
     box-shadow: 0 10px 30px 0 rgba(0,0,0,.05);

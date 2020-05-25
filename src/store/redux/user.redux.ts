@@ -3,17 +3,19 @@ import loginApi from '@/apis/login'
 import cookie from '@utils/cookie'
 
 const LOGIN_IN = 'LOGIN_IN'
-const LOGIN_OUT = 'LOGIN_OUT '
+const LOGIN_OUT = 'LOGIN_OUT'
+const CHANGE_INFO = 'CHANGE_INFO'
 
 const initState = fromJS({
   authed: false,
   userInfo: {},
-  test: '123'
 })
 
 export function user (state = initState, action) {
   switch (action.type) {
     case LOGIN_IN:
+      return { ...state, authed: true, ...action.payload };
+    case CHANGE_INFO:
       return { ...state, authed: true, ...action.payload };
     case LOGIN_OUT:
       return initState;
@@ -22,11 +24,15 @@ export function user (state = initState, action) {
   }
 }
 
-export function loginIn (payload) {
-  return { type: LOGIN_IN, payload }
+export function changeUserInfo (payload) {
+  return { type: CHANGE_INFO, payload }
 }
 
-
+export function loginIn (payload, token) {
+  const config = { expires: 7, path: '/' };
+  cookie.setCookie({ key: 'Authorization', value: token, config })
+  return { type: LOGIN_IN, payload }
+}
 export async function loginOut () {
   return { type: LOGIN_OUT }
 }
@@ -39,22 +45,19 @@ export function getUserInfo () {
       .then(res => {
         console.log(res)
         if (res) {
-          dispatch(loginIn(res))
+          dispatch(changeUserInfo(res))
         }
       })
   }
 }
-// export function getUserInfo ()
 
 export function login (data) {
   return (dispatch, getState) => {
-    return loginApi.adminLogin(data)
+    return loginApi.userLogin(data)
       .then(res => {
         console.log(res)
         if (res) {
-          const config = { expires: 7, path: '/' };
-          cookie.setCookie({ key: 'Authorization', value: res.token, config })
-          dispatch(loginIn(res.user))
+          dispatch(loginIn(res.user, res.token))
         }
       })
   }

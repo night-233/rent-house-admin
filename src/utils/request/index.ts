@@ -46,10 +46,9 @@ const request = (config: any, that: any = false) => {
       that.source = c;
     })
   } : {};
+
   const customConfig = Object.assign({ ...cancel }, config);
-  if (customConfig.noJweToken) {
-    customConfig.url += '#noJweToken#';
-  }
+
   return axios(customConfig)
     .then((response) => {
       return response.data;

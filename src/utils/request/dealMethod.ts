@@ -51,7 +51,6 @@ export function dealResStatus (resData: any) {
   }
 }
 
-
 export function dealResError (error: any) {
 
   if (!error) return
