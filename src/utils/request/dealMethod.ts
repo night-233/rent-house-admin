@@ -1,18 +1,19 @@
 
 import { message } from 'antd';
-import utils from '@utils/index'
-
+import utils from '@utils/index';
+import { createBrowserHistory } from 'history';
+const history = createBrowserHistory()
 function errorCreat (msg: string) {
   const err = new Error(msg)
   errorLog(err)
   throw err
 }
 
-function errorLog (err: any) {
+function errorLog (err: any, duration: number = 0, fn = () => { }) {
   if (process.env.NODE_ENV === 'development') {
     console.log(err)
   }
-  message.error(err.message)
+  message.error(err.message, duration, fn)
 }
 
 
@@ -52,7 +53,6 @@ export function dealResStatus (resData: any) {
 }
 
 export function dealResError (error: any) {
-
   if (!error) return
   if (error && error.response) {
     console.log('错误', error.response)
@@ -61,7 +61,7 @@ export function dealResError (error: any) {
         error.message = '请求错误';
         break
       case 401:
-        error.message = '未授权，请登录';
+        error.message = '未授权，请至登录页面登录';
         break
       case 403:
         error.message = '拒绝访问';
@@ -97,5 +97,13 @@ export function dealResError (error: any) {
         break
     }
   }
-  errorLog(error)
+  if (error.response.status === 401) {
+    message.error(error.message, 1000, () => {
+      //  history.pushState('./login') 
+      console.log('111')
+      // window.location.href = '/login'
+    })
+  } else {
+    errorLog(error)
+  }
 }

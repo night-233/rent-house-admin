@@ -51,7 +51,7 @@ const request = (config: any, that: any = false) => {
 
   return axios(customConfig)
     .then((response) => {
-      return response.data;
+      return response.data || true;
     }, (err) => {
       console.log(err, err.response);
       return false;

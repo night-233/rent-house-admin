@@ -6,7 +6,6 @@ import renderRoutes from './router/routingGuard'
 import routes from './router/index';
 import { Provider } from 'react-redux';
 import store from './store/index';
-import '@assets/icon/iconfont/font/iconfont.css'
 import './App.css';
 
 const authPath = '/login'

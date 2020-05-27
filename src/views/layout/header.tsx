@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import style from '@assets/global-style';
-import Avatar from '@/components/avatar'
 import { useSelector, useDispatch } from 'react-redux'
 import { Menu, Dropdown } from 'antd';
 import cookie from '@utils/cookie';
+import Avatar from '@/components/TextAvatar'
 import { useHistory } from 'react-router-dom'
 import { loginOut } from '@/store/redux/user.redux';
 import { NavLink } from 'react-router-dom'
@@ -36,13 +36,13 @@ function Header (props) {
     <Top>
       <div className="content-box">
         <section className="nav-List">
-          <NavLink to="/home" className="nav-item add-new">房源<i className="iconfont iconadd"></i></NavLink>
+          <NavLink to="/home" className="nav-item add-new">房源</NavLink>
           <NavLink to="/addHouse" className="nav-item add-new">新增<i className="iconfont iconadd"></i></NavLink>
         </section>
         <section className='user-block'>
           <Dropdown overlay={menu}>
             <div>
-              <Avatar name={user.nickName || 'admin'}></Avatar>
+              <Avatar name={user.nickName || 'admin'} avatar={user.avatar}></Avatar>
             </div>
           </Dropdown>
         </section>

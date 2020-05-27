@@ -58,4 +58,8 @@ export const GlobalStyle = createGlobalStyle`
     border: 1px solid ${style['theme-color']};
     color: ${style['theme-color']}
   }
+  .global-flex-center {
+    display: flex;
+    align-items: center;
+  }
 `

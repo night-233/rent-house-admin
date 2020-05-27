@@ -78,7 +78,6 @@ const RegisterBlock = (props: Props) => {
     }
   })
   return (<Style>
-
     <div className="title">注册房东管理系统</div>
     <section className="login-block">
       {!loading ? (

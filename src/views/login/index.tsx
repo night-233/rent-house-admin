@@ -55,6 +55,8 @@ const Layout = styled.div`
     animation: skew 2s ease-in-out alternate infinite;
     transform-origin: bottom;
     box-sizing: border-box;
+    transform-origin: left top;
+    transition: all ease-out 0.3s;
   }
   .threeD-txt {
     font-family: Montserrat;

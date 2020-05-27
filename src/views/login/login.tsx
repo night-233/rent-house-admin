@@ -3,7 +3,6 @@ import { Button, Form, Input, message, Spin } from 'antd';
 import { login } from '@/store/redux/user.redux'
 import { useDispatch } from 'react-redux'
 import styled from 'styled-components';
-import style from '@assets/global-style'
 import { useHistory } from 'react-router-dom';
 
 interface Func {

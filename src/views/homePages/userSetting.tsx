@@ -1,11 +1,11 @@
 
 import React, { useEffect } from 'react'
-import { Button, Form, Input, message, Spin } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import userApi from '@apis/login'
-import { changeUserInfo } from '@/store/redux/user.redux'
-
+import { changeUserInfo, getUserInfo } from '@/store/redux/user.redux'
+import UploadImg from '@/application/upload'
 interface Data {
   introduction: string;
   nickName: string
@@ -15,18 +15,22 @@ export default () => {
   const user = useSelector(state => state.get('user'))
   const dispatch = useDispatch()
   const [form] = Form.useForm();
+  const { TextArea } = Input;
+  const layout = {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
+  };
+  const tailLayout = {
+    labelCol: { span: 0 },
+    wrapperCol: { span: 24 },
+  };
   const onFinish = (value) => {
     const data = {
       introduction: value.introduction,
       nickName: value.nickName
     }
     updateUserInfo(data)
-
   }
-  const layout = {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 18 },
-  };
   const updateUserInfo = (data: Data) => {
     userApi.updateUserInfo(data).then((res) => {
       if (res) {
@@ -38,7 +42,9 @@ export default () => {
   const onFinishFailed = () => {
     message.error('请检查表单是否填写完整')
   }
-
+  const handleUpdateInfo = () => {
+    dispatch(getUserInfo())
+  }
   useEffect(() => {
     form.setFieldsValue(user);
   }, [form, user]);
@@ -53,6 +59,9 @@ export default () => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
+        <Form.Item label="头像">
+          <UploadImg name={user.nickName} url={user.avatar} callback={handleUpdateInfo} />
+        </Form.Item>
         <Form.Item
           label="昵称"
           name="nickName"
@@ -79,12 +88,12 @@ export default () => {
           label="介绍"
           name="introduction"
         >
-          <Input defaultValue={user.introduction} />
+          <TextArea defaultValue={user.introduction} />
         </Form.Item>
-        <Form.Item>
+        <Form.Item className="footer">
           <Button type="primary" htmlType="submit" className="login-form-button">
             更新
-        </Button>
+          </Button>
         </Form.Item>
       </Form>
     </UserInfo>
@@ -94,4 +103,10 @@ export default () => {
 const UserInfo = styled.div`
     width: 60%;
     margin: auto;
+   .footer {
+     text-align: right;
+     display: flex;
+     align-items: flex-end;
+     justify-content: flex-end;
+   }
 `
