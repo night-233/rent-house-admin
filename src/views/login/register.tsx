@@ -58,6 +58,7 @@ const RegisterBlock = (props: Props) => {
       if (time === 0 && timer) {
         clearInterval(timer)
         setCodeText('获取验证码')
+        timer = 60
       }
     }, 1000)
   }
