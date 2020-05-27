@@ -21,7 +21,7 @@ const RegisterBlock = (props: Props) => {
     labelCol: { span: 5 },
     wrapperCol: { span: 19 },
   };
-  let time = 59;
+  let time = 60;
   let timer: any
   let codetext: any;
   let setCodeText: any;
@@ -53,9 +53,12 @@ const RegisterBlock = (props: Props) => {
       }
     })
     timer = setInterval(() => {
-      if (time === 0 && timer) clearInterval(timer)
       time--;
       setCodeText(time);
+      if (time === 0 && timer) {
+        clearInterval(timer)
+        setCodeText('获取验证码')
+      }
     }, 1000)
   }
   const onFinishFailed = errorInfo => {
@@ -74,9 +77,9 @@ const RegisterBlock = (props: Props) => {
   }
   useEffect(() => {
     return (): void => {
-      if (timer) clearInterval(timer)
+      clearInterval(timer)
     }
-  })
+  }, [timer])
   return (<Style>
     <div className="title">注册房东管理系统</div>
     <section className="login-block">

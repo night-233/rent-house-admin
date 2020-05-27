@@ -8,7 +8,6 @@ const UploadImg = ({ name, url, callback }) => {
   let fileList: any
   let setFileList: any
   [fileList, setFileList] = useState([]);
-  const [curName, setName] = useState([])
   useEffect(() => {
     if (url) {
       setFileList([{
