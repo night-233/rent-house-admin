@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Upload } from 'antd';
+import { Upload, message } from 'antd';
 import styled from 'styled-components'
 import style from '@assets/global-style'
 import TextAvatar from '@/components/TextAvatar'
@@ -18,6 +18,18 @@ const UploadImg = ({ name, url, callback }) => {
       }])
     }
   }, [setFileList, url])
+  const handleRemove = (file) => {
+    return uploadApi.removeUserLogo().then((res) => {
+      if (res) {
+        setFileList([])
+        callback()
+        message.success('成功移除头像')
+        return true
+      } else {
+        return false
+      }
+    })
+  }
   const handleUpload = ({
     file,
     onError,
@@ -41,6 +53,7 @@ const UploadImg = ({ name, url, callback }) => {
           {!url && <TextAvatar name={name || 'admin'} avatar={url} width="64"></TextAvatar>}
           <Upload
             customRequest={handleUpload}
+            onRemove={handleRemove}
             fileList={fileList}
             listType="picture-card"
           >

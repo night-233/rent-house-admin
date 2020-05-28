@@ -9,7 +9,7 @@ function errorCreat (msg: string) {
   throw err
 }
 
-function errorLog (err: any, duration: number = 0, fn = () => { }) {
+function errorLog (err: any, duration: number = 1000, fn = () => { }) {
   if (process.env.NODE_ENV === 'development') {
     console.log(err)
   }

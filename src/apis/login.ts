@@ -7,11 +7,17 @@ export default {
     return {
       userLogin: `${base}/user/login`,
       getUserInfo: `${base}/user`,
-      test: `${base}/address/support/cities`,
+      removeUserLogo: `${base}/user/avatar`,
       updateUserInfo: `${base}/user/basicInfo`,
       sendMessage: `${base}/user/sendSmsToPhone`,
       registerPhone: `${base}/user/registryByPhone`,
     };
+  },
+  removeUserLogo () {
+    return request({
+      url: this.urls().removeUserLogo,
+      method: 'delete',
+    });
   },
   registerPhone (data: Object) {
     return request({
@@ -48,12 +54,6 @@ export default {
       method: 'post',
       data,
       noJweToken: true
-    });
-  },
-  test () {
-    return request({
-      url: this.urls().test,
-      method: 'get',
     });
   },
 };

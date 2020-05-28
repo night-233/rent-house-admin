@@ -7,7 +7,14 @@ export default {
     return {
       uploadUserAvatar: `${base}/user/avatar/qiniu/${key}`,
       postImage: `${base}/user/avatar/img`,
+      removeUserLogo: `${base}/user/avatar`,
     };
+  },
+  removeUserLogo () {
+    return request({
+      url: this.urls().removeUserLogo,
+      method: 'delete',
+    });
   },
   postImage (data: Object) {
     return request({
