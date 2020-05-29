@@ -4,9 +4,12 @@ import styled from 'styled-components'
 import style from '@assets/global-style'
 import TextAvatar from '@/components/TextAvatar'
 import uploadApi from '@apis/uploadImg'
-const UploadImg = ({ name, url, callback }) => {
+const UploadImg = ({ name, url, callback, limits }) => {
+  console.log('ss', limits)
+  const limitMessage = `图片仅支持 ${limits.avatarTypeLimit.join('，')} 格式，大小不超过 ${limits.avatarSizeLimit / 1024 / 1024} KB`
   let fileList: any, setFileList: any
   [fileList, setFileList] = useState([]);
+  console.log('ddd', limits)
   useEffect(() => {
     if (url) {
       setFileList([{
@@ -28,6 +31,20 @@ const UploadImg = ({ name, url, callback }) => {
         return false
       }
     })
+  }
+  const beforeUpload = (file) => {
+    console.log(file.type)
+    const currentType = file.type.split('/')[1]
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!limits.avatarTypeLimit.includes(currentType)) {
+      message.error(`图片仅支持 ${limits.avatarTypeLimit.join('，')} 格式`);
+    }
+    console.log('ddd', file.size)
+    const isMore = file.size > limits.avatarSizeLimit;
+    if (!isMore) {
+      message.error(`图片大小不超过 ${limits.avatarSizeLimit / 1024 / 1024} KB`);
+    }
+    return isJpgOrPng && isMore;
   }
   const handleUpload = ({
     file,
@@ -53,6 +70,7 @@ const UploadImg = ({ name, url, callback }) => {
           <Upload
             customRequest={handleUpload}
             onRemove={handleRemove}
+            beforeUpload={beforeUpload}
             fileList={fileList}
             listType="picture-card"
           >
@@ -60,7 +78,7 @@ const UploadImg = ({ name, url, callback }) => {
               <i className="icon iconfont iconbianji"></i>
             }
           </Upload>
-
+          <div>{limitMessage}</div>
         </div>
 
       </Style>
