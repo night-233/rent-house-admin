@@ -42,6 +42,7 @@ export async function loginOut () {
 }
 
 
+
 export function getUserInfo () {
   return (dispatch, getState) => {
     return loginApi.getUserInfo()

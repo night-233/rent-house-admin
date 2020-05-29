@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom'
 
 function Header (props) {
   const user = useSelector(state => state.user)
+  console.log('qqq', user)
   const dispatch = useDispatch()
   const history = useHistory()
   const handleLoginOut = () => {
@@ -42,7 +43,7 @@ function Header (props) {
         <section className='user-block'>
           <Dropdown overlay={menu}>
             <div>
-              <Avatar name={user.userInfo.nickName || 'admin'} avatar={user.userInfo.avatar}></Avatar>
+              <Avatar name={user.nickName || 'admin'} avatar={user.avatar}></Avatar>
             </div>
           </Dropdown>
         </section>

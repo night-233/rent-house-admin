@@ -11,7 +11,7 @@ function errorCreat (msg: string) {
 
 function errorLog (err: any, duration: number = 1000, fn = () => { }) {
   if (process.env.NODE_ENV === 'development') {
-    console.error(err)
+    console.log(err)
   }
   message.error(err.message, duration, fn)
 }
@@ -100,6 +100,7 @@ export function dealResError (error: any) {
   if (error.response.status === 401) {
     message.error(error.message, 1000, () => {
       //  history.pushState('./login') 
+      console.log('111')
       // window.location.href = '/login'
     })
   } else {

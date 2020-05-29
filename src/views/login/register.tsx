@@ -142,7 +142,7 @@ const RegisterBlock = (props: Props) => {
     </section>
   </Style>)
 }
-export default RegisterBlock;
+export default React.memo(RegisterBlock);
 
 const Style = styled.div`
  .ant-form-item-explain {

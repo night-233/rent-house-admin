@@ -46,9 +46,7 @@ const request = (config: any, that: any = false) => {
       that.source = c;
     })
   } : {};
-
   const customConfig = Object.assign({ ...cancel }, config);
-
   return axios(customConfig)
     .then((response) => {
       return response.data || true;

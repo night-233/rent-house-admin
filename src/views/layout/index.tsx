@@ -10,7 +10,7 @@ import { getUserInfo } from '@/store/redux/user.redux'
 import styled from 'styled-components'
 
 
-export default function Layout (props) {
+const Layout = function Layout (props) {
   const { route } = props
   const dispatch = useDispatch()
   const location = useLocation()
@@ -66,6 +66,5 @@ const LayoutStyle = styled.div`
     box-shadow: 0 12px 16px 0 rgba(0,0,0,.12);
   }
 }
-
-
 `
+export default React.memo(Layout)

@@ -42,10 +42,12 @@ export async function loginOut () {
 }
 
 
+
 export function getUserInfo () {
   return (dispatch, getState) => {
     return loginApi.getUserInfo()
       .then(res => {
+        console.log(res)
         if (res) {
           dispatch(changeUserInfo(res))
         }
@@ -57,6 +59,7 @@ export function login (data) {
   return (dispatch, getState) => {
     return loginApi.userLogin(data)
       .then(res => {
+        console.log(res)
         if (res) {
           dispatch(loginIn(res.user, res.token))
         }

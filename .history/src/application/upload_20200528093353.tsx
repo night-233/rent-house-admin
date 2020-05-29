@@ -5,7 +5,8 @@ import style from '@assets/global-style'
 import TextAvatar from '@/components/TextAvatar'
 import uploadApi from '@apis/uploadImg'
 const UploadImg = ({ name, url, callback }) => {
-  let fileList: any, setFileList: any
+  let fileList: any
+  let setFileList: any
   [fileList, setFileList] = useState([]);
   useEffect(() => {
     if (url) {

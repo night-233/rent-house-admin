@@ -4,20 +4,25 @@ import styled from 'styled-components'
 import style from '@assets/global-style'
 import TextAvatar from '@/components/TextAvatar'
 import uploadApi from '@apis/uploadImg'
+import { useImmer } from "use-immer";
+
 const UploadImg = ({ name, url, callback }) => {
-  let fileList: any, setFileList: any
-  [fileList, setFileList] = useState([]);
+  let fileList: any
+  let setFileList: any
+  [fileList, setFileList] = useImmer([]);
   useEffect(() => {
     if (url) {
-      setFileList([{
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: url,
-      }])
+      setFileList(draft => {
+        draft = {
+          uid: '-1',
+          name: 'image.png',
+          status: 'done',
+          url: url,
+        }
+      });
     }
   }, [setFileList, url])
-  const handleRemove = (file) => {
+  const handleRemove = () => {
     return uploadApi.removeUserLogo().then((res) => {
       if (res) {
         setFileList([])

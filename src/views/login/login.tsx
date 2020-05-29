@@ -13,9 +13,9 @@ interface Props {
 }
 const LoginBlock = (props: Props) => {
   const dispatch = useDispatch()
-  const [loading, setLoading] = useState(false)
   const [form] = Form.useForm();
   const history = useHistory();
+  const [loading, setLoading] = useState(false)
   const onFinish = values => {
     const data = JSON.parse(JSON.stringify(values))
     setLoading(true)
@@ -28,7 +28,6 @@ const LoginBlock = (props: Props) => {
     message.error('请完成校验再登录')
   };
   return (<Style>
-
     <div className="title">登录房东管理系统</div>
     <section className="login-block">
       {!loading ? (
@@ -68,7 +67,6 @@ const LoginBlock = (props: Props) => {
     </section>
   </Style>)
 }
-export default LoginBlock;
 
 const Style = styled.div`
 .register-form-button {
@@ -83,3 +81,4 @@ const Style = styled.div`
   }
 
 `
+export default React.memo(LoginBlock);

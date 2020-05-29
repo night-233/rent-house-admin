@@ -8,6 +8,7 @@ export default {
   calcUserIcon (nickname: string, splitNumber: number = 2): Avatar {
     let pattern = new RegExp("[\u4E00-\u9FA5]+");
     splitNumber = pattern.test(nickname) ? 1 : 2
+    console.log('dd', splitNumber)
     const base = [
       '#F0B949',
       '#F78E59',

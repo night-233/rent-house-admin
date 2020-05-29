@@ -7,4 +7,4 @@ import produce from 'immer';
 
 export default combineReducers(produce, {
   user,
-})
+}

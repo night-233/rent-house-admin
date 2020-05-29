@@ -15,11 +15,11 @@ export function user (state = initState, action) {
     case LOGIN_IN:
       state.authed = true;
       state.userInfo = action.payload
-      return state;
+      return;
     case CHANGE_INFO:
       state.authed = true;
       state.userInfo = action.payload
-      return state;
+      return;
     case LOGIN_OUT:
       return initState;
     default:
@@ -40,6 +40,7 @@ export function loginIn (payload, token) {
 export async function loginOut () {
   return { type: LOGIN_OUT }
 }
+
 
 
 export function getUserInfo () {

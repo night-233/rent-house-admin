@@ -4,23 +4,27 @@ import styled from 'styled-components'
 import style from '@assets/global-style'
 import TextAvatar from '@/components/TextAvatar'
 import uploadApi from '@apis/uploadImg'
+import { useImmer } from "use-immer";
+
 const UploadImg = ({ name, url, callback }) => {
   let fileList: any, setFileList: any
-  [fileList, setFileList] = useState([]);
+  [fileList, setFileList] = useImmer([{
+    uid: '-1',
+    name: 'image.png',
+    status: 'done',
+    url: '',
+  }]);
   useEffect(() => {
     if (url) {
-      setFileList([{
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: url,
-      }])
+      setFileList(draft => {
+        draft[0].url = url
+      });
     }
   }, [setFileList, url])
-  const handleRemove = (file) => {
+  const handleRemove = () => {
     return uploadApi.removeUserLogo().then((res) => {
       if (res) {
-        setFileList([])
+        setFileList(draft => { draft = [] })
         callback()
         message.success('成功移除头像')
         return true

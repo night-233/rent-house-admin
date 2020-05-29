@@ -6,6 +6,7 @@ import LoginBlock from './login'
 import Register from './register'
 
 function Login () {
+
   const [block, setBlock] = useState('login')
   const changeBlock = (value) => {
     setBlock(value)

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 
-export default function Bottom () {
+const Bottom = function Bottom () {
   return (
     <>
       {/* this is buttom */}
     </>
   )
 }
+
+export default React.memo(Bottom)

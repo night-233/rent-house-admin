@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components'
 function Test1 (props) {
   const door = useRef<HTMLDivElement>(null)
   const light = useRef<HTMLDivElement>(null)
   const doorBox = useRef<HTMLDivElement>(null)
+  // let [percentDoor, setPercent] = useState(0)
   let percentDoor = 0
   let timer: any = ''
   const handleClick = () => {

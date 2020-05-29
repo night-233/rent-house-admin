@@ -1,3 +1,4 @@
+import { fromJS } from 'immutable';
 import loginApi from '@/apis/login'
 import cookie from '@utils/cookie'
 
@@ -5,21 +6,17 @@ const LOGIN_IN = 'LOGIN_IN'
 const LOGIN_OUT = 'LOGIN_OUT'
 const CHANGE_INFO = 'CHANGE_INFO'
 
-const initState = {
+const initState = fromJS({
   authed: false,
   userInfo: {},
-}
+})
 
 export function user (state = initState, action) {
   switch (action.type) {
     case LOGIN_IN:
-      state.authed = true;
-      state.userInfo = action.payload
-      return state;
+      return { ...state, authed: true, ...action.payload };
     case CHANGE_INFO:
-      state.authed = true;
-      state.userInfo = action.payload
-      return state;
+      return { ...state, authed: true, ...action.payload };
     case LOGIN_OUT:
       return initState;
     default:
@@ -40,6 +37,7 @@ export function loginIn (payload, token) {
 export async function loginOut () {
   return { type: LOGIN_OUT }
 }
+
 
 
 export function getUserInfo () {

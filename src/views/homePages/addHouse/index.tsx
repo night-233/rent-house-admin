@@ -1,6 +1,8 @@
 
 import React from 'react'
 
-export default () => {
+const AddHouse = () => {
   return <></>
 }
+
+export default React.memo(AddHouse)

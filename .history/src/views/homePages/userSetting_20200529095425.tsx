@@ -12,7 +12,7 @@ interface Data {
 }
 
 const UserSetting = () => {
-  const user = useSelector(state => state.user.userInfo)
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
   const [form] = Form.useForm();
   const { TextArea } = Input;
