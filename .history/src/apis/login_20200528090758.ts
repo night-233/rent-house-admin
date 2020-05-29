@@ -11,20 +11,12 @@ export default {
       updateUserInfo: `${base}/user/basicInfo`,
       sendMessage: `${base}/user/sendSmsToPhone`,
       registerPhone: `${base}/user/registryByPhone`,
-      judgeNickName: `${base}/user/nickName`
     };
   },
   removeUserLogo () {
     return request({
       url: this.urls().removeUserLogo,
       method: 'delete',
-    });
-  },
-  judgeNickName (params: any) {
-    return request({
-      url: this.urls().judgeNickName,
-      method: 'get',
-      params
     });
   },
   registerPhone (data: Object) {

@@ -12,7 +12,7 @@ function errorCreat (msg: string) {
   errorLog(err)
 }
 
-function errorLog (err: any, duration: number = 1, fn = () => { }) {
+function errorLog (err: any, duration: number = 1000, fn = () => { }) {
   if (process.env.NODE_ENV === 'development') {
     console.error(err)
   }

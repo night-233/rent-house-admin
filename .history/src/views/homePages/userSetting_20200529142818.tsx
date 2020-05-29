@@ -4,7 +4,6 @@ import { Button, Form, Input, message } from 'antd';
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import userApi from '@apis/login'
-import style from '@/assets/global-style'
 import { changeUserInfo, getUserInfo } from '@/store/redux/user.redux'
 import UploadAvatar from '@/components/uploadAvatar'
 interface Data {
@@ -41,17 +40,6 @@ const UserSetting = () => {
   const onFinishFailed = () => {
     message.error('请检查表单是否填写完整')
   }
-  const handleJudgeName = () => {
-    setJudge('')
-    const param = { nickName: form.getFieldsValue().nickName }
-    return userApi.judgeNickName(param).then((res) => {
-      if (res.code === 200) {
-        setJudge('right')
-      } else {
-        setJudge('wrong')
-      }
-    })
-  }
   const handleUpdateInfo = () => {
     dispatch(getUserInfo())
   }
@@ -77,13 +65,9 @@ const UserSetting = () => {
           name="nickName"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input value={user.nickName}
-            onFocus={() => { setJudge('') }}
-            suffix={
-              isNickNameRight === 'wrong' ? <i className={`iconfont iconwrong`}> </i> : '' ||
-                isNickNameRight === 'right' ? <i className={`iconfont iconCorrect`}> </i> : ''
-            }
-            onBlur={handleJudgeName} />
+          <Input value={user.nickName} suffix={
+            isNickNameRight === 'right' ? <i className={`iconfont iconCorrect`}> </i> : <i className={`iconfont iconwrong`}> </i>
+          } />
         </Form.Item>
 
         <Form.Item
@@ -124,15 +108,6 @@ const UserInfo = styled.div`
      display: flex;
      align-items: flex-end;
      justify-content: flex-end;
-   }
-   .iconwrong, .iconCorrect {
-     font-size: 13px;
-   }
-   .iconCorrect {
-     color: ${style['theme-color']}
-   }
-   .iconwrong {
-     color: ${style['danger-color']}
    }
 `
 export default React.memo(UserSetting)

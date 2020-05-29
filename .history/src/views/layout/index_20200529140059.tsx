@@ -10,8 +10,6 @@ import { getUserInfo } from '@/store/redux/user.redux'
 import { getLimits } from '@/store/redux/common.redux'
 import styled from 'styled-components'
 
-
-
 const Layout = function Layout (props) {
   const { route } = props
   const dispatch = useDispatch()

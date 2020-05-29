@@ -42,10 +42,9 @@ const UserSetting = () => {
     message.error('请检查表单是否填写完整')
   }
   const handleJudgeName = () => {
-    setJudge('')
     const param = { nickName: form.getFieldsValue().nickName }
     return userApi.judgeNickName(param).then((res) => {
-      if (res.code === 200) {
+      if (res) {
         setJudge('right')
       } else {
         setJudge('wrong')

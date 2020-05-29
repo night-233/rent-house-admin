@@ -4,7 +4,6 @@ import { Button, Form, Input, message } from 'antd';
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import userApi from '@apis/login'
-import style from '@/assets/global-style'
 import { changeUserInfo, getUserInfo } from '@/store/redux/user.redux'
 import UploadAvatar from '@/components/uploadAvatar'
 interface Data {
@@ -42,10 +41,9 @@ const UserSetting = () => {
     message.error('请检查表单是否填写完整')
   }
   const handleJudgeName = () => {
-    setJudge('')
     const param = { nickName: form.getFieldsValue().nickName }
     return userApi.judgeNickName(param).then((res) => {
-      if (res.code === 200) {
+      if (res) {
         setJudge('right')
       } else {
         setJudge('wrong')
@@ -126,13 +124,7 @@ const UserInfo = styled.div`
      justify-content: flex-end;
    }
    .iconwrong, .iconCorrect {
-     font-size: 13px;
-   }
-   .iconCorrect {
-     color: ${style['theme-color']}
-   }
-   .iconwrong {
-     color: ${style['danger-color']}
+     font-size: 12px;
    }
 `
 export default React.memo(UserSetting)

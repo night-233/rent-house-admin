@@ -45,6 +45,7 @@ const UserSetting = () => {
     setJudge('')
     const param = { nickName: form.getFieldsValue().nickName }
     return userApi.judgeNickName(param).then((res) => {
+      console.log('daa', res)
       if (res.code === 200) {
         setJudge('right')
       } else {

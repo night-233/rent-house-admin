@@ -1,5 +1,4 @@
 
-import React from 'react'
 import { message } from 'antd';
 import utils from '@utils/index';
 import { createBrowserHistory } from 'history';
@@ -12,7 +11,7 @@ function errorCreat (msg: string) {
   errorLog(err)
 }
 
-function errorLog (err: any, duration: number = 1, fn = () => { }) {
+function errorLog (err: any, duration: number = 1000, fn = () => { }) {
   if (process.env.NODE_ENV === 'development') {
     console.error(err)
   }
@@ -102,10 +101,10 @@ export function dealResError (error: any) {
   }
 
   if (error.response.status === 401) {
-    message.error(error.message, 1, () => {
+    message.error(error.message, 1000, () => {
       history.push('/login')
     })
   } else {
-    message.error(error.message, 1)
+    message.error(error.message, 0)
   }
 }
