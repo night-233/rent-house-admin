@@ -10,12 +10,11 @@ interface Func {
   (value: string): void
 }
 interface Props {
-  goToLogin: Func,
+  goToRegister: Func,
   limits: any
 }
 const RegisterBlock = (props: Props) => {
   const dispatch = useDispatch()
-  const { limits } = props
   const [loading, setLoading] = useState(false)
   const [form] = Form.useForm();
   const history = useHistory();
@@ -28,12 +27,11 @@ const RegisterBlock = (props: Props) => {
   [codetext, setCodeText] = useState('获取验证码')
   const onFinish = values => {
     const data = {
-      password: values.password,
       phoneNumber: values.phone,
       verifyCode: values.verifyCode
     }
     setLoading(true)
-    openApi.registerPhone(data).then((res) => {
+    openApi.loginInNoPwd(data).then((res) => {
       setLoading(false)
       if (res) {
         dispatch(loginIn(res, res.token))
@@ -44,7 +42,7 @@ const RegisterBlock = (props: Props) => {
   const getCapcha = async () => {
     await form.validateFields(['phone'])
     const data = {
-      operationType: 'signUp',
+      operationType: 'login',
       phoneNumber: form.getFieldsValue().phone
     }
     openApi.sendMessage(data).then((res) => {
@@ -65,35 +63,13 @@ const RegisterBlock = (props: Props) => {
   const onFinishFailed = errorInfo => {
     message.error('请完成校验再登录')
   };
-  const checkPassword = (rule, value, callback) => {
-    try {
-      if (value !== form.getFieldsValue().password) {
-        throw new Error('两次密码输入不一致');
-      } else {
-        callback()
-      }
-    } catch (err) {
-      callback(err);
-    }
-  }
-  const checkPwd = (rule, value, callback) => {
-    try {
-      if (!new RegExp(limits?.userPasswordRegex).test(value)) {
-        throw callback(new Error('请检查输入密码是否符合规范'));
-      } else {
-        callback()
-      }
-    } catch (err) {
-      callback();
-    }
-  }
+
   useEffect(() => {
     return (): void => {
       clearInterval(timer)
     }
   }, [timer])
   return (<Style>
-    {/* <div className="title">注册房东管理系统</div> */}
     <section className="login-block">
       {!loading ? (
         <Form
@@ -126,27 +102,17 @@ const RegisterBlock = (props: Props) => {
               </Col>
             </Row>
           </Form.Item>
-          <Form.Item
-            label="密码"
-            name="password"
-            rules={[{ required: true, message: '请输入密码' }, { validator: checkPwd }]}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item
-            label="确认密码"
-            name="ensurePwd"
-            rules={[{ required: true, message: '确认密码不能为空' }, { validator: checkPassword }]}
-          >
-            <Input.Password />
-          </Form.Item>
+
+
+
           <div className='footer-btn'>
-            <Button className="plain-btn" onClick={() => props.goToLogin('login')}>
-              返回登录
-            </Button>
-            <Button type="primary" htmlType="submit" className="login-form-button">
+            <Button className="plain-btn" onClick={() => props.goToRegister('register')}>
               注册
               </Button>
+            <Button type="primary" htmlType="submit" className="login-form-button">
+              登录
+              </Button>
+
           </div>
 
         </Form>) : <Spin />}
@@ -163,7 +129,7 @@ const Style = styled.div`
  .footer-btn {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin: auto;
     width: 100%;
   }

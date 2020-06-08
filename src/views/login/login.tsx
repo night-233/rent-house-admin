@@ -52,7 +52,7 @@ const LoginBlock = (props: Props) => {
     message.error('请完成校验再登录')
   };
   return (<Style>
-    <div className="title">登录房东管理系统</div>
+    {/* <div className="title">登录房东管理系统</div> */}
     <section className="login-block">
       {!loading ? (
         <Form
@@ -100,7 +100,7 @@ const Style = styled.div`
  .footer-btn {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin: auto;
     width: 100%;
   }

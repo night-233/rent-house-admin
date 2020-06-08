@@ -5,14 +5,30 @@ import style from '@assets/global-style';
 import { getLimits } from '@/store/redux/common.redux'
 import LoginBlock from './login'
 import Register from './register'
+import Capcha from './capcha'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 
 function Login () {
   const [block, setBlock] = useState('login')
+  const [currentNavTitle, setNavTitle] = useState('密码登录')
   const dispatch = useDispatch()
   const limits = useSelector(state => state.common.limits)
-  const changeBlock = (value) => {
+
+  const changeNavTitle = (value) => {
+    switch (value) {
+      case 'login':
+        setNavTitle('密码登录')
+        break;
+      case 'register':
+        setNavTitle('注册账号')
+        break;
+      case 'capcha':
+        setNavTitle('免密登录')
+        break;
+      default:
+        break
+    }
     setBlock(value)
   }
   useEffect(() => {
@@ -23,9 +39,17 @@ function Login () {
       <section className="login-box">
         <div className="threeD-txt threeD-txt--index-about"></div>
         <div className="root-wrap">
-          {
-            block === 'login' ? <LoginBlock goToRegister={changeBlock} limits={limits} /> : <Register goToLogin={changeBlock} limits={limits} />
-          }
+          <section className="login-nav-box">
+            <div className="current-nav-title">{currentNavTitle}</div>
+            <div className="login-nav-titles">
+              <div className={block === 'capcha' ? "active-item nav-item" : 'nav-item'} onClick={() => changeNavTitle('capcha')}>免密登录</div>
+              <div className={block === 'login' ? "active-item nav-item" : 'nav-item'} onClick={() => changeNavTitle('login')}>密码登录</div>
+            </div>
+          </section>
+
+          {block === 'login' && <LoginBlock goToRegister={changeNavTitle} limits={limits} />}
+          {block === 'register' && <Register goToLogin={changeNavTitle} limits={limits} />}
+          {block === 'capcha' && <Capcha goToRegister={changeNavTitle} limits={limits} />}
         </div>
       </section>
 
@@ -39,6 +63,43 @@ const Layout = styled.div`
   display: flex;
   justify-content: center;
   position: relative;
+  .login-nav-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 24px;
+    padding-bottom: 48px;
+    padding-left: 24px;
+    .current-nav-title {
+      font-size: 20px;
+      color: ${style['theme-color']}
+    }
+    .login-nav-titles {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .active-item {
+      color: ${style['theme-color']}
+    }
+    .nav-item {
+      margin-right: 10px;
+      padding-right: 10px;
+      cursor:pointer;
+      position: relative;
+      &:hover {
+        color: ${style['theme-color']}
+      }
+      &:not(:last-of-type)::after {
+        content: '';
+        position: absolute;
+        right: 0px;
+        width: 1px;
+        height: 15px;
+        border-right: 1px solid #ccc;
+      }
+    }
+  }
   .register-form-button {
     margin-left: 10px;
   }
