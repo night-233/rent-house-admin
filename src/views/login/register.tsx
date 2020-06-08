@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { loginIn } from '@/store/redux/user.redux'
-import LoginApi from '@apis/login'
+import openApi from '@apis/open'
 interface Func {
   (value: string): void
 }
@@ -33,7 +33,7 @@ const RegisterBlock = (props: Props) => {
       verifyCode: values.verifyCode
     }
     setLoading(true)
-    LoginApi.registerPhone(data).then((res) => {
+    openApi.registerPhone(data).then((res) => {
       setLoading(false)
       if (res) {
         dispatch(loginIn(res, res.token))
@@ -47,7 +47,7 @@ const RegisterBlock = (props: Props) => {
       operationType: 'signUp',
       phoneNumber: form.getFieldsValue().phone
     }
-    LoginApi.sendMessage(data).then((res) => {
+    openApi.sendMessage(data).then((res) => {
       if (res) {
         message.success('验证码发送成功，请注意查收')
       }

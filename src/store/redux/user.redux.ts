@@ -1,4 +1,5 @@
-import loginApi from '@/apis/login'
+import userApi from '@/apis/user'
+import openApi from '@/apis/open'
 import cookie from '@utils/cookie'
 
 const LOGIN_IN = 'LOGIN_IN'
@@ -44,7 +45,7 @@ export async function loginOut () {
 
 export function getUserInfo () {
   return (dispatch, getState) => {
-    return loginApi.getUserInfo()
+    return userApi.getUserInfo()
       .then(res => {
         if (res) {
           dispatch(changeUserInfo(res))
@@ -55,7 +56,7 @@ export function getUserInfo () {
 
 export function login (data) {
   return (dispatch, getState) => {
-    return loginApi.userLogin(data)
+    return openApi.userLogin(data)
       .then(res => {
         if (res) {
           dispatch(loginIn(res.user, res.token))

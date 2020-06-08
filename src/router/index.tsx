@@ -21,17 +21,14 @@ const Home = lazy(() => import("../views/home"));
 let constantRoutes = [
   {
     path: "/login",
-    requiresAuth: false,
     component: Login,
   },
   {
     path: "/test1",
-    requiresAuth: false,
     component: Test1
   },
   {
     path: "/test2",
-    requiresAuth: false,
     component: Test2
   }
 ]

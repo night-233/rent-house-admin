@@ -5,18 +5,26 @@ const base = '/dev';
 export default {
   urls () {
     return {
-      userLogin: `${base}/user/login`,
-      getUserInfo: `${base}/user`,
-      removeUserLogo: `${base}/user/avatar`,
-      updateUserInfo: `${base}/user/basicInfo`,
-      sendMessage: `${base}/user/sendSmsToPhone`,
-      registerPhone: `${base}/user/registryByPhone`,
+      userLogin: `${base}/open/login`,
+      getLimits: `${base}/open/limits`,
+      sendMessage: `${base}/open/sendSmsToPhone`,
+      loginInNoPwd: `${base}/open/noPassLogin`,
+      registerPhone: `${base}/open/registryByPhone`,
+      judgeNickName: `${base}/open/nickName`
     };
   },
-  removeUserLogo () {
+  getLimits () {
     return request({
-      url: this.urls().removeUserLogo,
-      method: 'delete',
+      url: this.urls().getLimits,
+      method: 'get',
+      noJweToken: true
+    });
+  },
+  judgeNickName (params: any) {
+    return request({
+      url: this.urls().judgeNickName,
+      method: 'get',
+      params
     });
   },
   registerPhone (data: Object) {
@@ -27,25 +35,21 @@ export default {
       noJweToken: true
     });
   },
-  updateUserInfo (data: Object) {
+  loginInNoPwd (data: Object) {
     return request({
-      url: this.urls().updateUserInfo,
-      method: 'put',
+      url: this.urls().loginInNoPwd,
+      method: 'post',
       data,
+      noJweToken: true
     });
   },
+
   sendMessage (data: Object) {
     return request({
       url: this.urls().sendMessage,
       method: 'post',
       data,
       noJweToken: true
-    });
-  },
-  getUserInfo () {
-    return request({
-      url: this.urls().getUserInfo,
-      method: 'get',
     });
   },
   userLogin (data: Object) {

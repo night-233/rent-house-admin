@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { Button, Form, Input, message } from 'antd';
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
-import userApi from '@apis/login'
+import openApi from '@apis/open'
+import userApi from '@apis/user'
 import style from '@/assets/global-style'
 import { changeUserInfo, getUserInfo } from '@/store/redux/user.redux'
 import UploadAvatar from '@/components/uploadAvatar'
@@ -44,7 +45,7 @@ const UserSetting = () => {
   const handleJudgeName = () => {
     setJudge('')
     const param = { nickName: form.getFieldsValue().nickName }
-    return userApi.judgeNickName(param).then((res) => {
+    return openApi.judgeNickName(param).then((res) => {
       if (res.code === 200) {
         setJudge('right')
       } else {

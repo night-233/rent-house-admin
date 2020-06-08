@@ -3,7 +3,7 @@ import { Upload, message } from 'antd';
 import styled from 'styled-components'
 import style from '@assets/global-style'
 import TextAvatar from '@/components/TextAvatar'
-import uploadApi from '@apis/uploadImg'
+import userApi from '@apis/user'
 const UploadImg = ({ name, url, callback, limits }) => {
   const limitMessage = `图片仅支持 ${limits?.avatarTypeLimit?.join('，')} 格式，大小不超过 ${limits?.avatarSizeLimit / 1024 / 1024} KB`
   let fileList: any, setFileList: any
@@ -19,7 +19,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
     }
   }, [setFileList, url])
   const handleRemove = () => {
-    return uploadApi.removeUserLogo().then((res) => {
+    return userApi.removeUserLogo().then((res) => {
       if (res) {
         setFileList([])
         callback()
@@ -49,7 +49,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
   }) => {
     const form = new FormData();
     form.append('file', file);
-    return uploadApi.postImage(form).then((res) => {
+    return userApi.postImage(form).then((res) => {
       if (res) {
         onSuccess(res, file);
         callback()

@@ -1,4 +1,4 @@
-import CommonApi from '@/apis/common'
+import openApi from '@/apis/open'
 
 const CHANGE_LIMITS = 'CHANGE_LIMITS'
 
@@ -23,7 +23,7 @@ export function changeLimits (payload) {
 
 export function getLimits () {
   return (dispatch, getState) => {
-    return CommonApi.getLimits()
+    return openApi.getLimits()
       .then(res => {
         if (res) {
           dispatch(changeLimits(res))
