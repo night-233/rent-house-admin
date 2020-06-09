@@ -64,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "@types/styled-components": "^5.1.0",
     "@types/webpack-env": "^1.15.2",
     "antd-img-crop": "^3.2.0",
     "customize-cra": "^0.9.1",

@@ -1,9 +1,9 @@
 
 import React from 'react'
 import { withRouter, useParams } from 'react-router-dom';
-import { Form, Select, Input, Row, Col, InputNumber, Tag, Upload, Button } from 'antd';
+import { Form, Select, Input, Row, Col, InputNumber, Tag, Upload, Button, Radio } from 'antd';
 import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 const layout = {
   labelCol: { span: 2 },
@@ -20,6 +20,37 @@ const colSpan = 8;
 const { TextArea } = Input;
 const { Option } = Select;
 const { CheckableTag } = Tag;
+
+const Cover = styled.img`
+  width: 100px;
+  height: 100px;
+`
+const Style = styled.div`
+
+`
+const RadioContainer = styled.div`
+.ant-radio-wrapper {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    -webkit-font-feature-settings: 'tnum', "tnum";
+    font-feature-settings: 'tnum', "tnum";
+    position: relative;
+    display: inline-block;
+    margin-right: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+`
+
 const AddHouse = () => {
 
 
@@ -285,23 +316,50 @@ const AddHouse = () => {
         </div>
         </Form.Item>
         <Form.Item
-
-          colon={false}
-          label=" "
-          name="button"
-        >
-          <div style={{ display: "flex" }}>
-            <Button type="primary" style={{ marginRight: "20px" }}>提交审核</Button>
+            colon={false}
+            label=" "
+            name="button"
+          >
+            <div style={{ display: "flex" }}>
+              <Button type="primary" style={{ marginRight: "20px" }}>提交审核</Button>
+            </div>
+        </Form.Item>
+      <Form.Item
+        label="封面"
+        name="cover"
+      >
+        {/* <div style={{display: "flex"}}>
+          请先上传图片从中选择封面
+        </div> */}
+        <RadioContainer>
+          <Radio.Group style={{display: "flex", alignItems: "center"}}>
+            <Radio value={1}>
+              <Cover src="http://qiniu.touchfish.top/FsP_RfAaUvVgUGUOinqxXmAy4xCX"/>
+            </Radio>
+            <Radio value={2}>
+              <Cover src="http://qiniu.touchfish.top/FsP_RfAaUvVgUGUOinqxXmAy4xCX"/>
+            </Radio>
+            <Radio value={3}>
+              <Cover src="http://qiniu.touchfish.top/FsP_RfAaUvVgUGUOinqxXmAy4xCX"/>
+            </Radio>
+            <Radio value={4}>
+              <Cover src="http://qiniu.touchfish.top/FsP_RfAaUvVgUGUOinqxXmAy4xCX"/>
+            </Radio>
+          </Radio.Group>
+        </RadioContainer>
+      </Form.Item>
+      <Form.Item
+        colon={false}
+        label=" "
+        name="button"
+      >
+          <div style={{display: "flex"}}>
+            <Button type="primary" style={{marginRight: "20px"}}>提交审核</Button>
             <Button>取消</Button>
           </div>
         </Form.Item>
-
       </Form>
     </Style >
   )
 }
-
-const Style = styled.div`
-`
-
 export default React.memo(AddHouse)
