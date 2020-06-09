@@ -51,6 +51,7 @@ export function dealResStatus (resData: any) {
   } else {
     if (code !== 200) {
       errorCreat(`${resData.message}`)
+      throw new Error(resData.message)
     }
   }
 }
@@ -100,7 +101,6 @@ export function dealResError (error: any) {
         break
     }
   }
-
   if (error.response.status === 401) {
     message.error(error.message, 1, () => {
       history.push('/login')

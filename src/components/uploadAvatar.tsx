@@ -19,6 +19,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
   const limitMessage = `图片仅支持 ${climits.format} 格式，大小不超过 ${climits.size}`
   let fileList: any, setFileList: any
   [fileList, setFileList] = useState([]);
+
   useEffect(() => {
     if (url) {
       setFileList([{

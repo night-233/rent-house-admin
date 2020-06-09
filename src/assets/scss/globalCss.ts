@@ -13,7 +13,14 @@ export const GlobalCss = createGlobalStyle`
   }
   .fade-enter, .fade-appear {
   opacity: 0;
-}
+  }
+
+  .global-form {
+    .ant-form-item-label > label {
+      font-size: 13px;
+      color: ${style['light-font']}
+    }
+  }
 
 .fade-enter.fade-enter-active, .fade-appear.fade-appear-active {
   opacity: 1;

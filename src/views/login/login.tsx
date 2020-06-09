@@ -21,7 +21,8 @@ const LoginBlock = (props: Props) => {
   const onFinish = values => {
     const data = JSON.parse(JSON.stringify(values))
     setLoading(true)
-    dispatch(login(data)).then(() => {
+    dispatch(login(data)).then((res) => {
+      console.log('das', res)
       setLoading(false)
       history.push('/')
     })

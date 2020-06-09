@@ -60,6 +60,7 @@ export function login (data) {
       .then(res => {
         if (res) {
           dispatch(loginIn(res.user, res.token))
+          return res
         }
       })
   }

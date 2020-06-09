@@ -12,7 +12,6 @@ export default ({ name, avatar, width = "32" }) => {
       return '16px';
     }
   }
-
   const style = {
     width: `${width}px`,
     height: `${width}px`,
