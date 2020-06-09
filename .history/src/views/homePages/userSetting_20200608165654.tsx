@@ -21,6 +21,7 @@ const UserSetting = () => {
   const [isNickNameRight, setJudge] = useState('')
   const { TextArea } = Input;
   let nickNameTemp = user.nickName
+  let commandTemp = user.introduction
   const layout = {
     labelCol: { span: 6 },
     wrapperCol: { span: 18 },
@@ -31,6 +32,7 @@ const UserSetting = () => {
       nickName: value.nickName
     }
     let res = await handleJudgeName()
+    console.log('d', res)
     if (res) {
       updateUserInfo(data)
     }
@@ -48,7 +50,7 @@ const UserSetting = () => {
   }
   const handleJudgeName = () => {
     setJudge('')
-    if (nickNameTemp === form.getFieldsValue().nickName) return true;
+    if (nickNameTemp === form.getFieldsValue().nickName) return
     const param = { nickName: form.getFieldsValue().nickName }
     return openApi.judgeNickName(param).then((res) => {
       if (res.code === 200) {

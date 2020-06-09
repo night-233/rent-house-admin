@@ -13,7 +13,7 @@ interface limitsType {
 
 const UploadImg = ({ name, url, callback, limits }) => {
   const climits: limitsType = {
-    format: limits?.avatarTypeLimit.join('，'),
+    format: limits.avatarTypeLimit.join('，'),
     size: Tools.unitConversion(limits?.avatarSizeLimit, '', true)
   }
   const limitMessage = `图片仅支持 ${climits.format} 格式，大小不超过 ${climits.size}`
@@ -49,7 +49,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
     }
     const isMore = file.size > limits.avatarSizeLimit;
     if (isMore) {
-      message.error(`图片大小不超过 ${climits.size}`);
+      message.error(`图片大小不超过 ${limits.avatarSizeLimit / 1024 / 1024} KB`);
     }
     return isJpgOrPng && !isMore;
   }

@@ -32,7 +32,7 @@ export default {
     return { color: base[index], name };
   },
   // 默认返回不带单位的数字格式
-  unitConversion (size: number, unit: string, hasUnit: boolean, fixedSize = 1) {
+  unitConversion (size, unit, hasUnit, fixedSize = 1) {
     let destSize = Number(size);
     try {
       if (destSize) {

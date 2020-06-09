@@ -48,7 +48,7 @@ const UserSetting = () => {
   }
   const handleJudgeName = () => {
     setJudge('')
-    if (nickNameTemp === form.getFieldsValue().nickName) return true;
+    if (nickNameTemp === form.getFieldsValue().nickName) return
     const param = { nickName: form.getFieldsValue().nickName }
     return openApi.judgeNickName(param).then((res) => {
       if (res.code === 200) {
