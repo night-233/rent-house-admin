@@ -64,6 +64,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
     return userApi.postImage(form).then((res) => {
       if (res) {
         onSuccess(res, file);
+        message.success('成功更新图片')
         callback()
       } else {
         onError('上传失败')
