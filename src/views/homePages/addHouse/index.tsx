@@ -1,9 +1,10 @@
 
-import React from 'react'
-import { withRouter, useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react'
 import { Form, Select, Input, Row, Col, InputNumber, Tag, Upload, Button, Radio } from 'antd';
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
+import { InboxOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import {handleResponse} from "@utils/handle-reponse";
+import AddressApi from "@apis/address";
 
 const layout = {
   labelCol: { span: 2 },
@@ -50,8 +51,37 @@ const RadioContainer = styled.div`
     align-items: center;
   }
 `
+interface address {
+  id: number,
+  enName: string,
+  cnName: string,
+  level: string,
+  baiduMapLng: number,
+  baiduMapLat: number,
+}
 
 const AddHouse = () => {
+
+  // 城市列表
+  const [cities, setCities] = useState<address[]>([]);
+  // 城市列表加载中
+  const [isCityList, setIsCityLoading] = useState(false);
+  // 区县列表
+  const [regions, setRegions] = useState([]);
+  // 区县列表加载中
+  const [isRegionLoading, setIsRegionLoading] = useState(false);
+  useEffect(() => {
+    getSupportCities();
+  }, [])
+
+  // 获取城市列表
+  const getSupportCities = () => {
+    return handleResponse(AddressApi.getSupportCities(), (data) => setCities(data.list), "获取城市列表失败", setIsCityLoading);
+  }
+
+  const getSupportRegions = (cityEnName) => {
+    return handleResponse(AddressApi.getSupportRegions(cityEnName), (data) => setRegions(data.list), "获取区县列表失败", setIsRegionLoading)
+  }
 
 
   return (
@@ -66,8 +96,9 @@ const AddHouse = () => {
               rules={[{ required: true, message: '请选择城市' }]}
             >
               <Select style={{ textAlign: "left" }} placeholder="请选择城市" allowClear={true}>
-                <Option value="hz">杭州</Option>
-                <Option value="bj">北京</Option>
+                {
+                  cities.map(city => <Option value={city.enName}>{city.cnName}</Option>)
+                }
               </Select>
             </Form.Item>
           </Col>

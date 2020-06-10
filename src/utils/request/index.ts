@@ -9,6 +9,11 @@ axios.create({
   timeout: 5000
 })
 
+interface Response {
+    code: number,
+    data?: any,
+    message: string | null,
+}
 // 响应拦截
 axios.interceptors.response.use(
   response => {
@@ -47,6 +52,7 @@ const request = (config: any, that: any = false) => {
   const customConfig = Object.assign({ ...cancel }, config);
   return axios(customConfig)
     .then((response) => {
+        console.dir(response)
       return response.data || response || true;
     }, (err) => {
       console.log(err, err.response);
