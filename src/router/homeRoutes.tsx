@@ -13,7 +13,7 @@ const SuspenseComponent = Component => props => {
 const UserSetting = lazy(() => import("../views/homePages/userSetting"));
 const AddHouse = lazy(() => import("../views//homePages/addHouse/index"));
 const Home = lazy(() => import("../views/home"));
-
+const HouseList = lazy(() => import("../views/homePages/houseList"));
 
 export default [
   {
@@ -30,6 +30,11 @@ export default [
     path: "/home",
     meta: { title: '主页' },
     component: SuspenseComponent(Home),
+  },
+  {
+    path: "/houseList",
+    meta: { title: '房源列表' },
+    component: SuspenseComponent(HouseList),
   },
   {
     path: "/addHouse",

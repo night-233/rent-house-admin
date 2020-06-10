@@ -46,6 +46,8 @@ function Header (props) {
               <NavLink to={nav.path} key={index} activeClassName="active-link" className="nav-item add-new">{nav?.meta?.title}</NavLink>
             )
           })}
+          {/* <NavLink to="/home" className="nav-item add-new">房源</NavLink>
+          <NavLink to="/addHouse" className="nav-item add-new">新增<i className="iconfont iconadd"></i></NavLink> */}
         </section>
         <section className='user-block'>
           <Dropdown overlay={menu}>

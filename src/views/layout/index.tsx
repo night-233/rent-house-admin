@@ -23,7 +23,7 @@ const Layout = function Layout (props) {
   }, [dispatch])
   return (
     <LayoutStyle>
-      <Header></Header>
+      <Header route={route}></Header>
       <section className="content-wrap">
         <section className="main-content-box">
           <section className="nav-tip">{currentTitle?.length && currentTitle[0]?.meta?.title}</section>
@@ -64,7 +64,7 @@ const LayoutStyle = styled.div`
       background: #f9f9f9;
     }
     .main-content {
-      padding: 30px;
+      padding: 40px;
       margin-top: -5px;
       width: 100%;
       background: #fff;
