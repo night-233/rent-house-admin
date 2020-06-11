@@ -52,7 +52,6 @@ const request = (config: any, that: any = false) => {
   const customConfig = Object.assign({ ...cancel }, config);
   return axios(customConfig)
     .then((response) => {
-        console.dir(response)
       return response.data || response || true;
     }, (err) => {
       console.log(err, err.response);

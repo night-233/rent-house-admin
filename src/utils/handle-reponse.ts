@@ -9,8 +9,8 @@ import {message} from "antd";
  */
 export const handleResponse = (request, successCallBack, failMsg, loadingCallback?) => {
     loadingCallback && loadingCallback(true);
-    return request.then(json => {
-        successCallBack(json.data);
+    return request.then(data => {
+        successCallBack(data);
     }).catch(e => {
         if(failMsg instanceof  Object){
             console.error(failMsg.content + ":" + e);

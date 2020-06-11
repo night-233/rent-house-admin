@@ -34,4 +34,17 @@ export const GlobalCss = createGlobalStyle`
 .fade-exit.fade-exit-active {
   opacity: 0;
 }
+
+.ant-upload-list-picture-card .ant-upload-list-item-info::before {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.5);
+    opacity: 0;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    left: 0;
+    content: ' ';
+}
 `

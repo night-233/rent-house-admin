@@ -11,6 +11,7 @@ export default {
       postImage: `${base}/user/avatar/img`,
       removeUserLogo: `${base}/user/avatar`,
       updateUserInfo: `${base}/user/basicInfo`,
+      uploadPhoto: `${base}/user/upload/photo`
     };
   },
   updateUserInfo (data: Object) {
@@ -50,5 +51,5 @@ export default {
       url: this.urls().test,
       method: 'get',
     });
-  },
+  }
 };

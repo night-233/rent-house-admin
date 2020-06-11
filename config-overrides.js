@@ -3,7 +3,8 @@ const path = require('path')
 
 
 const mockIp = '10.0.5.199:13000/mock';
-const IP = 'rent-house.touchfish.top';
+// const IP = 'rent-house.touchfish.top';
+const IP = 'localhost:8080';
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {
@@ -39,7 +40,7 @@ module.exports = {
       style: true
     }),
     addDecoratorsLegacy(),
-    
+
     addLessLoader({
         javascriptEnabled: true,
         //下面这行很特殊，这里是更改主题的关键，这里我只更改了主色，当然还可以更改其他的，下面会详细写出。
@@ -58,7 +59,7 @@ module.exports = {
           // "@border-color-base": "#d9d9d9", // 边框色
           // "@box-shadow-base": "0 2px 8px rgba(0, 0, 0, 0.15)" // 浮层阴影
         },
-      
+
     })
   ),
   devServer: overrideDevServer(
