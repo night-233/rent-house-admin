@@ -10,9 +10,9 @@ axios.create({
 })
 
 interface Response {
-    code: number,
-    data?: any,
-    message: string | null,
+  code: number,
+  data?: any,
+  message: string | null,
 }
 // 响应拦截
 axios.interceptors.response.use(
@@ -40,7 +40,6 @@ axios.interceptors.request.use(
 
 
 const request = (config: any, that: any = false) => {
-
   if (that && typeof that?.source === 'function') {
     that.source('终止请求');
   }

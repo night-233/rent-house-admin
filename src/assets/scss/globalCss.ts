@@ -12,7 +12,7 @@ export const GlobalCss = createGlobalStyle`
     align-items: center;
   }
   .fade-enter, .fade-appear {
-  opacity: 0;
+    opacity: 0;
   }
 
   .global-form {

@@ -30,6 +30,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
       }])
     }
   }, [setFileList, url])
+
   const handleRemove = () => {
     return userApi.removeUserLogo().then((res) => {
       if (res) {
@@ -42,6 +43,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
       }
     })
   }
+
   const beforeUpload = (file) => {
     const currentType = file.type.split('/')[1]
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -54,6 +56,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
     }
     return isJpgOrPng && !isMore;
   }
+
   const handleUpload = ({
     file,
     onError,
@@ -71,6 +74,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
       }
     })
   }
+  
   return (
     <>
       <Style>

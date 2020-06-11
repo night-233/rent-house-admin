@@ -51,7 +51,7 @@ export function dealResStatus (resData: any) {
   } else {
     if (code !== 200) {
       errorCreat(`${resData.message}`)
-      throw new Error(resData.message)
+      return Promise.reject(resData.message)
     }
   }
 }

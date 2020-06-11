@@ -4,7 +4,7 @@ import { renderRoutes } from "react-router-config";
 function HouseList (props) {
   return (
     <div>
-      房源列表
+
     </div>
   )
 }

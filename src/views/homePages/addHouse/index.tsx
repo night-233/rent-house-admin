@@ -1,5 +1,5 @@
 
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Form,
   Select,
@@ -16,10 +16,11 @@ import {
   Empty,
   Modal, message
 } from 'antd';
+import style from '@assets/global-style';
 import styled from 'styled-components';
-import {handleResponse} from "@utils/handle-reponse";
+import { handleResponse } from "@utils/handle-reponse";
 import AddressApi from "@apis/address";
-import {PlusOutlined} from "@ant-design/icons/lib";
+import { PlusOutlined } from "@ant-design/icons/lib";
 import { useSelector } from 'react-redux'
 import AdminApi from "@apis/admin";
 import FileUtil from "@utils/file-util";
@@ -43,9 +44,6 @@ const { CheckableTag } = Tag;
 const Cover = styled.img`
   width: 100px;
   height: 100px;
-`
-const Style = styled.div`
-
 `
 const RadioContainer = styled.div`
 .ant-radio-wrapper {
@@ -105,7 +103,8 @@ interface subwayStation {
 const RegionPlaceHolderContainer = ["请先选择所在城市", "请选择区县"];
 const SubwayPlaceHolderContainer = ["请先选择所在城市", "请选择地铁线路"];
 const SubwayStationPlaceHolderContainer = ["请先选择地铁线路", "请选择地铁站"];
-const houseTagsArray = ["集体供暖","独立阳台","独立卫生间","空调","精装修","路由器","热水器","桌子","衣柜","拎包入住","洗衣机","电磁炉"];
+const houseTagsArray = ["集体供暖", "独立阳台", "独立卫生间", "空调", "精装修", "路由器", "热水器", "桌子", "衣柜", "拎包入住", "洗衣机", "电磁炉"];
+
 const UploadHintContainer = styled.div`
     margin: 0 0 20px;
     line-height: 24px;
@@ -114,11 +113,12 @@ const UploadHintContainer = styled.div`
     text-align: left;
 `
 const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div className="ant-upload-text">上传图片</div>
-    </div>
+  <div>
+    <PlusOutlined />
+    <div className="ant-upload-text">上传图片</div>
+  </div>
 );
+
 const AddHouse = () => {
 
   const [form] = Form.useForm();
@@ -137,11 +137,11 @@ const AddHouse = () => {
   // 地铁线路提示信息
   const [subwayPlaceholder, setSubwayPlaceholder] = useState(0);
   // 地铁线路列表加载中
-  const [isSubwayLoading ,setIsSubwayLoading] = useState(false);
+  const [isSubwayLoading, setIsSubwayLoading] = useState(false);
   // 地铁站列表
   const [subwayStations, setSubwayStations] = useState<subwayStation[]>([]);
   // 地铁站列表加载中
-  const [isSubwayStationLoading ,setIsSubwayStationLoading] = useState(false);
+  const [isSubwayStationLoading, setIsSubwayStationLoading] = useState(false);
   // 地铁站列表占位信息
   const [subwayStationPlaceholder, setSubwayStationPlaceholder] = useState(0);
   // 房屋标签
@@ -149,26 +149,31 @@ const AddHouse = () => {
   // 上传图片列表
   const [imageList, setImageList] = useState<any[]>([{
     uid: '-1',
+    isCover: false,
     name: 'image.png',
     status: 'done',
     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },{
+  }, {
     uid: '-2',
+    isCover: false,
     name: 'image.png',
     status: 'done',
     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },{
+  }, {
     uid: '-3',
+    isCover: false,
     name: 'image.png',
     status: 'done',
     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },{
+  }, {
     uid: '-4',
+    isCover: false,
     name: 'image.png',
     status: 'done',
     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-  },{
+  }, {
     uid: '-5',
+    isCover: false,
     name: 'image.png',
     status: 'done',
     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
@@ -186,7 +191,7 @@ const AddHouse = () => {
   const [cover, setCover] = useState("");
   // 房源新增loading
   const [formButtonLoading, setFormButtonLoading] = useState(false);
-
+  const [selectedImg, setSelectedImg] = useState<any>({});
   useEffect(() => {
     getSupportCities();
   }, [])
@@ -202,30 +207,30 @@ const AddHouse = () => {
   // 处理表单值改变
   const handleValuesChange = (changedValues) => {
     // 如果城市改变，则联动县与地铁线路
-    if(Object.keys(changedValues).indexOf("city") !== -1){
-      form.setFieldsValue({region: undefined, subway: undefined, subwayStation: undefined});
+    if (Object.keys(changedValues).indexOf("city") !== -1) {
+      form.setFieldsValue({ region: undefined, subway: undefined, subwayStation: undefined });
       setRegions([]);
       setSubways([]);
       setSubwayStations([]);
       setSubwayStationPlaceholder(0);
-      if(changedValues.city) {
+      if (changedValues.city) {
         setRegionPlaceHolder(1);
         setSubwayPlaceholder(1);
         getSupportRegions(changedValues.city);
         getSupportSubways(changedValues.city);
-      }else{
+      } else {
         setRegionPlaceHolder(0);
         setSubwayPlaceholder(0);
       }
     }
     // 如果地铁线路改变，则联动地铁站
-    if(Object.keys(changedValues).indexOf("subway") !== -1){
-      form.setFieldsValue({subwayStation: undefined});
+    if (Object.keys(changedValues).indexOf("subway") !== -1) {
+      form.setFieldsValue({ subwayStation: undefined });
       setSubwayStations([]);
-      if(changedValues.subway){
+      if (changedValues.subway) {
         setSubwayStationPlaceholder(1);
         getSupportSubwayStations(changedValues.subway);
-      }else{
+      } else {
         setSubwayStationPlaceholder(0);
       }
     }
@@ -245,7 +250,8 @@ const AddHouse = () => {
     setTags(nextSelectedTags)
   }
   // 处理上传文件改变
-  const handleFileChange = ({fileList}) => {
+  const handleFileChange = ({ file, fileList }) => {
+    console.log('sss', file)
     setImageList(fileList);
   }
   // 获取base64
@@ -259,6 +265,7 @@ const AddHouse = () => {
   }
   // 处理图片预览
   const handlePreview = async (file) => {
+    setSelectedImg(file)
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -267,7 +274,7 @@ const AddHouse = () => {
     setPreviewTitle(file.name);
   }
   // 处理上传图片
-  const handleUpload =  ({file, onError, onSuccess}) => {
+  const handleUpload = ({ file, onError, onSuccess }) => {
     return AdminApi.uploadPhoto(file).then((res) => {
       if (res) {
         setPictures([...pictures, res])
@@ -279,12 +286,12 @@ const AddHouse = () => {
   }
   // 图片上传校验
   const beforeUpload = (file) => {
-   const currentType = file.type.split('/')[1];
-    if(!limits.housePhotoTypeLimit.some(item => item === currentType)){
+    const currentType = file.type.split('/')[1];
+    if (!limits.housePhotoTypeLimit.some(item => item === currentType)) {
       message.error("仅支持:" + limits.housePhotoTypeLimit.join(",") + "; 格式");
       return false;
     }
-    if( file.size > limits.housePhotoSizeLimit){
+    if (file.size > limits.housePhotoSizeLimit) {
       message.error("单张图片最大:" + FileUtil.getFileSize(limits.housePhotoSizeLimit));
       return false;
     }
@@ -313,14 +320,32 @@ const AddHouse = () => {
     }
     console.dir(houseForm);
     console.log(JSON.stringify(houseForm));
-   /* handleResponse( AdminApi.addHouse(houseForm), data => {
-      console.dir(data);
-    }, "新增房源失败", setFormButtonLoading);*/
-
+    /* handleResponse( AdminApi.addHouse(houseForm), data => {
+       console.dir(data);
+     }, "新增房源失败", setFormButtonLoading);*/
   }
 
-  const numberValidate =  (message, pattern?) => ({
-    validator(rule, value) {
+  const handleSetCover = () => {
+    const currentImageList = JSON.parse(JSON.stringify(imageList))
+    currentImageList.forEach((item, index) => {
+      if (item?.uid === selectedImg?.uid) {
+        currentImageList[index].isCover = true;
+      } else {
+        currentImageList[index].isCover = false;
+      }
+    })
+    setImageList(currentImageList)
+    setPreviewModalVisible(false)
+
+  }
+  const handleRemove = (index) => {
+    const currentImageList = JSON.parse(JSON.stringify(imageList))
+    currentImageList.splice(index, 1)
+    setImageList(currentImageList)
+  }
+
+  const numberValidate = (message, pattern?) => ({
+    validator (rule, value) {
       const regx = pattern || /^[0-9]*$/;
       if (!value || regx.test(value)) {
         return Promise.resolve();
@@ -334,10 +359,10 @@ const AddHouse = () => {
         <Row gutter={20}>
           <Col span={colSpan} >
             <Form.Item
-                {...rowLayout}
-                label="标题"
-                name="title"
-                rules={[{ required: true, message: '请输入标题信息' }]}
+              {...rowLayout}
+              label="标题"
+              name="title"
+              rules={[{ required: true, message: '请输入标题信息' }]}
             >
               <Input placeholder="标题信息" />
             </Form.Item>
@@ -349,7 +374,7 @@ const AddHouse = () => {
               name="city"
               rules={[{ required: true, message: '请选择城市' }]}
             >
-              <Select style={{ textAlign: "left" }} placeholder="请选择城市" notFoundContent={isCityLoading ? <Spin size="small"/> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>}>
+              <Select style={{ textAlign: "left" }} placeholder="请选择城市" notFoundContent={isCityLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   cities.map(city => <Option key={city.enName} value={city.enName}>{city.cnName}</Option>)
                 }
@@ -364,7 +389,7 @@ const AddHouse = () => {
               rules={[{ required: true, message: '请选择区县' }
               ]}
             >
-              <Select style={{ textAlign: "left" }} placeholder={RegionPlaceHolderContainer[regionPlaceholder]} notFoundContent={isRegionLoading ? <Spin size="small"/> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>}>
+              <Select style={{ textAlign: "left" }} placeholder={RegionPlaceHolderContainer[regionPlaceholder]} notFoundContent={isRegionLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   regions.map(region => <Option key={region.enName} value={region.enName}>{region.cnName}</Option>)
                 }
@@ -408,7 +433,7 @@ const AddHouse = () => {
               name="room"
               rules={[{ required: true, message: '请输入房间数量' }, numberValidate("房间数量只能为正整数", /^\+?[1-9][0-9]*$/)]}
             >
-              <Input placeholder="房间数量" min={1} style={{ width: "100%" }} suffix="间"/>
+              <Input placeholder="房间数量" min={1} style={{ width: "100%" }} suffix="间" />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
@@ -418,7 +443,7 @@ const AddHouse = () => {
               name="parlour"
               rules={[numberValidate("客厅数量只能为非负整数", /^\d+$/)]}
             >
-              <Input placeholder="客厅数量" style={{ width: "100%" }} suffix="间"/>
+              <Input placeholder="客厅数量" style={{ width: "100%" }} suffix="间" />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
@@ -443,7 +468,7 @@ const AddHouse = () => {
               name="buildYear"
               rules={[{ required: true, message: '请输入建筑时间' }]}
             >
-              <DatePicker picker="year" placeholder={"建筑时间"} style={{width: "100%"}}/>
+              <DatePicker picker="year" placeholder={"建筑时间"} style={{ width: "100%" }} />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
@@ -451,9 +476,9 @@ const AddHouse = () => {
               {...rowLayout}
               label="所在楼层"
               name="floor"
-              rules={[{ required: true, message: '请输入所在楼层'}, numberValidate("楼层只能为整数", /^-?\d+$/)]}
+              rules={[{ required: true, message: '请输入所在楼层' }, numberValidate("楼层只能为整数", /^-?\d+$/)]}
             >
-              <Input placeholder="所在楼层" style={{ width: "100%" }} suffix="层"/>
+              <Input placeholder="所在楼层" style={{ width: "100%" }} suffix="层" />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
@@ -462,18 +487,18 @@ const AddHouse = () => {
               label="总楼层"
               name="totalFloor"
               rules={[{ required: true, message: '请输入总楼层' },
-                ({ getFieldValue }) => ({
-                  validator(rule, value) {
-                    if (!value || !getFieldValue('floor') || getFieldValue('floor') <= value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject("总楼层不能小于房屋所在楼层");
-                  },
-                }),
-                numberValidate("总楼层只能为正整数", /^\+?[1-9][0-9]*$/)
+              ({ getFieldValue }) => ({
+                validator (rule, value) {
+                  if (!value || !getFieldValue('floor') || getFieldValue('floor') <= value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject("总楼层不能小于房屋所在楼层");
+                },
+              }),
+              numberValidate("总楼层只能为正整数", /^\+?[1-9][0-9]*$/)
               ]}
             >
-              <Input placeholder="总楼层" min={1} style={{ width: "100%" }} suffix="层"/>
+              <Input placeholder="总楼层" min={1} style={{ width: "100%" }} suffix="层" />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
@@ -481,9 +506,9 @@ const AddHouse = () => {
               {...rowLayout}
               label="面积"
               name="area"
-              rules={[{ required: true, message: '请输入房间面积'}, numberValidate("房屋面积只能为正整数", /^\+?[1-9][0-9]*$/)]}
+              rules={[{ required: true, message: '请输入房间面积' }, numberValidate("房屋面积只能为正整数", /^\+?[1-9][0-9]*$/)]}
             >
-              <Input placeholder="面积" min={10} style={{ width: "100%" }}  suffix="㎡"/>
+              <Input placeholder="面积" min={10} style={{ width: "100%" }} suffix="㎡" />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
@@ -491,9 +516,9 @@ const AddHouse = () => {
               {...rowLayout}
               label="定价"
               name="price"
-              rules={[{ required: true, message: '请输入定价'}, numberValidate("房屋定价只能为正整数", /^\+?[1-9][0-9]*$/)]}
+              rules={[{ required: true, message: '请输入定价' }, numberValidate("房屋定价只能为正整数", /^\+?[1-9][0-9]*$/)]}
             >
-              <Input placeholder="定价" min={0} style={{ width: "100%" }} suffix="元/月"/>
+              <Input placeholder="定价" min={0} style={{ width: "100%" }} suffix="元/月" />
             </Form.Item>
           </Col>
           <Col span={colSpan}>
@@ -515,9 +540,9 @@ const AddHouse = () => {
               label="地铁线路"
               name="subway"
             >
-              <Select placeholder={SubwayPlaceHolderContainer[subwayPlaceholder]} style={{ textAlign: "left" }} notFoundContent={isSubwayLoading ? <Spin size="small"/> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>}>
+              <Select placeholder={SubwayPlaceHolderContainer[subwayPlaceholder]} style={{ textAlign: "left" }} notFoundContent={isSubwayLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
-                  subways.map(item => <Option key={item.id}  value={item.id}>{item.name}</Option>)
+                  subways.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)
                 }
               </Select>
             </Form.Item>
@@ -528,7 +553,7 @@ const AddHouse = () => {
               label="地铁站"
               name="subwayStation"
             >
-              <Select placeholder={SubwayStationPlaceHolderContainer[subwayStationPlaceholder]} style={{ textAlign: "left" }} notFoundContent={isSubwayStationLoading ? <Spin size="small"/> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>}>
+              <Select placeholder={SubwayStationPlaceHolderContainer[subwayStationPlaceholder]} style={{ textAlign: "left" }} notFoundContent={isSubwayStationLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   subwayStations.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)
                 }
@@ -542,7 +567,7 @@ const AddHouse = () => {
               name="distanceToSubway"
               rules={[numberValidate("距地铁距离只能为整数", /^-?\d+$/)]}
             >
-              <Input min={-1} placeholder="如不近地铁则为-1" style={{ width: "100%" }} suffix="米"/>
+              <Input min={-1} placeholder="如不近地铁则为-1" style={{ width: "100%" }} suffix="米" />
             </Form.Item>
           </Col>
         </Row>
@@ -553,7 +578,7 @@ const AddHouse = () => {
         >
           <div style={{ display: "flex" }}>
             {
-              houseTagsArray.map(tag => <CheckableTag key={tag} checked={tags.indexOf(tag) > -1} onChange={checked =>  handleTagChange(tag, checked)} >{tag}</CheckableTag>)
+              houseTagsArray.map(tag => <CheckableTag key={tag} checked={tags.indexOf(tag) > -1} onChange={checked => handleTagChange(tag, checked)} >{tag}</CheckableTag>)
             }
           </div>
         </Form.Item>
@@ -573,8 +598,8 @@ const AddHouse = () => {
         </Form.Item>
         <Form.Item
 
-            label="周边配套"
-            name="roundService"
+          label="周边配套"
+          name="roundService"
         >
           <Input placeholder="周边的服务配套设施，如: 学校，医院等" />
         </Form.Item>
@@ -585,48 +610,68 @@ const AddHouse = () => {
         >
           <TextArea placeholder="说点什么核心亮点之类的" rows={4} />
         </Form.Item>
-      <Form.Item
-        label="房源图片"
-        name="image"
-      >
-        <PreviewModalContainer>
-          <UploadHintContainer>请上传清晰、实拍的室内图片，请不要在图片上添加文字、数字、网址等内容，请勿上传名片、二维码、自拍照、风景照等与房源无关的图片，最多上传12张，每张最大10M</UploadHintContainer>
-          <Upload
-              listType="picture-card"
-              fileList={imageList}
-              multiple={true}
-              onPreview={handlePreview}
-              beforeUpload={beforeUpload}
-              onChange={handleFileChange}
-              customRequest={handleUpload}
-              previewFile={(file) => {
-                console.log('Your upload file:', file);
-                return new Promise(() => file)
-              }}
-          >
-            {imageList.length >= 12 ? null : uploadButton}
-          </Upload>
-          <Modal
+        <Form.Item
+          label="房源图片"
+          name="image"
+        >
+          <PreviewModalContainer>
+            <UploadHintContainer>请上传清晰、实拍的室内图片，请不要在图片上添加文字、数字、网址等内容，请勿上传名片、二维码、自拍照、风景照等与房源无关的图片，最多上传12张，每张最大10M</UploadHintContainer>
+            <div className='global-center'>
+              {
+                imageList.map((file, index) => {
+                  return (
+                    <div key={file.uid} className='img-file-item'>
+                      <div className='img-wrap'>
+                        <img className='img-file' src={file.url} alt=""></img>
+                        <div className='img-hover'>
+                          <span onClick={() => handlePreview(file)}><i className='iconfont iconeye'></i></span>
+                          <span onClick={() => handleRemove(index)}><i className='iconfont iconDeleteItemCCAndM'></i></span>
+                        </div>
+                        {file?.isCover && <div className='img-cover'>封面</div>}
+                      </div>
+
+                    </div>
+                  )
+                })
+              }
+              <Upload
+                listType="picture-card"
+                fileList={imageList}
+                multiple={true}
+                showUploadList={false}
+                onPreview={handlePreview}
+                beforeUpload={beforeUpload}
+                onChange={handleFileChange}
+                customRequest={handleUpload}
+                previewFile={(file) => {
+                  console.log('Your upload file:', file);
+                  return new Promise(() => file)
+                }}
+              >
+                {imageList.length >= 12 ? null : uploadButton}
+              </Upload>
+            </div>
+            <Modal
               visible={previewModalVisible}
               title={previewTitle}
               footer={
-                <div style={{display: "flex", flex: 1, justifyContent: "center"}}>
-                  <Button type="primary" style={{margin: "auto"}}>设为封面</Button>
+                <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+                  <Button onClick={handleSetCover} type="primary" style={{ margin: "auto" }}>设为封面</Button>
                 </div>
-                }
+              }
               onCancel={() => setPreviewModalVisible(false)}
-          >
-            <img alt="example" style={{ width: '100%' }} src={previewImage} />
-          </Modal>
-        </PreviewModalContainer>
-      </Form.Item>
-      <Form.Item
-        colon={false}
-        label=" "
-        name="button"
-      >
-          <div style={{display: "flex"}}>
-            <Button type="primary" style={{marginRight: "20px"}} htmlType="submit">提交审核</Button>
+            >
+              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </PreviewModalContainer>
+        </Form.Item>
+        <Form.Item
+          colon={false}
+          label=" "
+          name="button"
+        >
+          <div style={{ display: "flex" }}>
+            <Button type="primary" style={{ marginRight: "20px" }} htmlType="submit">提交审核</Button>
             <Button>取消</Button>
           </div>
         </Form.Item>
@@ -634,4 +679,74 @@ const AddHouse = () => {
     </Style >
   )
 }
+const Style = styled.div`
+.img-file-item {
+    margin-right: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+    width: 104px;
+    height: 104px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+  &:hover {
+    .img-hover {
+      opacity: 1;
+    }
+  }
+  .img-cover {
+    position: absolute;
+    width: 20%;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0px;
+    width: 100%;
+    font-size: 13px;
+    background: ${style['theme-color']};
+    color: #fff;
+  }
+  .img-wrap {
+    width: 86px;
+    height: 86px;
+    position: relative;
+  }
+  .img-hover {
+    opacity: 0;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 0.5s;
+    .iconfont {
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .iconeye {
+      margin-right: 10px;
+      position: relative;
+    }
+    /* .iconeye::after {
+      position
+    } */
+  }
+  .img-file {
+    width: 100%;
+    height: 100%;
+    transition: all 1s;
+  }
+}
+ .global-center {
+   display: flex;
+   align-items: center;
+   flex-wrap:wrap;
+ }
+`
 export default React.memo(AddHouse)

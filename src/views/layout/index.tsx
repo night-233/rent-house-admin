@@ -17,10 +17,12 @@ const Layout = function Layout (props) {
   const dispatch = useDispatch()
   const location = useLocation()
   const currentTitle = route.routes.filter((item) => item.path === location.pathname)
+
   useEffect(() => {
     dispatch(getUserInfo())
     dispatch(getLimits())
   }, [dispatch])
+
   return (
     <LayoutStyle>
       <Header route={route}></Header>
