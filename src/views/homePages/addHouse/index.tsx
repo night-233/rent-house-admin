@@ -225,7 +225,7 @@ const AddHouse = ({history}) => {
         return reject();
       }
       if( file.size > limits.housePhotoSizeLimit){
-        message.error("单张图片最大:" + Tools.getFileSize(limits.housePhotoSizeLimit));
+        message.error("单张图片最大:" + Tools.unitConversion(limits.housePhotoSizeLimit));
         return reject();
       }
       return resolve();

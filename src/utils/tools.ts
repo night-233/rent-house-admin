@@ -32,7 +32,7 @@ const Tools = {
     return { color: base[index], name };
   },
   // 默认返回不带单位的数字格式
-  unitConversion (size: number, unit: string, hasUnit: boolean, fixedSize = 1) {
+  unitConversion (size: number , fixedSize = 1, hasUnit = true, unit?: string) {
     let destSize = Number(size);
     try {
       if (destSize) {
@@ -58,21 +58,6 @@ const Tools = {
       throw new Error(e);
     }
     return destSize;
-  },
-
-  /**
-   * 计算文件大小
-   */
-  getFileSize(fileByte: number): string {
-    var fileSizeByte = fileByte;
-    var fileSizeMsg = "";
-    if (fileSizeByte < 1048576) fileSizeMsg = (fileSizeByte / 1024).toFixed(2) + "KB";
-    else if (fileSizeByte == 1048576) fileSizeMsg = "1MB";
-    else if (fileSizeByte > 1048576 && fileSizeByte < 1073741824) fileSizeMsg = (fileSizeByte / (1024 * 1024)).toFixed(2) + "MB";
-    else if (fileSizeByte > 1048576 && fileSizeByte == 1073741824) fileSizeMsg = "1GB";
-    else if (fileSizeByte > 1073741824 && fileSizeByte < 1099511627776) fileSizeMsg = (fileSizeByte / (1024 * 1024 * 1024)).toFixed(2) + "GB";
-    else fileSizeMsg = "超过1TB";
-    return fileSizeMsg;
   }
 }
 

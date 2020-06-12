@@ -41,4 +41,9 @@ export default [
     meta: { title: '添加房源' },
     component: SuspenseComponent(AddHouse)
   },
+  {
+    path: "/editHouse/:houseId",
+    meta: { title: '编辑房源' },
+    component: SuspenseComponent(AddHouse)
+  },
 ]
