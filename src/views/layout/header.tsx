@@ -10,10 +10,8 @@ import { loginOut } from '@/store/redux/user.redux';
 import { NavLink } from 'react-router-dom'
 
 function Header (props) {
-
   const { route } = props
-  const expectRoute = ['/', '/UserSetting']
-  const currentNav = route.routes.filter((nav) => !expectRoute.includes(nav.path))
+  const currentNav = route.routes.filter((nav) => nav?.meta?.showInHeader)
   const user = useSelector(state => state.user.userInfo)
   const dispatch = useDispatch()
   const history = useHistory()
