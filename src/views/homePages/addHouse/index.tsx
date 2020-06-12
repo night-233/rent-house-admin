@@ -217,17 +217,19 @@ const AddHouse = ({history}) => {
     })
   }
   // 图片上传校验
-  const beforeUpload = (file) => {
-    const currentType = file.type.split('/')[1];
-    if (!limits.housePhotoTypeLimit.some(item => item === currentType)) {
-      message.error("仅支持:" + limits.housePhotoTypeLimit.join(",") + "; 格式");
-      return false;
-    }
-    if (file.size > limits.housePhotoSizeLimit) {
-      message.error("单张图片最大:" + FileUtil.getFileSize(limits.housePhotoSizeLimit));
-      return false;
-    }
-    return true;
+  const beforeUpload = (file): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const currentType = file.type.split('/')[1];
+      if(!limits.housePhotoTypeLimit.some(item => item === currentType)){
+        message.error("仅支持:" + limits.housePhotoTypeLimit.join(",") + "; 格式");
+        return reject();
+      }
+      if( file.size > limits.housePhotoSizeLimit){
+        message.error("单张图片最大:" + FileUtil.getFileSize(limits.housePhotoSizeLimit));
+        return reject();
+      }
+      return resolve();
+    });
   }
   // 处理表单完成
   const handleFormFinish = (values) => {
@@ -558,7 +560,6 @@ const AddHouse = ({history}) => {
         <Form.Item
           label="房源图片"
         >
-          <PreviewModalContainer>
             <UploadHintContainer>请上传清晰、实拍的室内图片，请不要在图片上添加文字、数字、网址等内容，请勿上传名片、二维码、自拍照、风景照等与房源无关的图片，最多上传12张，每张最大10M</UploadHintContainer>
             <div className='global-center'>
               <FlipMove style={{display: "flex", flexWrap: "wrap"}}>
@@ -607,17 +608,21 @@ const AddHouse = ({history}) => {
               }
               onCancel={() => setPreviewModalVisible(false)}
             >
-              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+              <PreviewModalBodyContainer>
+                <img alt="example" style={{ width: '100%', height: "100%", objectFit: "cover" }} src={previewImage} />
+                {
+                  previewUid === cover && <ModalCoverContainer>封面</ModalCoverContainer>
+                }
+              </PreviewModalBodyContainer>
             </Modal>
-          </PreviewModalContainer>
         </Form.Item>
-        <Form.Item
-          colon={false}
-          label=" "
-          name="button"
-        >
-          <div style={{ display: "flex" }}>
-            <Button type="primary" style={{ marginRight: "20px" }} htmlType="submit" loading={formButtonLoading}>提交审核</Button>
+      <Form.Item
+        colon={false}
+        label=" "
+        name="button"
+      >
+          <div style={{display: "flex"}}>
+            <Button type="primary" style={{marginRight: "20px"}} htmlType="submit">提交审核</Button>
             <Button>取消</Button>
           </div>
         </Form.Item>
@@ -625,6 +630,23 @@ const AddHouse = ({history}) => {
     </Style >
   )
 }
+
+const PreviewModalBodyContainer = styled.div`
+  position: relative; 
+`
+const ModalCoverContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  height: 10%;
+  width: 100%;
+  background: #79d8db;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px; 
+  color: white;
+`
+
 
 const Cover = styled.img`
   width: 100px;
