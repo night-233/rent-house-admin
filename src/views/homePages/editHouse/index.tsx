@@ -7,11 +7,12 @@ import {withRouter} from "react-router-dom";
  */
 const index = (props) => {
 
-    const {location} = props;
+    const {location, match} = props;
 
+    console.log(match)
     return (
         <div>
-            房源编辑: {location}
+            房源编辑: {match.params.houseId}
         </div>
     )
 }

@@ -14,6 +14,7 @@ const UserSetting = lazy(() => import("../views/homePages/userSetting"));
 const AddHouse = lazy(() => import("../views//homePages/addHouse/index"));
 const Home = lazy(() => import("../views/home"));
 const HouseList = lazy(() => import("../views/homePages/houseList"));
+const EditHouse = lazy(() => import("../views/homePages/editHouse/index"));
 
 export default [
   {
@@ -44,6 +45,6 @@ export default [
   {
     path: "/editHouse/:houseId",
     meta: { title: '编辑房源', showInHeader: false },
-    component: SuspenseComponent(AddHouse)
+    component: SuspenseComponent(EditHouse)
   },
 ]
