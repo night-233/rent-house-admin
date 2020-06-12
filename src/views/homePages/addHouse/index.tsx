@@ -24,10 +24,10 @@ import AddressApi from "@apis/address";
 import {EyeOutlined, PlusOutlined} from "@ant-design/icons/lib";
 import { useSelector } from 'react-redux'
 import AdminApi from "@apis/admin";
-import FileUtil from "@utils/file-util";
 import FlipMove from "react-flip-move";
 import moment from "moment"
 import {withRouter} from "react-router-dom";
+import Tools from "@utils/tools";
 
 const layout = {
   labelCol: { span: 2 },
@@ -225,7 +225,7 @@ const AddHouse = ({history}) => {
         return reject();
       }
       if( file.size > limits.housePhotoSizeLimit){
-        message.error("单张图片最大:" + FileUtil.getFileSize(limits.housePhotoSizeLimit));
+        message.error("单张图片最大:" + Tools.getFileSize(limits.housePhotoSizeLimit));
         return reject();
       }
       return resolve();
