@@ -3,8 +3,8 @@ const path = require('path')
 
 
 const mockIp = '10.0.5.199:13000/mock';
-const IP = 'rent-house.touchfish.top';
-// const IP = 'localhost:8080';
+// const IP = 'rent-house.touchfish.top';
+const IP = 'localhost:8080';
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {

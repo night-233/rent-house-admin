@@ -10,7 +10,11 @@ export default {
     return {
       getHouseList: `${base}/admin/houses`,
       uploadPhoto: `${base}/admin/house/upload/photo`,
+<<<<<<< HEAD
       addHouses: `${base}/admin/house/add`
+=======
+      addHouse: `${base}/admin/house/add`,
+>>>>>>> 完成房源编辑
     };
   },
   getHouseList (data: Object) {
@@ -35,6 +39,26 @@ export default {
       method: 'post',
       data: houseForm
     });
+  },
+  /**
+   * 通过房源id获取房源具体信息
+   * @param houseId 房源id
+   */
+  getHouse(houseId){
+    return request({
+      url: `${base}/admin/house/` + houseId,
+      method: "get"
+    })
+  },
+  /**
+   * 更新房源信息
+   */
+  updateHouse(houseForm){
+    return request({
+      url: `${base}/admin/house/edit`,
+      method: "put",
+      data: houseForm
+    })
   }
 
 };
