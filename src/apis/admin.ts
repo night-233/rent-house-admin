@@ -10,11 +10,7 @@ export default {
     return {
       getHouseList: `${base}/admin/houses`,
       uploadPhoto: `${base}/admin/house/upload/photo`,
-<<<<<<< HEAD
       addHouses: `${base}/admin/house/add`
-=======
-      addHouse: `${base}/admin/house/add`,
->>>>>>> 完成房源编辑
     };
   },
   getHouseList (data: Object) {
