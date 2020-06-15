@@ -25,7 +25,7 @@ export default ({ name, avatar, width = "32" }) => {
 
   return (
     <Avatar color={config.color} style={style}>
-      {avatar ? <img src={avatar} style={style} /> : config.name}
+      {avatar ? <img src={avatar} style={style} alt='' /> : config.name}
     </Avatar>
   )
 }

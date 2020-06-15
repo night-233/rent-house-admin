@@ -39,6 +39,7 @@ export function loginIn (payload, token) {
 }
 
 export async function loginOut () {
+  cookie.removeCookie()
   return { type: LOGIN_OUT }
 }
 

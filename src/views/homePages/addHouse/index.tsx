@@ -21,12 +21,12 @@ import style from '@assets/global-style';
 import styled from 'styled-components';
 import { handleResponse } from "@utils/handle-reponse";
 import AddressApi from "@apis/address";
-import {EyeOutlined, PlusOutlined} from "@ant-design/icons/lib";
+import { EyeOutlined, PlusOutlined } from "@ant-design/icons/lib";
 import { useSelector } from 'react-redux'
 import AdminApi from "@apis/admin";
 import FlipMove from "react-flip-move";
 import moment from "moment"
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Tools from "@utils/tools";
 
 const layout = {
@@ -71,8 +71,9 @@ const SubwayPlaceHolderContainer = ["请先选择所在城市", "请选择地铁
 const SubwayStationPlaceHolderContainer = ["请先选择地铁线路", "请选择地铁站"];
 const houseTagsArray = ["集体供暖", "独立阳台", "独立卫生间", "空调", "精装修", "路由器", "热水器", "桌子", "衣柜", "拎包入住", "洗衣机", "电磁炉"];
 
-const AddHouse = ({history}) => {
-
+const AddHouse = (props) => {
+  console.log('sss', props)
+  // const { history } = props
   const [form] = Form.useForm();
   // 城市列表
   const [cities, setCities] = useState<address[]>([]);
@@ -193,7 +194,7 @@ const AddHouse = ({history}) => {
     setPreviewUid(file.uid)
   }
   // 处理上传文件改变
-  const handleFileChange =  ({file, fileList}) => {
+  const handleFileChange = ({ file, fileList }) => {
     const tmp = [...fileList];
     tmp.forEach(async (item) => {
       if (!item.url && !item.preview) {
@@ -201,13 +202,13 @@ const AddHouse = ({history}) => {
       }
       return item;
     })
-    if(!cover){
+    if (!cover) {
       setCover(tmp.length > 0 ? tmp[0].uid : null);
     }
     setImageList(tmp);
   }
   // 处理上传图片
-  const handleUpload =  ({ file, onError, onSuccess }) => {
+  const handleUpload = ({ file, onError, onSuccess }) => {
     return AdminApi.uploadPhoto(file).then(async (res) => {
       if (res) {
         onSuccess(res, file);
@@ -220,11 +221,11 @@ const AddHouse = ({history}) => {
   const beforeUpload = (file): Promise<void> => {
     return new Promise((resolve, reject) => {
       const currentType = file.type.split('/')[1];
-      if(!limits.housePhotoTypeLimit.some(item => item === currentType)){
+      if (!limits.housePhotoTypeLimit.some(item => item === currentType)) {
         message.error("仅支持:" + limits.housePhotoTypeLimit.join(",") + "; 格式");
         return reject();
       }
-      if( file.size > limits.housePhotoSizeLimit){
+      if (file.size > limits.housePhotoSizeLimit) {
         message.error("单张图片最大:" + Tools.unitConversion(limits.housePhotoSizeLimit));
         return reject();
       }
@@ -256,10 +257,10 @@ const AddHouse = ({history}) => {
     }
     console.dir(houseForm);
     console.log(JSON.stringify(houseForm));
-     handleResponse( AdminApi.addHouse(houseForm), data => {
-         message.success("新增成功");
-         history.push("/houseList")
-     }, "新增房源失败", setFormButtonLoading);
+    handleResponse(AdminApi.addHouse(houseForm), data => {
+      message.success("新增成功");
+      // history.push("/houseList")
+    }, "新增房源失败", setFormButtonLoading);
   }
 
   //  处理设置封面
@@ -270,7 +271,7 @@ const AddHouse = ({history}) => {
   // 处理移除图片
   const handleRemove = (uid) => {
     const result = imageList.filter(item => item.uid !== uid);
-    if(uid === cover){
+    if (uid === cover) {
       setCover(result.length > 0 ? result[0].uid : null);
     }
     setImageList(result);
@@ -364,10 +365,10 @@ const AddHouse = ({history}) => {
           </Col>
           <Col span={colSpan}>
             <Form.Item
-                {...rowLayout}
-                label="房间朝向"
-                name="direction"
-                rules={[{ required: true, message: '请选择房间朝向' }]}
+              {...rowLayout}
+              label="房间朝向"
+              name="direction"
+              rules={[{ required: true, message: '请选择房间朝向' }]}
             >
               <Select style={{ textAlign: "left" }} placeholder="请选择房间朝向">
                 <Option value="1">朝东</Option>
@@ -399,10 +400,10 @@ const AddHouse = ({history}) => {
           </Col>
           <Col span={colSpan}>
             <Form.Item
-                {...rowLayout}
-                label="卫生间数量"
-                name="bathroom"
-                rules={[numberValidate("卫生间数量只能为非负整数", /^\d+$/)]}
+              {...rowLayout}
+              label="卫生间数量"
+              name="bathroom"
+              rules={[numberValidate("卫生间数量只能为非负整数", /^\d+$/)]}
             >
               <Input placeholder="卫生间数量" style={{ width: "100%" }} suffix="间" />
             </Form.Item>
@@ -460,10 +461,10 @@ const AddHouse = ({history}) => {
           </Col>
           <Col span={colSpan}>
             <Form.Item
-                {...rowLayout}
-                label="建筑时间"
-                name="buildYear"
-                rules={[{ required: true, message: '请输入建筑时间' }]}
+              {...rowLayout}
+              label="建筑时间"
+              name="buildYear"
+              rules={[{ required: true, message: '请输入建筑时间' }]}
             >
               <DatePicker disabledDate={disabledBuildDate} picker="year" placeholder={"建筑时间"} style={{ width: "100%" }} />
             </Form.Item>
@@ -560,69 +561,69 @@ const AddHouse = ({history}) => {
         <Form.Item
           label="房源图片"
         >
-            <UploadHintContainer>请上传清晰、实拍的室内图片，请不要在图片上添加文字、数字、网址等内容，请勿上传名片、二维码、自拍照、风景照等与房源无关的图片，最多上传12张，每张最大10M</UploadHintContainer>
-            <div className='global-center'>
-              <FlipMove style={{display: "flex", flexWrap: "wrap"}}>
-                {
-                  imageList.map((file, index) => {
-                    return (
-                        <div key={file.uid} className='img-file-item'>
-                          <div className='img-wrap'>
-                            <img className='img-file' src={file.url || file.preview} alt=""/>
-                            <div className='img-hover'>
-                              <span onClick={() => handlePreview(file)}><EyeOutlined className="thumbnail-icon" title="预览"/></span>
-                              <span onClick={() => handleRemove(file.uid)}><DeleteOutlined className="thumbnail-icon" title="删除"/></span>
-                            </div>
-                            {file.uid === cover && <div className='img-cover'>封面</div>}
-                          </div>
+          <UploadHintContainer>请上传清晰、实拍的室内图片，请不要在图片上添加文字、数字、网址等内容，请勿上传名片、二维码、自拍照、风景照等与房源无关的图片，最多上传12张，每张最大10M</UploadHintContainer>
+          <div className='global-center'>
+            <FlipMove style={{ display: "flex", flexWrap: "wrap" }}>
+              {
+                imageList.map((file, index) => {
+                  return (
+                    <div key={file.uid} className='img-file-item'>
+                      <div className='img-wrap'>
+                        <img className='img-file' src={file.url || file.preview} alt="" />
+                        <div className='img-hover'>
+                          <span onClick={() => handlePreview(file)}><EyeOutlined className="thumbnail-icon" title="预览" /></span>
+                          <span onClick={() => handleRemove(file.uid)}><DeleteOutlined className="thumbnail-icon" title="删除" /></span>
                         </div>
-                    )
-                  })
-                }
-                <Upload
-                    style={{display: "inline-block"}}
-                    listType="picture-card"
-                    fileList={imageList}
-                    multiple={true}
-                    showUploadList={false}
-                    onPreview={handlePreview}
-                    beforeUpload={beforeUpload}
-                    onChange={handleFileChange}
-                    customRequest={handleUpload}
-                    previewFile={(file) => {
-                      console.log('Your upload file:', file);
-                      return new Promise(() => file)
-                    }}
-                >
-                  {imageList.length >= 12 ? null : uploadButton}
-                </Upload>
-              </FlipMove>
-            </div>
-            <Modal
-              visible={previewModalVisible}
-              title={previewTitle}
-              footer={
-                <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
-                  <Button onClick={handleSetCover} type="primary" style={{ margin: "auto" }}>设为封面</Button>
-                </div>
+                        {file.uid === cover && <div className='img-cover'>封面</div>}
+                      </div>
+                    </div>
+                  )
+                })
               }
-              onCancel={() => setPreviewModalVisible(false)}
-            >
-              <PreviewModalBodyContainer>
-                <img alt="example" style={{ width: '100%', height: "100%", objectFit: "cover" }} src={previewImage} />
-                {
-                  previewUid === cover && <ModalCoverContainer>封面</ModalCoverContainer>
-                }
-              </PreviewModalBodyContainer>
-            </Modal>
+              <Upload
+                style={{ display: "inline-block" }}
+                listType="picture-card"
+                fileList={imageList}
+                multiple={true}
+                showUploadList={false}
+                onPreview={handlePreview}
+                beforeUpload={beforeUpload}
+                onChange={handleFileChange}
+                customRequest={handleUpload}
+                previewFile={(file) => {
+                  console.log('Your upload file:', file);
+                  return new Promise(() => file)
+                }}
+              >
+                {imageList.length >= 12 ? null : uploadButton}
+              </Upload>
+            </FlipMove>
+          </div>
+          <Modal
+            visible={previewModalVisible}
+            title={previewTitle}
+            footer={
+              <div style={{ display: "flex", flex: 1, justifyContent: "center" }}>
+                <Button onClick={handleSetCover} type="primary" style={{ margin: "auto" }}>设为封面</Button>
+              </div>
+            }
+            onCancel={() => setPreviewModalVisible(false)}
+          >
+            <PreviewModalBodyContainer>
+              <img alt="example" style={{ width: '100%', height: "100%", objectFit: "cover" }} src={previewImage} />
+              {
+                previewUid === cover && <ModalCoverContainer>封面</ModalCoverContainer>
+              }
+            </PreviewModalBodyContainer>
+          </Modal>
         </Form.Item>
-      <Form.Item
-        colon={false}
-        label=" "
-        name="button"
-      >
-          <div style={{display: "flex"}}>
-            <Button type="primary" style={{marginRight: "20px"}} htmlType="submit">提交审核</Button>
+        <Form.Item
+          colon={false}
+          label=" "
+          name="button"
+        >
+          <div style={{ display: "flex" }}>
+            <Button type="primary" style={{ marginRight: "20px" }} htmlType="submit">提交审核</Button>
             <Button>取消</Button>
           </div>
         </Form.Item>
@@ -694,10 +695,10 @@ const UploadHintContainer = styled.div`
     text-align: left;
 `
 const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div className="ant-upload-text">上传图片</div>
-    </div>
+  <div>
+    <PlusOutlined />
+    <div className="ant-upload-text">上传图片</div>
+  </div>
 );
 const Style = styled.div`
 .img-file-item {
@@ -778,4 +779,4 @@ const Style = styled.div`
     width: auto;
  }
 `
-export default withRouter(React.memo(AddHouse));
+export default React.memo(AddHouse);

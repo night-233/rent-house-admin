@@ -8,16 +8,16 @@ const base = '/dev';
 export default {
   urls () {
     return {
-      getHouseList: `${base}/admin/house`,
+      getHouseList: `${base}/admin/houses`,
       uploadPhoto: `${base}/admin/house/upload/photo`,
-      addHouse: `${base}/admin/house/add`
+      addHouses: `${base}/admin/house/add`
     };
   },
-  getHouseList (params: Object) {
+  getHouseList (data: Object) {
     return request({
       url: this.urls().getHouseList,
-      method: 'get',
-      params,
+      method: 'post',
+      data,
     });
   },
   uploadPhoto (file: Blob) {
