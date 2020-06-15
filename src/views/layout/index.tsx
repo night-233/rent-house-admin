@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import Bottom from './bottom';
 import { renderRoutes } from 'react-router-config'
 import Header from './header'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { getUserInfo } from '@/store/redux/user.redux'
 import { getLimits } from '@/store/redux/common.redux'
@@ -16,8 +16,24 @@ const Layout = function Layout (props) {
   const { route } = props
   const dispatch = useDispatch()
   const location = useLocation()
-  const currentTitle = route.routes.filter((item) => item.path === location.pathname)
 
+  const dealPathName = (key, data) => {
+    return data.reduce((res, item) => {
+      if (key === 'local') {
+        return isNaN(Number(item)) ? res += item : res
+      } else {
+        return !item.includes(':') ? res += item : res
+      }
+    }, '')
+  }
+
+  const locationPath = dealPathName('local', location?.pathname?.split('/'))
+  const [currentTitle] = route.routes.filter((item) => {
+    const itemPath = dealPathName('currentPath', item?.path?.split('/'))
+    return itemPath === locationPath
+  })
+
+  console.log('dsa', route)
   useEffect(() => {
     dispatch(getUserInfo())
     dispatch(getLimits())
@@ -28,7 +44,7 @@ const Layout = function Layout (props) {
       <Header route={route}></Header>
       <section className="content-wrap">
         <section className="main-content-box">
-          <section className="nav-tip">{currentTitle?.length && currentTitle[0]?.meta?.title}</section>
+          <section className="nav-tip">{currentTitle && currentTitle?.meta?.title}</section>
           <section className="main-content">
             {renderRoutes(route.routes)}
           </section>
