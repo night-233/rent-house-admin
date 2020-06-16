@@ -13,10 +13,12 @@ import styled from 'styled-components'
 
 
 const Layout = function Layout (props) {
+
   const { route } = props
   const dispatch = useDispatch()
   const location = useLocation()
 
+  // 处理路由中出现动态id时的情况
   const dealPathName = (key, data) => {
     return data.reduce((res, item) => {
       if (key === 'local') {
@@ -28,12 +30,12 @@ const Layout = function Layout (props) {
   }
 
   const locationPath = dealPathName('local', location?.pathname?.split('/'))
+
   const [currentTitle] = route.routes.filter((item) => {
     const itemPath = dealPathName('currentPath', item?.path?.split('/'))
     return itemPath === locationPath
   })
 
-  console.log('dsa', route)
   useEffect(() => {
     dispatch(getUserInfo())
     dispatch(getLimits())

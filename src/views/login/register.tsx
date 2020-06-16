@@ -13,6 +13,7 @@ interface Props {
   goToLogin: Func,
   limits: any
 }
+
 const RegisterBlock = (props: Props) => {
   const dispatch = useDispatch()
   const { limits } = props
@@ -92,6 +93,8 @@ const RegisterBlock = (props: Props) => {
       clearInterval(timer)
     }
   }, [timer])
+
+
   return (<Style>
     {/* <div className="title">注册房东管理系统</div> */}
     <section className="login-block">

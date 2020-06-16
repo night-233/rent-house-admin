@@ -4,9 +4,14 @@ import React, { lazy, Suspense } from "react";
 
 const SuspenseComponent = Component => props => {
   return (
-    <Suspense fallback={<div></div>}>
+    <Suspense fallback={<div style={{
+      height: 'calc(100vh-150px)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}> loading...</div >}>
       <Component {...props}></Component>
-    </Suspense>
+    </Suspense >
   )
 }
 

@@ -36,6 +36,7 @@ export const InitStyle = createGlobalStyle`
     background: #f2f3f4;
     width: 100%;
     height: 100%;
+    text-align: left;
     font-family: Avenir,-apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,noto sans,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol,noto color emoji,sans-serif;
 	}
 	ol, ul {

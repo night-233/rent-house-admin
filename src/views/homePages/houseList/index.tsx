@@ -6,8 +6,10 @@ import adminApi from '@/apis/admin'
 import { useImmer } from "use-immer";
 import AddressApi from "@apis/address";
 import style from '@/assets/global-style'
-import { Table, Tag, Space } from 'antd';
+import { Table } from 'antd';
 import { FormOutlined } from "@ant-design/icons/lib";
+import { NavLink } from 'react-router-dom'
+
 interface address {
   id: number,
   enName: string,
@@ -16,11 +18,12 @@ interface address {
   baiduMapLng: number,
   baiduMapLat: number,
 }
+
 const columns = [
   {
     title: '标题',
     dataIndex: 'title',
-    key: 'adminId',
+    key: 'title',
     width: 120,
     render: title => (
       <>
@@ -31,48 +34,48 @@ const columns = [
   {
     title: '封面',
     dataIndex: 'cover',
-    key: 'adminId',
+    key: 'cover',
     width: 150,
     render: cover => (
       <>
-        <img style={{ width: '120px' }} src={cover} alt='' />
+        <img style={{ width: '120px' }} typeof="Image" src={cover} alt='' />
       </>
     ),
   },
   {
     title: '面积',
     dataIndex: 'area',
-    key: 'adminId',
+    key: 'area',
     width: 80
   },
   {
     title: '价格',
-    key: 'adminId',
+    key: 'price',
     dataIndex: 'price',
     width: 80
   },
   {
     title: '楼层',
     dataIndex: 'floor',
-    key: 'adminId',
+    key: 'floor',
     width: 80
   },
   {
     title: '带看次数',
     dataIndex: 'watchTimes',
-    key: 'adminId',
+    key: 'watchTimes',
     width: 80
   },
   {
     title: '创建时间',
     dataIndex: 'createTime',
-    key: 'adminId',
+    key: 'createTime',
     width: 100
   },
   {
     title: '发布状态',
     dataIndex: 'statusText',
-    key: 'adminId',
+    key: 'statusText',
     width: 90,
     render: (statusText) => (
       <div className='status-card'>
@@ -82,10 +85,10 @@ const columns = [
   },
   {
     title: '操作',
-    dataIndex: 'adminId',
-    key: 'adminId',
-    render: (row) => (
-      <div className='icon-box'><FormOutlined /></div>
+    dataIndex: 'id',
+    key: 'id',
+    render: (id) => (
+      <NavLink to={`/editHouse/${id}`}><div className='icon-box' ><FormOutlined /></div></NavLink>
     ),
     width: 80
   },
@@ -98,13 +101,16 @@ const statusMap = [
   { id: 3, text: '逻辑删除' },
 ]
 
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+
 function HouseList (props) {
-  const { Option } = Select;
-  const { RangePicker } = DatePicker;
+
   const [data, setData] = useState([]);
   const [total, setTotals] = useState(0)
   const [cities, setCities] = useState<address[]>([]);
   const [loading, setLoading] = useState(false)
+
   const [params, setParams] = useImmer({
     city: "",
     createTimeMax: "2021-06-01",
@@ -133,7 +139,7 @@ function HouseList (props) {
       setParams((draft) => {
         draft.title = value
       })
-    }, 300)
+    }, 500)
   }
 
   const handleChangeStatus = (value) => {
@@ -147,11 +153,12 @@ function HouseList (props) {
       draft.page = value
     })
   }
+
   const handleChangeDate = (date) => {
-    console.log(date[0].format(dateFormat))
+    console.log(date)
     setParams((draft) => {
-      draft.createTimeMin = date[0].format(dateFormat)
-      draft.createTimeMax = date[1].format(dateFormat)
+      draft.createTimeMin = date ? date[0]?.format(dateFormat) : ''
+      draft.createTimeMax = date ? date[1]?.format(dateFormat) : ''
     })
   }
 
@@ -178,7 +185,6 @@ function HouseList (props) {
   }, [params])
 
   const dealListData = (originData) => {
-
     return originData.map((item) => {
       return {
         ...item,
@@ -187,7 +193,8 @@ function HouseList (props) {
         price: `¥ ${item.price}`,
         floor: `${item.floor} 层`,
         watchTimes: `${item.watchTimes} 次`,
-        statusText: statusMap[item.status].text
+        statusText: statusMap[item.status].text,
+        key: item.id
       }
     })
   }
@@ -209,10 +216,8 @@ function HouseList (props) {
             <Col span={3}>
               <Select defaultValue="全部城市" onChange={handleChangeCity}>
                 {
-                  cities?.map((city, index) => (
-                    <>
-                      <Option value={city?.enName} key={index} >{city.cnName}</Option>
-                    </>
+                  cities?.map((city) => (
+                    <Option value={city?.enName} key={city.id} >{city.cnName}</Option>
                   ))
                 }
               </Select>
@@ -220,18 +225,19 @@ function HouseList (props) {
             <Col span={colSpan}>
               <Select defaultValue='所有状态' onChange={handleChangeStatus}>
                 {
-                  statusMap?.map((status, index) => (
-                    <>
-                      <Option value={status.id} key={status.id} >{status.text}</Option>
-                    </>
+                  statusMap?.map((status) => (
+                    <Option value={status.id} key={status.id} >{status.text}</Option>
                   ))
                 }
               </Select>
             </Col>
             <Col span={6}>
               <RangePicker
-                defaultValue={[moment('2015-01-01', dateFormat), moment(new Date(), dateFormat)]}
                 format={dateFormat}
+                ranges={{
+                  Today: [moment(), moment()],
+                  'This Month': [moment().startOf('month'), moment().endOf('month')],
+                }}
                 onChange={handleChangeDate}
               />
             </Col>
@@ -240,9 +246,12 @@ function HouseList (props) {
             </Col>
           </Row>
           <Table
-            pagination={{ position: ['bottomCenter'], pageSize: params.pageSize, total: total, onChange: handleSetPage }}
+            className='global-table'
+            pagination={{ position: ['bottomCenter'], hideOnSinglePage: true, pageSize: params.pageSize, total: total, onChange: handleSetPage }}
             columns={columns}
             loading={loading}
+            bordered={false}
+            rowKey={(record: any) => record.id}
             dataSource={data}
           />
         </section>
@@ -252,9 +261,15 @@ function HouseList (props) {
 }
 
 const Style = styled.div`
+.house-list {
+  
+}
+a {
+  color: ${style['lighter-font']}
+}
 .status-card {
   border: 1px solid red;
-  padding: 3px 6px;
+  padding: 2px 6px;
   border-radius: 4px;
   border: 1px solid ${style['theme-color']};
   font-size: 12px;

@@ -22,6 +22,22 @@ export const GlobalCss = createGlobalStyle`
     }
   }
 
+  .global-table {
+    .ant-table {
+      min-height: calc(100vh-200px)
+    }
+    .ant-table-thead > tr > th{
+      height: 44px !important;
+      line-height: 44px;
+      box-sizing: border-box;
+      font-size: 14px;
+      font-weight: 500;
+      background: #51c6cf0f;
+      padding: 0px 16px;
+      color: rgba(27, 29, 31, 0.65);
+    }
+  }
+
 .fade-enter.fade-enter-active, .fade-appear.fade-appear-active {
   opacity: 1;
   transition: opacity 300ms ease-in;
