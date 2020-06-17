@@ -34,7 +34,6 @@ window.addEventListener('error', function (e) {
       target.src = '/src/assets/img/avatar5.jpeg';
     }
   }
-  console.log('sss', target.src)
 }, true)
 
 

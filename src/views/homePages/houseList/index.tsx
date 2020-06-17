@@ -19,6 +19,8 @@ interface address {
   baiduMapLat: number,
 }
 
+
+
 const columns = [
   {
     title: '标题',
@@ -78,9 +80,11 @@ const columns = [
     key: 'statusText',
     width: 90,
     render: (statusText) => (
-      <div className='status-card'>
-        {statusText}
-      </div>
+      <StatusStyle color={statusText.color}>
+        <div className='status-card'>
+          {statusText.text}
+        </div>
+      </StatusStyle>
     ),
   },
   {
@@ -94,11 +98,18 @@ const columns = [
   },
 ];
 
+const StatusStyle = styled.div`
+  .status-card {
+    border-color: ${props => props.color};
+    color: ${props => props.color};
+  }
+`
+
 const statusMap = [
-  { id: 0, text: '未审核' },
-  { id: 1, text: '审核通过' },
-  { id: 2, text: '已出租' },
-  { id: 3, text: '逻辑删除' },
+  { id: 0, text: '未审核', color: '#db162f' },
+  { id: 1, text: '审核通过', color: '#51c6cf' },
+  { id: 2, text: '已出租', color: '#F0A202' },
+  { id: 3, text: '逻辑删除', color: '#db162f' },
 ]
 
 const { Option } = Select;
@@ -193,7 +204,7 @@ function HouseList (props) {
         price: `¥ ${item.price}`,
         floor: `${item.floor} 层`,
         watchTimes: `${item.watchTimes} 次`,
-        statusText: statusMap[item.status].text,
+        statusText: statusMap[item.status],
         key: item.id
       }
     })
@@ -271,10 +282,10 @@ a {
   border: 1px solid red;
   padding: 2px 6px;
   border-radius: 4px;
-  border: 1px solid ${style['theme-color']};
+  border: 1px solid;
   font-size: 12px;
-  color: ${style['theme-color']};
   text-align: center;
+  position: relative;
 }
 .icon-box {
   cursor: pointer;
