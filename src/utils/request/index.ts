@@ -39,16 +39,9 @@ axios.interceptors.request.use(
 );
 
 
-const request = (config: any, that: any = false) => {
-  if (that && typeof that?.source === 'function') {
-    that.source('终止请求');
-  }
-  const cancel = that ? {
-    cancelToken: new axios.CancelToken((c) => {
-      that.source = c;
-    })
-  } : {};
-  const customConfig = Object.assign({ ...cancel }, config);
+const request = (config: any) => {
+
+  const customConfig = Object.assign(config);
   return axios(customConfig)
     .then((response) => {
       return response.data || response || true;
