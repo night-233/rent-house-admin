@@ -12,12 +12,14 @@ interface Props {
   goToRegister: Func,
   limits: any
 }
+
 const LoginBlock = (props: Props) => {
+  const [form] = Form.useForm();
   const { limits } = props
   const dispatch = useDispatch()
-  const [form] = Form.useForm();
   const history = useHistory();
   const [loading, setLoading] = useState(false)
+
   const onFinish = values => {
     const data = JSON.parse(JSON.stringify(values))
     setLoading(true)
@@ -28,6 +30,7 @@ const LoginBlock = (props: Props) => {
       }
     })
   };
+
   const checkTel = (rule, value, callback) => {
     try {
       if (!new RegExp(limits?.phoneRegex).test(value)) {
@@ -39,6 +42,7 @@ const LoginBlock = (props: Props) => {
       callback()
     }
   }
+
   const checkPwd = (rule, value, callback) => {
     try {
       if (!new RegExp(limits?.userPasswordRegex).test(value)) {
@@ -50,9 +54,11 @@ const LoginBlock = (props: Props) => {
       callback(err);
     }
   }
+
   const onFinishFailed = errorInfo => {
     message.error('请完成校验再登录')
   };
+
   return (<Style>
     {/* <div className="title">登录房东管理系统</div> */}
     <section className="login-block">

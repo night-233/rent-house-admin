@@ -15,18 +15,18 @@ interface Props {
 }
 
 const RegisterBlock = (props: Props) => {
+  const [form] = Form.useForm();
   const dispatch = useDispatch()
   const { limits } = props
   const [loading, setLoading] = useState(false)
-  const [form] = Form.useForm();
   const history = useHistory();
+  const [codetext, setCodeText] = useState<any>('获取验证码')
+  let time = 60, timer: any;
   const layout = {
     labelCol: { span: 5 },
     wrapperCol: { span: 19 },
   };
-  let time = 60;
-  let timer: any, codetext: any, setCodeText: any;
-  [codetext, setCodeText] = useState('获取验证码')
+
   const onFinish = values => {
     const data = {
       password: values.password,
@@ -42,6 +42,7 @@ const RegisterBlock = (props: Props) => {
       }
     })
   };
+
   const getCapcha = async () => {
     await form.validateFields(['phone'])
     const data = {
@@ -63,9 +64,11 @@ const RegisterBlock = (props: Props) => {
       }
     }, 1000)
   }
+
   const onFinishFailed = errorInfo => {
     message.error('请完成校验再登录')
   };
+
   const checkPassword = (rule, value, callback) => {
     try {
       if (value !== form.getFieldsValue().password) {
@@ -77,6 +80,7 @@ const RegisterBlock = (props: Props) => {
       callback(err);
     }
   }
+
   const checkPwd = (rule, value, callback) => {
     try {
       if (!new RegExp(limits?.userPasswordRegex).test(value)) {
@@ -88,6 +92,7 @@ const RegisterBlock = (props: Props) => {
       callback();
     }
   }
+
   useEffect(() => {
     return (): void => {
       clearInterval(timer)
