@@ -50,7 +50,7 @@ const SubwayStationPlaceHolderContainer = ["请先选择地铁线路", "请选�
 
 const HouseForm = (props) => {
 
-  const { initValue, onSubmit, buttonName = "保存", buttonLoading = false } = props;
+  const { initValue, onSubmit, buttonName = "保存", buttonLoading = false, onCancel= (dirty) => {}} = props;
 
   const [form] = Form.useForm();
   // 城市列表
@@ -77,6 +77,8 @@ const HouseForm = (props) => {
   const [subwayStationPlaceholder, setSubwayStationPlaceholder] = useState(0);
   // 接口限制
   const limits = useSelector(state => state.common.limits);
+  // 表单是否被修改锅
+  const [formDirty, setFormDirty] = useState(false);
 
   useEffect(() => {
     if (initValue) {
@@ -105,6 +107,7 @@ const HouseForm = (props) => {
   }
   // 处理表单值改变
   const handleValuesChange = (changedValues) => {
+    setFormDirty(true);
     // 如果城市改变，则联动县与地铁线路
     if (Object.keys(changedValues).indexOf("city") !== -1) {
       form.setFieldsValue({ region: undefined, subway: undefined, subwayStation: undefined });
@@ -469,7 +472,7 @@ const HouseForm = (props) => {
         >
           <div style={{ display: "flex" }}>
             <Button type="primary" style={{ marginRight: "20px" }} htmlType="submit" loading={buttonLoading}>{buttonName}</Button>
-            <Button>取消</Button>
+            <Button onClick={() => onCancel(formDirty)}>取消</Button>
           </div>
         </Form.Item>
       </Form>

@@ -2,9 +2,11 @@ import React, {useEffect, useState} from "react";
 import AdminApi from "@apis/admin";
 import {handleResponse} from "@utils/handle-reponse";
 import HouseForm from "../../../components/HouseForm";
-import {message, Spin} from 'antd';
+import {message, Spin, Modal} from 'antd';
 import moment from "moment";
 import {useHistory} from "react-router";
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+const { confirm } = Modal;
 /**
  * 编辑房源
  * @constructor
@@ -87,10 +89,26 @@ const HouseEdit = (props) => {
             }
         });
     }
+    // 处理表单取消
+    const handleCancel = (dirty) => {
+        if(dirty){
+            confirm({
+                title: '警告',
+                icon: <ExclamationCircleOutlined />,
+                content: '你的修改不会被保存，是否继续？',
+                onOk() {
+                    history.push("/houseList");
+                },
+                onCancel() {},
+            });
+        }else{
+            history.push("/houseList");
+        }
+    };
 
     return (
         <Spin spinning={isFormLoading}>
-            <HouseForm initValue={formValues} onSubmit={onSubmit} buttonName="修改" buttonLoading={buttonLoading}/>
+            <HouseForm initValue={formValues} onSubmit={onSubmit} buttonName="修改" buttonLoading={buttonLoading} onCancel={handleCancel}/>
         </Spin>
     )
 }
