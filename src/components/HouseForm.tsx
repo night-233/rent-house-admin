@@ -211,10 +211,12 @@ const HouseForm = (props) => {
             >
               <Select
                 style={{ textAlign: "left" }}
+                showSearch={true}
+                optionFilterProp="children"
                 placeholder="请选择城市"
                 notFoundContent={isCityLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
-                  cities.map(city => <Option key={city.enName} value={city.enName}>{city.cnName}</Option>)
+                  cities.map(city => <Option key={city.cnName} value={city.enName}>{city.cnName}</Option>)
                 }
               </Select>
             </Form.Item>
@@ -227,7 +229,10 @@ const HouseForm = (props) => {
               rules={[{ required: true, message: '请选择区县' }
               ]}
             >
-              <Select style={{ textAlign: "left" }} placeholder={RegionPlaceHolderContainer[regionPlaceholder]} notFoundContent={isRegionLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
+              <Select style={{ textAlign: "left" }}
+                      showSearch={true}
+                      optionFilterProp="children"
+                      placeholder={RegionPlaceHolderContainer[regionPlaceholder]} notFoundContent={isRegionLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   regions.map(region => <Option key={region.enName} value={region.enName}>{region.cnName}</Option>)
                 }
@@ -389,7 +394,11 @@ const HouseForm = (props) => {
               label="地铁线路"
               name="subway"
             >
-              <Select placeholder={SubwayPlaceHolderContainer[subwayPlaceholder]} style={{ textAlign: "left" }} notFoundContent={isSubwayLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
+              <Select placeholder={SubwayPlaceHolderContainer[subwayPlaceholder]}
+                      style={{ textAlign: "left" }}
+                      showSearch={true}
+                      optionFilterProp="children"
+                      notFoundContent={isSubwayLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   subways.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)
                 }
@@ -402,7 +411,11 @@ const HouseForm = (props) => {
               label="地铁站"
               name="subwayStation"
             >
-              <Select placeholder={SubwayStationPlaceHolderContainer[subwayStationPlaceholder]} style={{ textAlign: "left" }} notFoundContent={isSubwayStationLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
+              <Select placeholder={SubwayStationPlaceHolderContainer[subwayStationPlaceholder]}
+                      style={{ textAlign: "left" }}
+                      showSearch={true}
+                      optionFilterProp="children"
+                      notFoundContent={isSubwayStationLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   subwayStations.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)
                 }
