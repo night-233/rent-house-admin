@@ -6,7 +6,7 @@ import adminApi from '@/apis/admin'
 import { useImmer } from "use-immer";
 import AddressApi from "@apis/address";
 import style from '@/assets/global-style'
-import { Table } from 'antd';
+import { Table, Popover } from 'antd';
 import { FormOutlined } from "@ant-design/icons/lib";
 import { NavLink } from 'react-router-dom'
 
@@ -38,7 +38,9 @@ const columns = [
     width: 150,
     render: cover => (
       <>
-        <img style={{ height: '100px', width: '150px' }} typeof="Image" src={cover} alt='' />
+        <Popover content={<img style={{ width: '320px' }} src={cover} alt=''></img>}>
+          <img style={{ height: '100px', width: '150px' }} typeof="Image" src={cover} alt='' />
+        </Popover>
       </>
     ),
   },
