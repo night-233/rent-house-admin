@@ -19,8 +19,6 @@ interface address {
   baiduMapLat: number,
 }
 
-
-
 const columns = [
   {
     title: '标题',
@@ -40,7 +38,7 @@ const columns = [
     width: 150,
     render: cover => (
       <>
-        <img style={{ width: '120px' }} typeof="Image" src={cover} alt='' />
+        <img style={{ height: '100px', width: '150px' }} typeof="Image" src={cover} alt='' />
       </>
     ),
   },
@@ -48,31 +46,65 @@ const columns = [
     title: '面积',
     dataIndex: 'area',
     key: 'area',
-    width: 80
+    width: 100,
+    sorter: (a, b) => a.area - b.area,
+    render: (area) => (
+      <div>
+        {area} ㎡
+      </div>
+    ),
   },
   {
     title: '价格',
     key: 'price',
     dataIndex: 'price',
-    width: 80
+    width: 100,
+    sorter: (a, b) => a.price - b.price,
+    render: (price) => (
+      <div>
+        ¥ {price}
+      </div>
+    ),
   },
   {
     title: '楼层',
     dataIndex: 'floor',
     key: 'floor',
-    width: 80
+    width: 100,
+    sorter: (a, b) => a.floor - b.floor,
+    render: (floor) => (
+      <div>
+        {floor} 层
+      </div>
+    ),
   },
   {
     title: '带看次数',
     dataIndex: 'watchTimes',
     key: 'watchTimes',
-    width: 80
+    width: 120,
+    sorter: (a, b) => a.watchTimes - b.watchTimes,
+    render: (watchTimes) => (
+      <div>
+        {watchTimes} 次
+      </div>
+    ),
   },
   {
     title: '创建时间',
-    dataIndex: 'createTime',
-    key: 'createTime',
-    width: 100
+    dataIndex: 'createTimeText',
+    key: 'createTimeText',
+    width: 100,
+    sorter: (a, b) => {
+      const aT = new Date(a.createTime).getTime()
+      const bT = new Date(b.createTime).getTime()
+      return aT - bT
+    },
+    render: (createTimeText) => (
+      <div>
+        {createTimeText}
+      </div>
+    ),
   },
   {
     title: '发布状态',
@@ -94,9 +126,10 @@ const columns = [
     render: (id) => (
       <NavLink to={`/editHouse/${id}`}><div className='icon-box' ><FormOutlined /></div></NavLink>
     ),
-    width: 80
+    width: 60
   },
 ];
+
 
 const StatusStyle = styled.div`
   .status-card {
@@ -109,7 +142,6 @@ const statusMap = [
   { id: 0, text: '未审核', color: '#db162f' },
   { id: 1, text: '审核通过', color: '#51c6cf' },
   { id: 2, text: '已出租', color: '#F0A202' },
-  { id: 3, text: '逻辑删除', color: '#db162f' },
 ]
 
 const { Option } = Select;
@@ -120,10 +152,9 @@ function HouseList (props) {
   const [data, setData] = useState([]);
   const [total, setTotals] = useState(0)
   const [cities, setCities] = useState<address[]>([]);
-  const [loading, setLoading] = useState(false)
-
+  const [loading, setLoading] = useState(false);
   const [params, setParams] = useImmer({
-    city: "",
+    cityEnName: "",
     createTimeMax: "2021-06-01",
     createTimeMin: "2015-06-01",
     // direction: "",
@@ -139,15 +170,19 @@ function HouseList (props) {
   const dateFormat = 'YYYY-MM-DD';
 
   const handleChangeCity = (value) => {
+
     setParams((draft) => {
-      draft.city = value
+      draft.page = 1
+      draft.cityEnName = value === 'null' ? null : value
     })
   }
+
   const handleChangeTitle = (e) => {
     if (timer) clearTimeout(timer)
     const value = e.target.value
     timer = setTimeout(() => {
       setParams((draft) => {
+        draft.page = 1
         draft.title = value
       })
     }, 500)
@@ -155,7 +190,8 @@ function HouseList (props) {
 
   const handleChangeStatus = (value) => {
     setParams((draft) => {
-      draft.status = value
+      draft.page = 1
+      draft.status = value === 'null' ? null : value
     })
   }
 
@@ -168,6 +204,7 @@ function HouseList (props) {
   const handleChangeDate = (date) => {
     console.log(date)
     setParams((draft) => {
+      draft.page = 1
       draft.createTimeMin = date ? date[0]?.format(dateFormat) : ''
       draft.createTimeMax = date ? date[1]?.format(dateFormat) : ''
     })
@@ -175,6 +212,7 @@ function HouseList (props) {
 
   const getSupportCities = useCallback(() => {
     return AddressApi.getSupportCities().then((res) => {
+
       if (res && Array.isArray(res.list)) {
         setCities(res.list)
       }
@@ -199,15 +237,15 @@ function HouseList (props) {
     return originData.map((item) => {
       return {
         ...item,
-        createTime: moment(item.createTime).format('YYYY-MM-DD HH:mm:ss'),
-        area: `${item.area} ㎡`,
-        price: `¥ ${item.price}`,
-        floor: `${item.floor} 层`,
-        watchTimes: `${item.watchTimes} 次`,
+        createTimeText: moment(item.createTime).format('YYYY-MM-DD HH:mm:ss'),
         statusText: statusMap[item.status],
         key: item.id
       }
     })
+  }
+
+  const showTotal = (total) => {
+    return `共 ${total} 条`;
   }
 
   useEffect(() => {
@@ -226,15 +264,17 @@ function HouseList (props) {
           <Row justify="start" style={{ marginBottom: '24px' }} gutter={20}>
             <Col span={3}>
               <Select defaultValue="全部城市" onChange={handleChangeCity}>
+                <Option value='null' key={-1} >全部城市</Option>
                 {
                   cities?.map((city) => (
-                    <Option value={city?.enName} key={city.id} >{city.cnName}</Option>
+                    <Option value={city.enName} key={city.id} >{city.cnName}</Option>
                   ))
                 }
               </Select>
             </Col>
             <Col span={colSpan}>
               <Select defaultValue='所有状态' onChange={handleChangeStatus}>
+                <Option value='null' key={-1} >所有状态</Option>
                 {
                   statusMap?.map((status) => (
                     <Option value={status.id} key={status.id} >{status.text}</Option>
@@ -258,7 +298,14 @@ function HouseList (props) {
           </Row>
           <Table
             className='global-table'
-            pagination={{ position: ['bottomCenter'], hideOnSinglePage: true, pageSize: params.pageSize, total: total, onChange: handleSetPage }}
+            pagination={{
+              position: ['bottomCenter'],
+              hideOnSinglePage: true,
+              pageSize: params.pageSize,
+              total: total,
+              showTotal: showTotal,
+              onChange: handleSetPage
+            }}
             columns={columns}
             loading={loading}
             bordered={false}
@@ -274,6 +321,9 @@ function HouseList (props) {
 const Style = styled.div`
 .house-list {
   
+}
+.ant-table-column-sorters {
+  padding: 0px;
 }
 a {
   color: ${style['lighter-font']}

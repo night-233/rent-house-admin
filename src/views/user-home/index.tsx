@@ -1,35 +1,35 @@
 import React from "react";
 import Header from "@views/user-home/Header";
 import styled from "styled-components";
-import {AutoComplete, Input} from "antd";
+import { AutoComplete, Input } from "antd";
 import MapBtnImage from "@assets/img/map-bg.png";
 /**
  * 客户端首页
  */
 const UserHome = () => {
 
-    return(
-        <Container>
-            <Header/>
-            <ContentContainer>
-                <SearchBoxContainer>
-                    <AutoComplete
-                        dropdownMatchSelectWidth={252}
-                    >
-                        <Input.Search size="large" placeholder="请输入小区/商圈/地铁站等..." enterButton={"开始找房"} />
-                    </AutoComplete>
+  return (
+    <Container>
+      <Header />
+      <ContentContainer>
+        <SearchBoxContainer>
+          <AutoComplete
+            dropdownMatchSelectWidth={252}
+          >
+            <Input.Search size="large" placeholder="请输入小区/商圈/地铁站等..." enterButton={"开始找房"} />
+          </AutoComplete>
 
-                    <div className="map-btn">
-                        <i className="iconfont icon-location">
-                            &#xe620;
+          <div className="map-btn">
+            <i className="iconfont icon-location">
+              &#xe620;
                         </i>
-                        <i className="hover-background"></i>
+            <i className="hover-background"></i>
                         地图找房
                     </div>
-                </SearchBoxContainer>
-            </ContentContainer>
-        </Container>
-    )
+        </SearchBoxContainer>
+      </ContentContainer>
+    </Container>
+  )
 }
 
 const Container = styled.div`
