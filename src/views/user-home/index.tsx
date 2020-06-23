@@ -2,6 +2,7 @@ import React from "react";
 import Header from "@views/user-home/Header";
 import SearchBox from "@views/user-home/SearchBox";
 import SearchFilter from "@views/user-home/SearchFilter";
+import HouseList from "@views/user-home/HouseList";
 import styled from "styled-components";
 
 
@@ -16,6 +17,7 @@ const UserHome = () => {
             <ContentContainer>
                 <SearchBox/>
                 <SearchFilter/>
+                <HouseList/>
             </ContentContainer>
         </Container>
     )

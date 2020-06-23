@@ -5,6 +5,7 @@ import {DownOutlined, UpOutlined} from "@ant-design/icons/lib";
 import {houseTagsArray} from "../../components/HouseForm";
 import { CSSTransition, SwitchTransition} from 'react-transition-group'
 import {Gutter} from "antd/lib/grid/row";
+import NumericInput from "../../components/NumericInput";
 const { CheckableTag } = Tag;
 interface OptionSpanRadio{
     value: any,
@@ -33,6 +34,8 @@ const SearchFilter = () => {
     const [moreOptionVisible, setMoreOptionVisible] = useState(false);
 
     const [searchType, setSearchType] = useState();
+    // 控制展开动画结束以后才移出弹出的找房方式
+    const [showSearchType, setShowSearchType] = useState();
 
     return (
         <Container>
@@ -41,25 +44,32 @@ const SearchFilter = () => {
                     找房方式
                 </Col>
                 <Col span={22} className="option" style={{borderBottom: "none"}}>
-                    <OptionSpanRadioGroup value={searchType} onChange={setSearchType}>
+                    <OptionSpanRadioGroup value={searchType} onChange={(value) => {
+                        setSearchType(value);
+                        if(value){
+                            setShowSearchType(value);
+                        }
+                    }}>
                         <OptionSpanRadio  value={1}>区域{searchType === 1 ? <UpOutlined style={ArrowIconStyle}/> : <DownOutlined style={ArrowIconStyle}/>}</OptionSpanRadio>
                         <OptionSpanRadio  value={2}>地铁{searchType === 2 ? <UpOutlined style={ArrowIconStyle}/> : <DownOutlined style={ArrowIconStyle}/>}</OptionSpanRadio>
                         <OptionSpanRadio  value={3}>距离{searchType === 3 ? <UpOutlined style={ArrowIconStyle}/> : <DownOutlined style={ArrowIconStyle}/>}</OptionSpanRadio>
                     </OptionSpanRadioGroup>
                 </Col>
-                <CSSTransition  in={!!searchType} classNames="type-search-dropdown"  timeout={300} >
-                    <Col span={24}  className="type-search"  style={{padding: 0}}>
-                        {
-                            searchType &&
-                            <SwitchTransition mode="out-in">
+                <CSSTransition  in={!!searchType} classNames={"type-search-dropdown"}  timeout={300}
+                    onExited={() => setShowSearchType(null)}
+                >
+                    <Col span={24} style={{padding: 0}} className="type-search">
+                      {
+                          showSearchType &&
+                            <SwitchTransition mode="out-in" >
                                 <CSSTransition
-                                    key={searchType}
+                                    key={showSearchType}
                                     addEndListener={(node, done) => node.addEventListener("transitionend", done, false)}
-                                    classNames='fade'
+                                    classNames="fade"
                                 >
-                                    <Row gutter={RowGutter}>
+                                    <Row gutter={RowGutter} >
                                         {
-                                            searchType === 1 &&
+                                            showSearchType === 1 &&
                                             <>
                                                 <Col span={2}>区域</Col>
                                                 <Col span={22} className="option">
@@ -73,7 +83,7 @@ const SearchFilter = () => {
                                             </>
                                         }
                                         {
-                                            searchType === 2 &&
+                                            showSearchType === 2 &&
                                             <>
                                                 <Col span={2}>地铁</Col>
                                                 <Col span={22} className="option">
@@ -87,10 +97,10 @@ const SearchFilter = () => {
                                             </>
                                         }
                                         {
-                                            searchType === 3 &&
+                                            showSearchType === 3 &&
                                             <>
                                                 <Col span={2}>公司地址</Col>
-                                                <Col span={22}>
+                                                <Col span={22} className="option" style={{border: "none"}}>
                                                     <i className="iconfont">&#xe620;</i>
                                                     <AutoComplete
                                                         style={{ width: 250, border: "none"}}
@@ -98,7 +108,7 @@ const SearchFilter = () => {
                                                     />
                                                 </Col>
                                                 <Col span={2}>距离</Col>
-                                                <Col span={22}>
+                                                <Col span={22} className="option">
                                                     <OptionSpanRadioGroup>
                                                         <OptionSpanRadio value="西湖">1千米</OptionSpanRadio>
                                                         <OptionSpanRadio value="下城">2千米</OptionSpanRadio>
@@ -107,7 +117,7 @@ const SearchFilter = () => {
                                                         <OptionSpanRadio value="拱墅">5千米</OptionSpanRadio>
                                                     </OptionSpanRadioGroup>
                                                     <OptionSpan>
-                                                        <InputNumber size="small" min={1}  style={{width: 55, height: 22, borderRadius: 0}}/>
+                                                        <NumericInput  style={{width: 55, height: 22, borderRadius: 0}}/>
                                                     </OptionSpan>
                                                     <OptionSpan checked={true}>确定</OptionSpan>
                                                 </Col>
@@ -142,9 +152,9 @@ const SearchFilter = () => {
                         <OptionSpanRadio value="5000-6000">5000-6000元</OptionSpanRadio>
                     </OptionSpanRadioGroup>
                     <OptionSpan>
-                        <Input style={{width: 55, height: 22, borderRadius: 0}}/>
+                        <NumericInput style={{width: 55, height: 22, borderRadius: 0}}/>
                         <span style={{margin: "0 5px"}}>-</span>
-                        <Input style={{width: 55, height: 22, borderRadius: 0}}/>
+                        <NumericInput style={{width: 55, height: 22, borderRadius: 0}}/>
                     </OptionSpan>
                     <OptionSpan checked={true}>确定</OptionSpan>
                 </Col>
@@ -258,51 +268,46 @@ const Container = styled.div`
         height: 0;
     }
     // 找房方式fade动画
-    .fade-enter{
+    .fade-enter {
       opacity: 0;
-      transform: translateX(-30%);
     }
     .fade-enter-active {
       opacity: 1;
-      transform: translateX(0%);
+      transition: opacity 0.3s;
     }
     .fade-exit{
       opacity: 1;
-      transform: translateX(0%);
     }
     .fade-exit-active {
       opacity: 0;
-      transform: translateX(30%);
-    }
-    .fade-enter-active,
-    .fade-exit-active{
-      transition: opacity 500ms, transform 500ms;
+      transition: opacity 0.3s;
     }
     // 找房方式下拉展开
     .type-search{
         padding: 0;
-        height: 0;
+        max-height: 0;
         overflow: hidden;
     }
+    // 区域和地铁展开动画
     .type-search-dropdown-enter{
-        height: 0;
+        max-height: 0;
     }
-    .type-search-dropdown-enter-active{
-        height: 96px;
-        transition: height 0.15s cubic-bezier(0,.86,.5,1.02);
+    .type-search-dropdown-enter-active {
+        max-height: 96px;
+        transition: max-height 0.3s cubic-bezier(0,.86,.5,1.02);
     }
     .type-search-dropdown-enter-done{
-        height: 96px;
+        max-height: 96px;
     }
     .type-search-dropdown-exit{
-        height: 96px;
+        max-height: 96px;
     }
     .type-search-dropdown-exit-active{
-        height: 0;
-        transition: height  0.3s cubic-bezier(0,.86,.5,1.02);
+        max-height: 0;
+        transition: max-height 0.3s cubic-bezier(0,.86,.5,1.02);
     }
     .type-search-dropdown-exit-done{
-        height: 0;
+        max-height: 0;
     }
     // 更多选项下拉动画
     .dropdown-enter{
@@ -336,7 +341,7 @@ const Container = styled.div`
         width: 100%;
         height: 32px;
         padding: 0 11px;
-        box-shadow: none;
+        box-shadow: none !important;
     }
 `;
 const OptionSpan = styled.span`
@@ -346,6 +351,7 @@ const OptionSpan = styled.span`
              margin-right: 20px; 
              padding: 0 5px; 
              user-select: none;
+             transition: color 0.3s;
              &:hover{  color: #51C6CF; }`
         :
         `
@@ -356,6 +362,8 @@ const OptionSpan = styled.span`
             border-radius: 5px;
             color: #FFFFFF;
             background: #51C6CF;
+            transition: background 0.3s;
+            &:hover{  background: #6FCFCF; }
         `
     }
 `;
