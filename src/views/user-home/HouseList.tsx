@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {Col, Row} from "antd";
+import {Col, Pagination, Row, Button} from "antd";
 
 /**
  * 房源列表
@@ -9,11 +9,13 @@ const HouseList = () => {
 
     return (
         <Container>
+            {/* 排序过滤 */}
             <FilterContainer>
                 <div className="name ">默认排序 <span className="underline"/></div>
                 <div className="name">价格<i className="iconfont icon" >&#xe679;</i><i className="iconfont icon" style={{marginLeft: -8}}>&#xe66a;</i><span className="underline"/></div>
                 <div className="name name-active">面积<i className="iconfont icon" >&#xe679;</i><i className="iconfont icon icon-active" style={{marginLeft: -8}}>&#xe66a;</i><span className="underline"/></div>
             </FilterContainer>
+            {/* 房源列表*/}
             <ListContainer>
                 <Row gutter={[21, 21]}>
                     <Col span={8}><HouseBox/></Col>
@@ -31,6 +33,27 @@ const HouseList = () => {
                     <Col span={8}><HouseBox/></Col>
                 </Row>
             </ListContainer>
+            {/* 分页器*/}
+            <PaginationContainer>
+                <Pagination
+                    hideOnSinglePage={true}
+                    total={85}
+                    pageSizeOptions={['10', '20', '30', '50']}
+                    showSizeChanger
+                    showQuickJumper
+                    showTotal={total => `共${total}条数据`}
+                />
+                <Button type="primary" style={{marginLeft: "15px"}}>确认</Button>
+            </PaginationContainer>
+            {/*    最近浏览*/}
+            <RecentViewContainer>
+                <h1>最近浏览</h1>
+                <Row gutter={[21, 21]}>
+                    <Col span={8}><HouseBox/></Col>
+                    <Col span={8}><HouseBox/></Col>
+                    <Col span={8}><HouseBox/></Col>
+                </Row>
+            </RecentViewContainer>
         </Container>
     )
 };
@@ -201,6 +224,20 @@ const HouseBoxContainer = styled.div`
                 align-items: center;
             }
         }
+    }
+`;
+const PaginationContainer = styled.div`
+    padding: 20px 0 60px;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+`;
+const RecentViewContainer = styled.div`
+    h1{
+        color: rgba(0,0,0,.85);
+        margin: 40px 0 20px;
+        font-size: 24px;
+        font-weight: bold;
     }
 `;
 
