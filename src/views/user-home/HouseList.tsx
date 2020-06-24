@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import {Col, Pagination, Row, Button} from "antd";
-
+import LazyLoad from 'react-lazyload';
 /**
  * 房源列表
  */
@@ -30,7 +30,7 @@ const HouseList = () => {
                     <Col span={8}><HouseBox/></Col>
                     <Col span={8}><HouseBox/></Col>
                     <Col span={8}><HouseBox/></Col>
-                    <Col span={8}><HouseBox/></Col>
+                    <Col span={8}><HouseBox src="http://qiniu.touchfish.top/FtpxeJvUYvEQjbZbiXzdesf4Fw_q"/></Col>
                 </Row>
             </ListContainer>
             {/* 分页器*/}
@@ -241,12 +241,14 @@ const RecentViewContainer = styled.div`
     }
 `;
 
-const HouseBox = () => {
+const HouseBox = ({src = "http://qiniu.touchfish.top/FgAb6JHwe9nHZ3e59WnHVMokawBa"}) => {
 
     return (
         <HouseBoxContainer>
             <div className="pic">
-                <img src="http://qiniu.touchfish.top/FgAb6JHwe9nHZ3e59WnHVMokawBa" style={{objectFit: "cover", width: "100%", height: "100%"}}></img>
+                <LazyLoad height="100%" placeholder={"图片加载中"}>
+                    <img src={src} style={{objectFit: "cover", width: "100%", height: "100%"}}></img>
+                </LazyLoad>
             </div>
             <div className="info">
                 <div className="title"><span className="icon-sign">签</span> 杭州合租阳光郡990租房户型实景图</div>
