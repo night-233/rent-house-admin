@@ -31,8 +31,8 @@ function App () {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <InitStyle></InitStyle>
-        <GlobalStyle></GlobalStyle>
+        <InitStyle/>
+        <GlobalStyle/>
         {renderRoutes(routes, authPath)}
       </BrowserRouter>
     </Provider>

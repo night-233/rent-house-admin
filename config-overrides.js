@@ -19,6 +19,12 @@ const addProxy = () => (configFunction) => {
       pathRewrite: { '^/dev': '/' },
       secure: false, // 如果是https接口，需要配置这个参数
       changeOrigin: true
+    },
+     '/baiduApi': {
+        target: `http://api.map.baidu.com/`, // 接口域名
+         pathRewrite: { '^/baiduApi': '/' },
+         secure: false, // 如果是https接口，需要配置这个参数
+         changeOrigin: true
     }
   };
 

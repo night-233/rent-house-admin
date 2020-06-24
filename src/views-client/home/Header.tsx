@@ -1,19 +1,65 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Logo from "@assets/img/logo.png";
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import {NavLink} from "react-router-dom";
+import BaiduApi from "@apis/baidu";
+import AddressApi from "@apis/address";
+import { useDispatch, useSelector } from 'react-redux'
+import {changeCity} from "../../store/redux/common.redux";
 const Header = () => {
+
+    const [supportCitiesList, setSupportCitiesList] = useState([]);
+
+    const city = useSelector(state => state.common.city);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        getSupportCities().then(res => {
+            if(res){
+                const cityList = res.list;
+                setSupportCitiesList(cityList);
+                getCurrentCity().then( (result:any) => {
+                    const city = result?.content?.address_detail?.city?.replace("市", "");
+                    const matchCity = cityList.find(item => item.cnName === city);
+                    if(matchCity){
+                        dispatch(changeCity({cnName: matchCity.cnName, enName: matchCity.enName}));
+                    }else if(cityList.length > 0){
+                        dispatch(changeCity({cnName: cityList[0].cnName, enName: cityList[0].enName}))
+                    }
+                })
+            }
+        })
+    }, []);
+
+    const getCurrentCity = () => {
+        return BaiduApi.getCurrentCity();
+    };
+
+    const getSupportCities = async () => {
+        return  AddressApi.getSupportCities();
+    };
+
+    const handleCityClick = ({item, key}) => {
+       if(city.enName !== key){
+           dispatch(changeCity({cnName: item.props.title,  enName: key}));
+       }
+    };
+
     return (
         <Container>
             <div className="content">
                 <div style={{display: "flex"}}>
                     <LogoContainer src={Logo}/>
                     <LocationContainer>
-                        <Dropdown overlay={CityMenu}>
+                        <Dropdown overlay={<Menu onClick={handleCityClick}>
+                            {
+                                supportCitiesList.map((item: any) => <Menu.Item key={item.enName} title={item.cnName}>{item.cnName}</Menu.Item>)
+                            }
+                        </Menu>}>
                             <div className="city">
-                                <span style={{marginRight: "5px"}}>杭州</span><DownOutlined />
+                                <span style={{marginRight: "5px"}}>{city.cnName}</span><DownOutlined />
                             </div>
                         </Dropdown>
                     </LocationContainer>
@@ -35,17 +81,6 @@ const Header = () => {
         </Container>
     )
 };
-
-const CityMenu = (
-    <Menu>
-        <Menu.Item key="0">
-            北京
-        </Menu.Item>
-        <Menu.Item key="1">
-            上海
-        </Menu.Item>
-    </Menu>
-)
 
 const Container = styled.div`
     position: fixed;

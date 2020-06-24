@@ -5,8 +5,8 @@ import homeRoutes from './homeRoutes'
 import Login from '../views/login/index';
 const SuspenseComponent = Component => props => {
   return (
-    <Suspense fallback={<div></div>}>
-      <Component {...props}></Component>
+    <Suspense fallback={<div/>}>
+      <Component {...props}/>
     </Suspense>
   )
 }
@@ -14,8 +14,7 @@ const SuspenseComponent = Component => props => {
 const Layout = lazy(() => import("../views/layout"));
 const Test1 = lazy(() => import("../views/test1"));
 const Test2 = lazy(() => import("../views/test2"));
-const Home = lazy(() => import("../views/home"));
-const UserHome = lazy(() => import("../views/user-home"));
+const ClientHome = lazy(() => import("../views-client/home"));
 // 公用页面，不需要权限验证的
 let constantRoutes = [
   {
@@ -31,10 +30,10 @@ let constantRoutes = [
     component: Test2
   },
   {
-    path: "/user-home",
-    component: UserHome
+    path: "/client/home",
+    component: ClientHome
   }
-]
+];
 
 // 需要权限的路由
 let authRoutes = [
@@ -46,10 +45,11 @@ let authRoutes = [
       ...homeRoutes
     ]
   }
-]
+];
+
 constantRoutes = constantRoutes.map((item) => ({ ...item, requiresAuth: false }))
 authRoutes = authRoutes.map((item) => ({ ...item, requiresAuth: true }))
 export default [
   ...constantRoutes,
-  ...authRoutes
+  ...authRoutes,
 ]
