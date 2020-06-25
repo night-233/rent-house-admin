@@ -16,7 +16,8 @@ const initSearchParam = {
     page: 1,
     pageSize: 20,
     orderBy: SortTypeEnum.DEFAULT,
-    sortDirection: SortDirectionEnum.DESC
+    sortDirection: SortDirectionEnum.DESC,
+    keyword: null
 }
 
 /**
@@ -38,13 +39,13 @@ const ClientHome = () => {
     const [searchLoading, setSearchLoading] = useState(false);
     useEffect(() => {
         if(city.enName){
-            getHouseList(searchParams);
+            getHouseList(initSearchParam);
             setSearchParams(initSearchParam);
         }
     }, [city.enName]);
 
-    const getHouseList = (params) => {
-        handleResponse(HouseApi.getHouseList({...params, cityEnName: city.enName}), setHouseData, "获取房源失败", setSearchLoading);
+    const getHouseList = (params, cancelToken ?) => {
+        return handleResponse(HouseApi.getHouseList({...params, cityEnName: city.enName}, cancelToken), setHouseData, "获取房源失败", setSearchLoading);
     };
 
     const handleParamsChange = (params) => {
@@ -53,11 +54,17 @@ const ClientHome = () => {
         getHouseList(tmp);
     };
 
+    const handleSearchClick = (value, cancelToken) => {
+        const params = {...initSearchParam, keyword: value};
+        setSearchParams(params);
+        return getHouseList(params, cancelToken);
+    };
+
     return(
         <Container>
             <Header/>
             <ContentContainer>
-                <SearchBox/>
+                <SearchBox onSearchClick={handleSearchClick} value={searchParams.keyword} onChange={value => setSearchParams(({...searchParams, keyword: value}))}/>
                 <SearchFilter/>
                 <Spin spinning={searchLoading}>
                     <HouseList data={houseData}

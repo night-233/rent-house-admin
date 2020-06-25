@@ -30,8 +30,10 @@ axios.interceptors.response.use(
 
 // 请求拦截
 axios.interceptors.request.use(
-  (config) => {
-    NProgress.start()
+  (config: any) => {
+      if(config.progress !== false){
+          NProgress.start()
+      }
     const preConfig = dealAxiosRequestConfig(config);
     return preConfig;
   },

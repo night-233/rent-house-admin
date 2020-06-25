@@ -75,7 +75,7 @@ const HouseList = (props: HouseListProps) => {
                                 total={data.total}
                                 pageSize={pageSize}
                                 current={page}
-                                pageSizeOptions={['1', '2', '5', '10', '20', '30', '50']}
+                                pageSizeOptions={['20', '30', '50']}
                                 showSizeChanger
                                 showQuickJumper
                                 onChange={onPageChange}
