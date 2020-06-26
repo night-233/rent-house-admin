@@ -1,11 +1,15 @@
 import React, {Children, ReactChild, useState} from "react";
 import styled from "styled-components";
-import {AutoComplete, Button, Col, Input, InputNumber, Row, Tag} from "antd";
+import {AutoComplete, Button, Col, Input, InputNumber, message, Row, Skeleton, Tag} from "antd";
 import {DownOutlined, UpOutlined} from "@ant-design/icons/lib";
 import {houseTagsArray} from "../../components/HouseForm";
 import { CSSTransition, SwitchTransition} from 'react-transition-group'
 import {Gutter} from "antd/lib/grid/row";
 import NumericInput from "../../components/NumericInput";
+import AddressApi from "@apis/address";
+import { useSelector } from 'react-redux'
+import {handleResponse} from "@utils/handle-reponse";
+import { Checkbox } from 'antd';
 const { CheckableTag } = Tag;
 interface OptionSpanRadio{
     value: any,
@@ -15,7 +19,7 @@ interface OptionSpanRadio{
     children: any,
     checked?: boolean
 }
-interface OptionSpanRadioGroup {
+interface OptionSpanRadioGroupProp {
     children?: any,
     value?: any,
     defaultValue?: any,
@@ -29,13 +33,75 @@ const RowGutter: [Gutter, Gutter] = [0, 15];
  * 搜索过滤
  * @constructor
  */
-const SearchFilter = () => {
+const SearchFilter = (props) => {
 
     const [moreOptionVisible, setMoreOptionVisible] = useState(false);
 
     const [searchType, setSearchType] = useState();
     // 控制展开动画结束以后才移出弹出的找房方式
     const [showSearchType, setShowSearchType] = useState();
+
+    const {searchParams, onChange} = props;
+
+    // 区域
+    const [region, setRegion] = useState({
+        total: 0,
+        list: []
+    });
+
+    const [subway, setSubway] = useState({
+        total: 0,
+        list: []
+    });
+
+    const [subwayStation ,setSubwayStation] = useState({
+        total: 0,
+        list: []
+    });
+    const [subwayStationLoading, setSubwayStationLoading] = useState(false);
+
+    const [searchTypeLoading, setSearchTypeLoading] = useState(false);
+
+    const city = useSelector(state => state.common.city);
+
+    const getRegionByCity = () => {
+        handleRequestByCity((cityEnName) => handleResponse(AddressApi.getSupportRegions(cityEnName), setRegion, "获取区域失败", setSearchTypeLoading));
+    };
+
+    const getSubWayByCity = () => {
+        handleRequestByCity((cityEnName) => handleResponse(AddressApi.getSupportSubways(cityEnName), setSubway, "获取区域失败", setSearchTypeLoading));
+    };
+
+    const handleRequestByCity = (request) => {
+        if(city){
+            request(city?.enName);
+        }else {
+            message.warn("请先选择城市")
+        }
+    };
+
+    const handleSearchTypeChange = (value) => {
+        setSearchType(value);
+        if(value){
+            setShowSearchType(value);
+        }
+        switch (value) {
+            case 1: getRegionByCity(); break;
+            case 2: getSubWayByCity(); break;
+        }
+    };
+
+    // 处理地铁线路改变
+    const handleSubwayChange = (subwayLineId) => {
+        onChange({regionEnName: null, subwayLineId: subwayLineId, subwayStationIdList: null});
+        if(subwayLineId){
+            getSubwayStationBySubway(subwayLineId);
+        }
+    };
+    // 通过地铁线路获取地铁站
+    const getSubwayStationBySubway = (subwayLineId) => {
+        handleResponse(AddressApi.getSupportSubwayStations(subwayLineId), setSubwayStation, "获取地铁站失败", setSubwayStationLoading);
+    }
 
     return (
         <Container>
@@ -44,12 +110,7 @@ const SearchFilter = () => {
                     找房方式
                 </Col>
                 <Col span={22} className="option" style={{borderBottom: "none"}}>
-                    <OptionSpanRadioGroup value={searchType} onChange={(value) => {
-                        setSearchType(value);
-                        if(value){
-                            setShowSearchType(value);
-                        }
-                    }}>
+                    <OptionSpanRadioGroup value={searchType} onChange={handleSearchTypeChange}>
                         <OptionSpanRadio  value={1}>区域{searchType === 1 ? <UpOutlined style={ArrowIconStyle}/> : <DownOutlined style={ArrowIconStyle}/>}</OptionSpanRadio>
                         <OptionSpanRadio  value={2}>地铁{searchType === 2 ? <UpOutlined style={ArrowIconStyle}/> : <DownOutlined style={ArrowIconStyle}/>}</OptionSpanRadio>
                         <OptionSpanRadio  value={3}>距离{searchType === 3 ? <UpOutlined style={ArrowIconStyle}/> : <DownOutlined style={ArrowIconStyle}/>}</OptionSpanRadio>
@@ -73,12 +134,13 @@ const SearchFilter = () => {
                                             <>
                                                 <Col span={2}>区域</Col>
                                                 <Col span={22} className="option">
-                                                    <OptionSpanRadioGroup>
-                                                        <OptionSpanRadio value="西湖">西湖</OptionSpanRadio>
-                                                        <OptionSpanRadio value="下城">下城</OptionSpanRadio>
-                                                        <OptionSpanRadio value="江干">江干</OptionSpanRadio>
-                                                        <OptionSpanRadio value="拱墅">拱墅</OptionSpanRadio>
-                                                    </OptionSpanRadioGroup>
+                                                    <Skeleton active={true} loading={searchTypeLoading} paragraph={{rows: 1}} title={false}>
+                                                        <OptionSpanRadioGroup value={searchParams.regionEnName} onChange={(value) => onChange({regionEnName: value, subwayLineId: null, subwayStationIdList: null})}>
+                                                            {
+                                                                region.list.map((item:any) => <OptionSpanRadio key={item.id} value={item.enName}>{item.cnName}</OptionSpanRadio>)
+                                                            }
+                                                        </OptionSpanRadioGroup>
+                                                     </Skeleton>
                                                 </Col>
                                             </>
                                         }
@@ -86,13 +148,25 @@ const SearchFilter = () => {
                                             showSearchType === 2 &&
                                             <>
                                                 <Col span={2}>地铁</Col>
-                                                <Col span={22} className="option">
-                                                    <OptionSpanRadioGroup>
-                                                        <OptionSpanRadio value="西湖">1号线</OptionSpanRadio>
-                                                        <OptionSpanRadio value="下城">2号线</OptionSpanRadio>
-                                                        <OptionSpanRadio value="江干">3号线</OptionSpanRadio>
-                                                        <OptionSpanRadio value="拱墅">4号线</OptionSpanRadio>
-                                                    </OptionSpanRadioGroup>
+                                                <Col span={22} className="option-subway">
+                                                    <Skeleton active={true} loading={searchTypeLoading} paragraph={{rows: 1}} title={false}>
+                                                        <OptionSpanRadioGroup value={searchParams.subwayLineId} onChange={handleSubwayChange}>
+                                                            {
+                                                                subway.list.map((item:any) => <OptionSpanRadio key={item.id} value={item.id}>{item.name}</OptionSpanRadio>)
+                                                            }
+                                                        </OptionSpanRadioGroup>
+                                                    </Skeleton>
+                                                    {
+                                                        searchParams.subwayLineId &&
+                                                        <div>
+                                                            <Skeleton active={true} loading={subwayStationLoading} title={false}>
+                                                                <Checkbox.Group
+                                                                    onChange={(checkedValue) => onChange({regionEnName: null, subwayLineId: searchParams.subwayLineId, subwayStationIdList: checkedValue})}
+                                                                    options={subwayStation.list.map((item:any) => ({value: item.id, label: item.name}))}
+                                                                />
+                                                            </Skeleton>
+                                                        </div>
+                                                    }
                                                 </Col>
                                             </>
                                         }
@@ -262,6 +336,20 @@ const Container = styled.div`
         color: rgba(0,0,0,.6);
         font-size: 15px;
         border-bottom: 1px solid rgba(224,224,224, .6);
+        flex-wrap: wrap;
+        align-items: center;
+        .ant-checkbox-inner{
+            border-radius: 0px;
+        }
+    }
+    .option-subway{
+        color: rgba(0,0,0,.6);
+        font-size: 15px;
+        border-bottom: 1px solid rgba(224,224,224, .6);
+        align-items: center;
+        .ant-checkbox-inner{
+            border-radius: 0px;
+        }
     }
     .more-option{
         overflow: hidden;
@@ -368,7 +456,7 @@ const OptionSpan = styled.span`
     }
 `;
 
-const OptionSpanRadioGroup = ({children, value, onChange, mode = RadioModeEnum.SINGLE, defaultValue}: OptionSpanRadioGroup) => {
+const OptionSpanRadioGroup = ({children, value, onChange, mode = RadioModeEnum.SINGLE, defaultValue}: OptionSpanRadioGroupProp) => {
 
     const [radioValue, setRadioValue] = useState<any |Array<any>>(defaultValue);
 

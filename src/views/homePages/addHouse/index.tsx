@@ -14,7 +14,7 @@ const AddHouse = () => {
 
   const onSubmit = (houseForm) => {
     setButtonLoading(true);
-    AdminApi.updateHouse(houseForm).then(data => {
+    AdminApi.addHouse(houseForm).then(data => {
       if(data){
         message.success("新增成功");
         history.push("/houseList");

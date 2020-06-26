@@ -65,7 +65,7 @@ const ClientHome = () => {
             <Header/>
             <ContentContainer>
                 <SearchBox onSearchClick={handleSearchClick} value={searchParams.keyword} onChange={value => setSearchParams(({...searchParams, keyword: value}))}/>
-                <SearchFilter/>
+                <SearchFilter searchParams={searchParams} onChange={handleParamsChange}/>
                 <Spin spinning={searchLoading}>
                     <HouseList data={houseData}
                                page={searchParams.page}

@@ -17,6 +17,7 @@ interface Response {
 // 响应拦截
 axios.interceptors.response.use(
   response => {
+      debugger
     NProgress.done()
     const dataAxios = response.data
     const dealData = dealResStatus(dataAxios)

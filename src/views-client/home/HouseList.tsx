@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {Col, Pagination, Row, Button, Empty} from "antd";
+import {Col, Empty, Pagination, Row} from "antd";
 import LazyLoad from 'react-lazyload';
 
 
@@ -298,7 +298,7 @@ export const HouseBox = (props) => {
         <HouseBoxContainer>
             <div className="pic">
                 <LazyLoad height="100%" placeholder={"图片加载中"}>
-                    <img src={data.cover} style={{objectFit: "cover", width: "100%", height: "100%"}}></img>
+                    <img src={data.cover} style={{objectFit: "cover", width: "100%", height: "100%"}} alt={data.title}/>
                 </LazyLoad>
             </div>
             <div className="info">
@@ -313,7 +313,7 @@ export const HouseBox = (props) => {
                         data.tags?.map((item, index) => <span key={index}>{item}</span>)
                     }
                 </div>
-                <div className="tip"><i className="iconfont iconair air"></i> 空气质量已检测</div>
+                <div className="tip"><i className="iconfont iconair air"/> 空气质量已检测</div>
             </div>
         </HouseBoxContainer>
     )

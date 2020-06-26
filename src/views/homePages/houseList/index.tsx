@@ -204,7 +204,6 @@ function HouseList (props) {
   }
 
   const handleChangeDate = (date) => {
-    console.log(date)
     setParams((draft) => {
       draft.page = 1
       draft.createTimeMin = date ? date[0]?.format(dateFormat) : ''
@@ -214,7 +213,6 @@ function HouseList (props) {
 
   const getSupportCities = useCallback(() => {
     return AddressApi.getSupportCities().then((res) => {
-
       if (res && Array.isArray(res.list)) {
         setCities(res.list)
       }

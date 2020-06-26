@@ -333,7 +333,7 @@ const HouseForm = (props) => {
               rules={[{ required: true, message: '请输入总楼层' },
               ({ getFieldValue }) => ({
                 validator (rule, value) {
-                  if (!value || !getFieldValue('floor') || getFieldValue('floor') <= value) {
+                  if (!value || !getFieldValue('floor') || parseInt(getFieldValue('floor')) <= parseInt(value)) {
                     return Promise.resolve();
                   }
                   return Promise.reject("总楼层不能小于房屋所在楼层");
