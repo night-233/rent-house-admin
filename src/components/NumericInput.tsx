@@ -1,5 +1,5 @@
 import {Input} from 'antd';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 /**
  * 数字输入框
@@ -10,7 +10,13 @@ const NumericInput = (props) =>  {
     const {onChange, value } = props;
 
 
-    const [numberValue, setNumberValue] = useState(null);
+
+
+    const [numberValue, setNumberValue] = useState("");
+
+    useEffect(() => {
+        setNumberValue(value)
+    }, [value])
 
     const handleChange = e => {
         const { value } = e.target;

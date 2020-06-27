@@ -66,16 +66,15 @@ const ClientHome = () => {
             <ContentContainer>
                 <SearchBox onSearchClick={handleSearchClick} value={searchParams.keyword} onChange={value => setSearchParams(({...searchParams, keyword: value}))}/>
                 <SearchFilter searchParams={searchParams} onChange={handleParamsChange}/>
-                <Spin spinning={searchLoading}>
-                    <HouseList data={houseData}
-                               page={searchParams.page}
-                               pageSize={searchParams.pageSize}
-                               sort={{type: searchParams.orderBy, direction: searchParams.sortDirection}}
-                               onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}
-                               onPageChange={(page) => handleParamsChange({page: page})}
-                               onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
-                    />
-                </Spin >
+                <HouseList data={houseData}
+                           listLoading={searchLoading}
+                           page={searchParams.page}
+                           pageSize={searchParams.pageSize}
+                           sort={{type: searchParams.orderBy, direction: searchParams.sortDirection}}
+                           onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}
+                           onPageChange={(page) => handleParamsChange({page: page})}
+                           onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
+                />
                 {/*<RecentList/>*/}
             </ContentContainer>
         </Container>

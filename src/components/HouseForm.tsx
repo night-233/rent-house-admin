@@ -7,6 +7,7 @@ import AddressApi from "@apis/address";
 import { useSelector } from 'react-redux'
 import moment from "moment"
 import PictureUploader from "./PictureUploader";
+import {HouseDirectionList, HouseTagList} from "../base/HouseBaseEntity";
 
 const layout = {
   labelCol: { span: 2 },
@@ -277,10 +278,9 @@ const HouseForm = (props) => {
               rules={[{ required: true, message: '请选择房间朝向' }]}
             >
               <Select style={{ textAlign: "left" }} placeholder="请选择房间朝向">
-                <Option value={1}>朝东</Option>
-                <Option value={2}>朝南</Option>
-                <Option value={3}>朝西</Option>
-                <Option value={4}>朝北</Option>
+                {
+                  HouseDirectionList.map(item => <Option value={item.value} key={item.value}>{item.label}</Option>)
+                }
               </Select>
             </Form.Item>
           </Col>
@@ -493,7 +493,6 @@ const HouseForm = (props) => {
   )
 }
 
-export const houseTagsArray = ["集体供暖", "独立阳台", "独立卫生间", "空调", "精装修", "路由器", "热水器", "桌子", "衣柜", "拎包入住", "洗衣机", "电磁炉"];
 // 房屋标签
 const HouseTags = (props) => {
 
@@ -511,7 +510,7 @@ const HouseTags = (props) => {
   return (
     <div style={{ display: "flex" }} >
       {
-        houseTagsArray.map(tag => <CheckableTag
+        HouseTagList.map(tag => <CheckableTag
           key={tag}
           checked={value.indexOf(tag) > -1}
           onChange={checked => handleTagChange(tag, checked)}

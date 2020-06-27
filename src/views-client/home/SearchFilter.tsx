@@ -1,8 +1,7 @@
-import React, {Children, ReactChild, useState} from "react";
+import React, {Children, ReactChild, useEffect, useState} from "react";
 import styled from "styled-components";
 import {AutoComplete, Button, Col, Input, InputNumber, message, Row, Skeleton, Tag} from "antd";
 import {DownOutlined, UpOutlined} from "@ant-design/icons/lib";
-import {houseTagsArray} from "../../components/HouseForm";
 import { CSSTransition, SwitchTransition} from 'react-transition-group'
 import {Gutter} from "antd/lib/grid/row";
 import NumericInput from "../../components/NumericInput";
@@ -10,6 +9,7 @@ import AddressApi from "@apis/address";
 import { useSelector } from 'react-redux'
 import {handleResponse} from "@utils/handle-reponse";
 import { Checkbox } from 'antd';
+import {HouseDirectionList, HouseTagList} from "../../base/HouseBaseEntity";
 const { CheckableTag } = Tag;
 interface OptionSpanRadio{
     value: any,
@@ -42,6 +42,12 @@ const SearchFilter = (props) => {
     const [showSearchType, setShowSearchType] = useState();
 
     const {searchParams, onChange} = props;
+
+    const [priceType, setPriceType] = useState();
+
+    const [priceMinInput, setPriceMinInput] = useState();
+
+    const [priceMaxInput, setPriceMaxInput] = useState();
 
     // 区域
     const [region, setRegion] = useState({
@@ -101,7 +107,11 @@ const SearchFilter = (props) => {
     // 通过地铁线路获取地铁站
     const getSubwayStationBySubway = (subwayLineId) => {
         handleResponse(AddressApi.getSupportSubwayStations(subwayLineId), setSubwayStation, "获取地铁站失败", setSubwayStationLoading);
-    }
+    };
+
+    const isNumberEmpty = (val) => {
+        return val === "" || val === null || val === undefined;
+    };
 
     return (
         <Container>
@@ -207,17 +217,28 @@ const SearchFilter = (props) => {
                     类型
                 </Col>
                 <Col span={22} className="option">
-                    <OptionSpanRadioGroup>
-                        <OptionSpanRadio value="不限">不限</OptionSpanRadio>
-                        <OptionSpanRadio value="合租">合租</OptionSpanRadio>
-                        <OptionSpanRadio value="整租">整租</OptionSpanRadio>
+                    <OptionSpanRadioGroup value={searchParams.rentWay} onChange={value => onChange({rentWay: value})}>
+                        <OptionSpanRadio value={0}>合租</OptionSpanRadio>
+                        <OptionSpanRadio value={1}>整租</OptionSpanRadio>
                     </OptionSpanRadioGroup>
                 </Col>
                 <Col span={2} className="title">
                     租金
                 </Col>
                 <Col span={22} className="option">
-                    <OptionSpanRadioGroup>
+                    <OptionSpanRadioGroup value={priceType === 1 && (searchParams.priceMin + "-" + searchParams.priceMax)} onChange={value => {
+                        if(value){
+                            onChange({priceMin: value.split("-")[0], priceMax: value.split("-")[1]});
+                            setPriceType(1);
+                            setPriceMinInput(null);
+                            setPriceMaxInput(null);
+                        }else{
+                            onChange({priceMin: null, priceMax: null});
+                            setPriceType(1);
+                            setPriceMinInput(null);
+                            setPriceMaxInput(null);
+                        }
+                    }}>
                         <OptionSpanRadio value="0-1000">1000元以下</OptionSpanRadio>
                         <OptionSpanRadio value="1000-2000">1000-2000元</OptionSpanRadio>
                         <OptionSpanRadio value="2000-3000">2000-3000元</OptionSpanRadio>
@@ -226,19 +247,28 @@ const SearchFilter = (props) => {
                         <OptionSpanRadio value="5000-6000">5000-6000元</OptionSpanRadio>
                     </OptionSpanRadioGroup>
                     <OptionSpan>
-                        <NumericInput style={{width: 55, height: 22, borderRadius: 0}}/>
+                        <NumericInput style={{width: 55, height: 22, borderRadius: 0}} value={priceMinInput} onChange={setPriceMinInput}/>
                         <span style={{margin: "0 5px"}}>-</span>
-                        <NumericInput style={{width: 55, height: 22, borderRadius: 0}}/>
+                        <NumericInput style={{width: 55, height: 22, borderRadius: 0}} value={priceMaxInput} onChange={setPriceMaxInput}/>
                     </OptionSpan>
-                    <OptionSpan checked={true}>确定</OptionSpan>
+                    <OptionSpan checked={true} disabled={ isNumberEmpty(priceMinInput) || isNumberEmpty(priceMaxInput)} onClick={() => {
+                        if(!isNumberEmpty(priceMinInput) && !isNumberEmpty(priceMaxInput)){
+                            const max = Math.max(priceMaxInput, priceMinInput);
+                            const min = Math.min(priceMaxInput, priceMinInput);
+                            setPriceMinInput(min);
+                            setPriceMaxInput(max);
+                            setPriceType(2);
+                            onChange({priceMin: min, priceMax: max});
+                        }
+                    }}>确定</OptionSpan>
                 </Col>
                 <Col span={2} className="title">
                     房源特色
                 </Col>
                 <Col span={22} className="option">
-                    <OptionSpanRadioGroup mode={RadioModeEnum.MULTI}>
+                    <OptionSpanRadioGroup mode={RadioModeEnum.MULTI} onChange={value => onChange({tags: value})} value={searchParams.tags}>
                         {
-                            houseTagsArray.map((tag, index) => <OptionSpanRadio key={index} value={tag}
+                            HouseTagList.map((tag, index) => <OptionSpanRadio key={index} value={tag}
                             >{tag}</OptionSpanRadio>)
                         }
                     </OptionSpanRadioGroup>
@@ -247,28 +277,18 @@ const SearchFilter = (props) => {
                 <Col span={24}  style={{padding: 0}}>
                     {
                         <CSSTransition in={moreOptionVisible} classNames="dropdown"  timeout={300} >
-                            <Row  gutter={RowGutter} className="more-option">
-                                <Col span={2} className="title">
-                                    租房活动
-                                </Col>
-                                <Col span={22} className="option">
-                                    <OptionSpanRadioGroup>
-                                        <OptionSpanRadio value="0-1000">限时特惠</OptionSpanRadio>
-                                    </OptionSpanRadioGroup>
-                                </Col>
+                            <Row  gutter={RowGutter} className="more-option" style={{margin: 0}}>
                                 <Col span={2} className="title">
                                     朝向
                                 </Col>
                                 <Col span={22} className="option">
-                                    <OptionSpanRadioGroup>
-                                        <OptionSpanRadio value="0-1000">南</OptionSpanRadio>
-                                        <OptionSpanRadio value="1000-2000">北</OptionSpanRadio>
-                                        <OptionSpanRadio value="2000-3000">东</OptionSpanRadio>
-                                        <OptionSpanRadio value="3000-4000">西</OptionSpanRadio>
-                                        <OptionSpanRadio value="4000-5000">南北</OptionSpanRadio>
+                                    <OptionSpanRadioGroup value={searchParams.direction} onChange={value => onChange({direction: value})}>
+                                        {
+                                            HouseDirectionList.map(item => <OptionSpanRadio value={item.value} key={item.value}>{item.label}</OptionSpanRadio>)
+                                        }
                                     </OptionSpanRadioGroup>
                                 </Col>
-                                <Col span={2} className="title">
+                              {/*  <Col span={2} className="title">
                                     供暖方式
                                 </Col>
                                 <Col span={22} className="option">
@@ -299,7 +319,7 @@ const SearchFilter = (props) => {
                                         <OptionSpanRadio value="3000-4000">自如可转租</OptionSpanRadio>
                                         <OptionSpanRadio value="4000-5000">可预定</OptionSpanRadio>
                                     </OptionSpanRadioGroup>
-                                </Col>
+                                </Col>*/}
                             </Row>
                         </CSSTransition>
                     }
@@ -402,14 +422,14 @@ const Container = styled.div`
         height: 0;
     }
     .dropdown-enter-active{
-        height: 240px;
+        height: 48px;
         transition: height 0.15s cubic-bezier(0,.86,.5,1.02);
     }
     .dropdown-enter-done{
-        height: 240px;
+        height: 48px;
     }
     .dropdown-exit{
-        height: 240px;
+        height: 48px;
     }
     .dropdown-exit-active{
         height: 0;
@@ -433,7 +453,7 @@ const Container = styled.div`
     }
 `;
 const OptionSpan = styled.span`
-    ${({checked = false}: {checked?: boolean}) => !checked ?
+    ${({checked = false, disabled = false}: {checked?: boolean, disabled?: boolean}) => !checked ?
         `
              cursor: pointer;    
              margin-right: 20px; 
@@ -444,14 +464,16 @@ const OptionSpan = styled.span`
         :
         `
             user-select: none;
-            cursor: pointer;
+            cursor: ${disabled ? 'not-allowed' : 'pointer'};
             margin-right: 20px;
             padding: 0 5px;
             border-radius: 5px;
-            color: #FFFFFF;
-            background: #51C6CF;
+            color: ${disabled ? 'rgba(0,0,0,.25)' : '#FFFFFF'};
+            background: ${disabled ? '#f5f5f5' : '#51C6CF'};
             transition: background 0.3s;
-            &:hover{  background: #6FCFCF; }
+            ${
+                !disabled && `&:hover{  background: #6FCFCF; }`
+            }
         `
     }
 `;
@@ -459,6 +481,10 @@ const OptionSpan = styled.span`
 const OptionSpanRadioGroup = ({children, value, onChange, mode = RadioModeEnum.SINGLE, defaultValue}: OptionSpanRadioGroupProp) => {
 
     const [radioValue, setRadioValue] = useState<any |Array<any>>(defaultValue);
+
+    useEffect(() => {
+        setRadioValue(value);
+    }, [value]);
 
     const handleChange = (selectVal) => {
         let tmp;

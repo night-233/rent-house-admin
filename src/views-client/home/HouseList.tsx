@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
-import {Col, Empty, Pagination, Row} from "antd";
+import {Col, Empty, Pagination, Row, Spin, Tooltip } from "antd";
 import LazyLoad from 'react-lazyload';
-
+import { forceCheck } from 'react-lazyload';
 
 interface HouseListProps {
     data: {total: number, list: Array<any>},
@@ -14,6 +14,7 @@ interface HouseListProps {
         type: SortTypeEnum,
         direction: SortDirectionEnum
     },
+    listLoading?: boolean,
     onSortChange?: any
 }
 export enum SortTypeEnum {DEFAULT = "lastUpdateTime", PRICE = "price", AREA = "area"};
@@ -27,7 +28,7 @@ export enum SortDirectionEnum {
  */
 const HouseList = (props: HouseListProps) => {
 
-    const {data, page = 1, onPageChange, pageSize = 10, onPageSizeChange, sort = {type: SortTypeEnum.DEFAULT, direction: SortDirectionEnum.DESC}, onSortChange} = props;
+    const {data, page = 1, onPageChange, pageSize = 10, onPageSizeChange, sort = {type: SortTypeEnum.DEFAULT, direction: SortDirectionEnum.DESC}, onSortChange, listLoading} = props;
 
 
     // 排序过滤点击
@@ -48,43 +49,49 @@ const HouseList = (props: HouseListProps) => {
         }
     };
 
+    // 强制延迟加载检查
+    useEffect(() => {
+        forceCheck();
+    }, [data.list])
+
     return (
         <Container>
-            {
-                data.total === 0 ?
-                    <Empty description={"未搜到对应房源，换个搜索条件试试"} style={{marginTop: 100, fontSize: "12px", color: "rgba(0, 0, 0, 0.2)"}}/> :
-                    <>
-                        {/* 排序过滤 */}
-                        <FilterContainer>
-                            <FilterTypeComponent title="默认排序" checked={sort.type === SortTypeEnum.DEFAULT} onClick={() => handleSortClick(SortTypeEnum.DEFAULT)}/>
-                            <FilterTypeComponent title="价格" checked={sort.type === SortTypeEnum.PRICE} direction={sort.direction} showDirection={true} onClick={() => handleSortClick(SortTypeEnum.PRICE)}/>
-                            <FilterTypeComponent title="面积" checked={sort.type === SortTypeEnum.AREA} direction={sort.direction}  showDirection={true} onClick={() => handleSortClick(SortTypeEnum.AREA)}/>
-                        </FilterContainer>
-                        {/* 房源列表*/}
-                        <ListContainer>
-                            <Row gutter={[21, 21]}>
-                                {
-                                    data.list.map(item => <Col span={8} key={item.id}><HouseBox data={item}/></Col>)
-                                }
-                            </Row>
-                        </ListContainer>
-                        {/* 分页器*/}
-                        <PaginationContainer>
-                            <Pagination
-                                hideOnSinglePage={false}
-                                total={data.total}
-                                pageSize={pageSize}
-                                current={page}
-                                pageSizeOptions={['20', '30', '50']}
-                                showSizeChanger
-                                showQuickJumper
-                                onChange={onPageChange}
-                                onShowSizeChange={onPageSizeChange}
-                                showTotal={total => `共${total}条数据`}
-                            />
-                            {/*<Button type="primary" style={{marginLeft: "15px"}}>确认</Button>*/}
-                        </PaginationContainer>
-                    </>
+
+                    {/* 排序过滤 */}
+                    <FilterContainer>
+                        <FilterTypeComponent title="默认排序" checked={sort.type === SortTypeEnum.DEFAULT} onClick={() => handleSortClick(SortTypeEnum.DEFAULT)}/>
+                        <FilterTypeComponent title="价格" checked={sort.type === SortTypeEnum.PRICE} direction={sort.direction} showDirection={true} onClick={() => handleSortClick(SortTypeEnum.PRICE)}/>
+                        <FilterTypeComponent title="面积" checked={sort.type === SortTypeEnum.AREA} direction={sort.direction}  showDirection={true} onClick={() => handleSortClick(SortTypeEnum.AREA)}/>
+                    </FilterContainer>
+                    {
+                        data.total === 0 ?
+                        <Empty description={"未搜到对应房源，换个搜索条件试试"} style={{marginTop: 100, fontSize: "12px", color: "rgba(0, 0, 0, 0.2)"}}/> :
+                        <Spin spinning={listLoading}>
+                            {/* 房源列表*/}
+                            <ListContainer>
+                                <Row gutter={[21, 21]}>
+                                    {
+                                        data.list.map(item => <Col span={8} key={item.id}><HouseBox data={item}/></Col>)
+                                    }
+                                </Row>
+                            </ListContainer>
+                            {/* 分页器*/}
+                            <PaginationContainer>
+                                <Pagination
+                                    hideOnSinglePage={false}
+                                    total={data.total}
+                                    pageSize={pageSize}
+                                    current={page}
+                                    pageSizeOptions={['20', '30', '50']}
+                                    showSizeChanger
+                                    showQuickJumper
+                                    onChange={onPageChange}
+                                    onShowSizeChange={onPageSizeChange}
+                                    showTotal={total => `共${total}条数据`}
+                                />
+                                {/*<Button type="primary" style={{marginLeft: "15px"}}>确认</Button>*/}
+                            </PaginationContainer>
+                        </Spin>
             }
         </Container>
     )
@@ -297,7 +304,7 @@ export const HouseBox = (props) => {
     return (
         <HouseBoxContainer>
             <div className="pic">
-                <LazyLoad height="100%" placeholder={"图片加载中"}>
+                <LazyLoad height="100%" placeholder={<div style={{height: "100%", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "30px"}}>图片加载中...</div>}>
                     <img src={data.cover} style={{objectFit: "cover", width: "100%", height: "100%"}} alt={data.title}/>
                 </LazyLoad>
             </div>
@@ -307,11 +314,11 @@ export const HouseBox = (props) => {
                     <span>{data.area}㎡ | {data.floor}/{data.totalFloor}层 </span>
                     <span className="price"><span className="number">{data.price}</span> <span className="unit">/月</span></span>
                 </div>
-                <div className="location"><i className="iconfont" style={{fontSize: "12px"}}>&#xe620;</i>{data.houseDetail?.description}</div>
+                <div className="location"><i className="iconfont" style={{fontSize: "12px"}}>&#xe620;</i>{data.houseDetail?.address}</div>
                 <div className="tag">
-                    {
-                        data.tags?.map((item, index) => <span key={index}>{item}</span>)
-                    }
+                        {
+                            data.tags?.map((item, index) => <span key={index}>{item}</span>)
+                        }
                 </div>
                 <div className="tip"><i className="iconfont iconair air"/> 空气质量已检测</div>
             </div>
