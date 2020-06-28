@@ -2,13 +2,12 @@ import React, {useEffect, useState} from "react";
 import Header from "./Header";
 import SearchBox from "./SearchBox";
 import SearchFilter from "./SearchFilter";
-import HouseList, {SortDirectionEnum, SortTypeEnum} from "./HouseList";
-import RecentList from "./RecentList";
+import HouseList from "./HouseList";
 import styled from "styled-components";
-import { useSelector } from 'react-redux'
+import {useSelector} from 'react-redux'
 import HouseApi from "@apis/house";
 import {handleResponse} from "@utils/handle-reponse";
-import {Skeleton, Spin} from "antd";
+import SortOrderFilter, {SortDirectionEnum, SortTypeEnum} from "./SortOrderFilter";
 
 
 const initSearchParam = {
@@ -36,11 +35,15 @@ const ClientHome = () => {
     // 最近浏览
     const [recentList, setRecentList] = useState([]);
 
+    // 刷新过滤器
+    const [flushFilter, setFlushFilter] = useState(false);
+
     const [searchLoading, setSearchLoading] = useState(false);
     useEffect(() => {
         if(city.enName){
             getHouseList(initSearchParam);
             setSearchParams(initSearchParam);
+            setFlushFilter(!flushFilter);
         }
     }, [city.enName]);
 
@@ -57,6 +60,7 @@ const ClientHome = () => {
     const handleSearchClick = (value, cancelToken) => {
         const params = {...initSearchParam, keyword: value};
         setSearchParams(params);
+        setFlushFilter(!flushFilter);
         return getHouseList(params, cancelToken);
     };
 
@@ -65,13 +69,22 @@ const ClientHome = () => {
             <Header/>
             <ContentContainer>
                 <SearchBox onSearchClick={handleSearchClick} value={searchParams.keyword} onChange={value => setSearchParams(({...searchParams, keyword: value}))}/>
-                <SearchFilter searchParams={searchParams} onChange={handleParamsChange}/>
+                {
+                    flushFilter ?
+                        <SearchFilter key={1} searchParams={searchParams} onChange={handleParamsChange}/>
+                        :
+                        <SearchFilter key={2} searchParams={searchParams} onChange={handleParamsChange}/>
+                }
+                {
+                    flushFilter ?
+                        <SortOrderFilter key={3} sortType={searchParams.orderBy} sortDirection={searchParams.sortDirection} onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}/>
+                        :
+                        <SortOrderFilter key={4} sortType={searchParams.orderBy} sortDirection={searchParams.sortDirection} onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}/>
+                }
                 <HouseList data={houseData}
                            listLoading={searchLoading}
                            page={searchParams.page}
                            pageSize={searchParams.pageSize}
-                           sort={{type: searchParams.orderBy, direction: searchParams.sortDirection}}
-                           onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}
                            onPageChange={(page) => handleParamsChange({page: page})}
                            onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
                 />

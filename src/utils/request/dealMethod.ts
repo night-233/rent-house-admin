@@ -39,7 +39,7 @@ export function dealAxiosRequestConfig (config) {
 }
 
 /**
- * 
+ *
  * @param resData 响应值
  */
 
@@ -101,7 +101,7 @@ export function dealResError (error: any) {
         break
     }
   }
-  if (error.response.status === 401) {
+  if (error.response?.status === 401) {
     message.error(error.message, 1, () => {
       history.push('/login')
     })

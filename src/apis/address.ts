@@ -12,6 +12,7 @@ const AddressApi = {
         return request({
             url:  `${base}/address/support/cities`,
             method: 'get',
+            noJweToken: true
         });
     },
     /**
@@ -21,6 +22,7 @@ const AddressApi = {
         return request({
             url:  `${base}/address/support/regions/${cityEnName}`,
             method: 'get',
+            noJweToken: true
         });
     },
     /**
@@ -30,6 +32,7 @@ const AddressApi = {
         return request({
             url:  `${base}/address/support/subways/${cityEnName}`,
             method: 'get',
+            noJweToken: true
         });
     },
     /**
@@ -39,6 +42,7 @@ const AddressApi = {
         return request({
             url:  `${base}/address/support/subwayStations/${subwayLineId}`,
             method: 'get',
+            noJweToken: true
         });
     }
 }

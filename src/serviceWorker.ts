@@ -11,13 +11,17 @@
 // opt-in, read https://bit.ly/CRA-PWA
 
 const isLocalhost = Boolean(
-  window.location.hostname === 'localhost' ||
+    true
+  /*window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
     window.location.hostname === '[::1]' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === 'harry' ||
+    window.location.hostname === '192.168.1.141' ||
     // 127.0.0.0/8 are considered localhost for IPv4.
     window.location.hostname.match(
       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-    )
+    )*/
 );
 
 type Config = {

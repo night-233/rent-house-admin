@@ -29,7 +29,8 @@ const HouseApi = {
             url: `${base}/house/houses`,
             method: 'post',
             data: searchData,
-            cancelToken: cancelToken?.token
+            cancelToken: cancelToken?.token,
+            noJweToken: true
         });
     },
     // 搜索提示
@@ -37,7 +38,8 @@ const HouseApi = {
         return request({
             url: `${base}/house/search/autocomplete?prefix=` + prefix,
             method: "get",
-            progress: false
+            progress: false,
+            noJweToken: true
         })
     }
 };

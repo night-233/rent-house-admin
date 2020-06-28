@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { dealResError, dealResStatus, dealAxiosRequestConfig } from './dealMethod'
+import {dealAxiosRequestConfig, dealResError, dealResStatus} from './dealMethod'
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+
 NProgress.configure({ showSpinner: false });
 
 axios.create({
@@ -34,8 +35,7 @@ axios.interceptors.request.use(
       if(config.progress !== false){
           NProgress.start()
       }
-    const preConfig = dealAxiosRequestConfig(config);
-    return preConfig;
+      return dealAxiosRequestConfig(config);
   },
   error => Promise.reject(error)
 );

@@ -1,8 +1,7 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
-import {Col, Empty, Pagination, Row, Spin, Tooltip } from "antd";
-import LazyLoad from 'react-lazyload';
-import { forceCheck } from 'react-lazyload';
+import {Col, Empty, Pagination, Row, Spin} from "antd";
+import LazyLoad, {forceCheck} from 'react-lazyload';
 
 interface HouseListProps {
     data: {total: number, list: Array<any>},
@@ -10,44 +9,17 @@ interface HouseListProps {
     onPageChange?: any,
     pageSize?: number,
     onPageSizeChange?: any,
-    sort?: {
-        type: SortTypeEnum,
-        direction: SortDirectionEnum
-    },
     listLoading?: boolean,
     onSortChange?: any
 }
-export enum SortTypeEnum {DEFAULT = "lastUpdateTime", PRICE = "price", AREA = "area"};
-export enum SortDirectionEnum {
-    ASC = "ASC",
-    DESC = "DESC"
-}
+
 
 /**
  * 房源列表
  */
 const HouseList = (props: HouseListProps) => {
 
-    const {data, page = 1, onPageChange, pageSize = 10, onPageSizeChange, sort = {type: SortTypeEnum.DEFAULT, direction: SortDirectionEnum.DESC}, onSortChange, listLoading} = props;
-
-
-    // 排序过滤点击
-    const handleSortClick = (type) => {
-        if(type === SortTypeEnum.DEFAULT){
-            if(sort.type !== type){
-                onSortChange && onSortChange(SortTypeEnum.DEFAULT, SortDirectionEnum.DESC);
-            }
-            return;
-        }
-        if(type === SortTypeEnum.PRICE || type === SortTypeEnum.AREA){
-            if(type !== sort.type){
-                onSortChange && onSortChange(type, SortDirectionEnum.ASC);
-            }else{
-               const direction = sort.direction === SortDirectionEnum.ASC ? SortDirectionEnum.DESC : SortDirectionEnum.ASC;
-                onSortChange && onSortChange(type, direction);
-            }
-        }
-    };
+    const {data, page = 1, onPageChange, pageSize = 10, onPageSizeChange, listLoading} = props;
 
     // 强制延迟加载检查
     useEffect(() => {
@@ -56,13 +28,6 @@ const HouseList = (props: HouseListProps) => {
 
     return (
         <Container>
-
-                    {/* 排序过滤 */}
-                    <FilterContainer>
-                        <FilterTypeComponent title="默认排序" checked={sort.type === SortTypeEnum.DEFAULT} onClick={() => handleSortClick(SortTypeEnum.DEFAULT)}/>
-                        <FilterTypeComponent title="价格" checked={sort.type === SortTypeEnum.PRICE} direction={sort.direction} showDirection={true} onClick={() => handleSortClick(SortTypeEnum.PRICE)}/>
-                        <FilterTypeComponent title="面积" checked={sort.type === SortTypeEnum.AREA} direction={sort.direction}  showDirection={true} onClick={() => handleSortClick(SortTypeEnum.AREA)}/>
-                    </FilterContainer>
                     {
                         data.total === 0 ?
                         <Empty description={"未搜到对应房源，换个搜索条件试试"} style={{marginTop: 100, fontSize: "12px", color: "rgba(0, 0, 0, 0.2)"}}/> :
@@ -100,63 +65,7 @@ const HouseList = (props: HouseListProps) => {
 const Container = styled.div`
     margin-top: 30px;
 `;
-const FilterContainer = styled.div`
-    border-bottom: 1px solid rgba(0,0,0,.06);
-    font-size: 16px;
-    height: 30px;
-    line-height: 30px;
-    display: flex;
-    justify-content: flex-end;
-    .icon{
-        font-weight: bold;
-        color: #E0E0E0;
-    }
-    .name{
-        margin-right: 20px;
-        cursor: pointer;
-        position: relative;
-        .underline{
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background: #51c6cf;
-            border-radius: 1px;
-            -webkit-transition: width .3s;
-            transition: width .3s;
-            will-change: width;
-        }
-        &:hover .underline{
-            width: 100%;
-        }
-    }
-    .name-active .underline{
-       width: 100%;
-    }
-    .name-active, .icon-active{
-        color: #51c6cf;
-    }
-`;
-const FilterTypeComponent = ({checked = false, title = "", showDirection = false, direction = SortDirectionEnum.DESC, onClick = () => {}}) => {
 
-    return (
-        <div className={"name " + (checked && "name-active")} onClick={onClick}>
-            {title}
-            {
-                showDirection &&
-                <>
-                    <i className={"iconfont icon " + (checked && direction === SortDirectionEnum.DESC && "icon-active")} >&#xe679;</i>
-                    <i className={"iconfont icon " + (checked && direction === SortDirectionEnum.ASC && "icon-active")} style={{marginLeft: -8}}>&#xe66a;</i>
-                </>
-            }
-            <span className="underline"/>
-        </div>
-    )
-};
 const ListContainer = styled.div`
     margin-top: 30px;
 `;

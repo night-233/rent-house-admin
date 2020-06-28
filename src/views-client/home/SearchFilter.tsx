@@ -1,6 +1,6 @@
 import React, {Children, ReactChild, useEffect, useState} from "react";
 import styled from "styled-components";
-import {AutoComplete, Button, Col, Input, InputNumber, message, Row, Skeleton, Tag} from "antd";
+import {AutoComplete, Button, Col, Input, InputNumber, message, Row, Select, Skeleton, Tag} from "antd";
 import {DownOutlined, UpOutlined} from "@ant-design/icons/lib";
 import { CSSTransition, SwitchTransition} from 'react-transition-group'
 import {Gutter} from "antd/lib/grid/row";
@@ -9,7 +9,10 @@ import AddressApi from "@apis/address";
 import { useSelector } from 'react-redux'
 import {handleResponse} from "@utils/handle-reponse";
 import { Checkbox } from 'antd';
+import debounce from "lodash/debounce"
 import {HouseDirectionList, HouseTagList} from "../../base/HouseBaseEntity";
+import BaiduApi from "@apis/baidu";
+const { Option } = Select;
 const { CheckableTag } = Tag;
 interface OptionSpanRadio{
     value: any,
@@ -25,6 +28,7 @@ interface OptionSpanRadioGroupProp {
     defaultValue?: any,
     onChange?: Function,
     mode?: RadioModeEnum // 单选: "single" 多选: "multi
+    cancelable?: boolean
 }
 enum RadioModeEnum {SINGLE, MULTI};
 
@@ -68,7 +72,41 @@ const SearchFilter = (props) => {
 
     const [searchTypeLoading, setSearchTypeLoading] = useState(false);
 
+    const [addressHintList, setAddressHintList] = useState([]);
+
+    const [distance, setDistance] = useState(3);
+
+    const [distanceType, setDistanceType] = useState(1);
+
+    const [distanceInputValue, setDistanceInputValue] = useState();
+
+    const [addressOption, setAddressOption] = useState();
+
+    const [addressInput, setAddressInput] = useState();
+
     const city = useSelector(state => state.common.city);
+
+
+   /* useEffect(() => {
+        setSearchType(null);
+        initDistance();
+    }, [city.enName]);
+
+    useEffect(() => {
+        if(searchParams.keyword){
+            setSearchType(null);
+            initDistance();
+        }
+    }, [searchParams.keyword]);*/
+
+    const initDistance = () => {
+        setDistanceType(1);
+        setDistance(3);
+        setAddressOption(undefined);
+        setDistanceInputValue(undefined);
+        setAddressInput(undefined);
+        setAddressHintList([]);
+    };
 
     const getRegionByCity = () => {
         handleRequestByCity((cityEnName) => handleResponse(AddressApi.getSupportRegions(cityEnName), setRegion, "获取区域失败", setSearchTypeLoading));
@@ -99,7 +137,8 @@ const SearchFilter = (props) => {
 
     // 处理地铁线路改变
     const handleSubwayChange = (subwayLineId) => {
-        onChange({regionEnName: null, subwayLineId: subwayLineId, subwayStationIdList: null});
+        initDistance();
+        onChange({regionEnName: null, subwayLineId: subwayLineId, subwayStationIdList: null, keyword: null, distanceSearch: null});
         if(subwayLineId){
             getSubwayStationBySubway(subwayLineId);
         }
@@ -111,6 +150,54 @@ const SearchFilter = (props) => {
 
     const isNumberEmpty = (val) => {
         return val === "" || val === null || val === undefined;
+    };
+
+    // 获取地址提示
+    const getAddressHint = (keyword) => {
+        return BaiduApi.getAddressHint(keyword, city.cnName);
+    };
+
+    // 处理输入框搜索
+    const handleAddressInputSearch = debounce(value => {
+        if(value){
+            getAddressHint(value).then(res => {
+                if(res){
+                    if(res.status === 0){
+                        setAddressHintList(res.result);
+                    }else{
+                        message.error(res.message);
+                    }
+                }
+            });
+        }
+    }, 500);
+
+    // 公司地址改变
+    const handleAddressSelect = (value, option) => {
+        setAddressOption(option);
+        const location = option.location;
+        handleAddressChange(location, distanceType === 1 ? distance : distanceInputValue);
+    };
+
+    // 处理距离单选框选中
+    const handleDistanceChange = (value) => {
+      setDistance(value);
+      setDistanceType(1);
+      handleAddressChange(addressOption?.location, value);
+    };
+
+    // 处理距离输入框确定按钮点击
+    const handleDistanceInputClick = () => {
+        setDistanceType(2);
+        const tmp = distanceInputValue || 3;
+        setDistanceInputValue(tmp);
+        handleAddressChange(addressOption?.location, tmp);
+    };
+
+    const handleAddressChange = (location, distance) => {
+        if(location){
+            onChange({regionEnName: null, subwayLineId: null, subwayStationIdList: null, keyword: null,  distanceSearch: {lon: location.lng, lat: location.lat, distance: distance}});
+        }
     };
 
     return (
@@ -145,7 +232,10 @@ const SearchFilter = (props) => {
                                                 <Col span={2}>区域</Col>
                                                 <Col span={22} className="option">
                                                     <Skeleton active={true} loading={searchTypeLoading} paragraph={{rows: 1}} title={false}>
-                                                        <OptionSpanRadioGroup value={searchParams.regionEnName} onChange={(value) => onChange({regionEnName: value, subwayLineId: null, subwayStationIdList: null})}>
+                                                        <OptionSpanRadioGroup value={searchParams.regionEnName} onChange={(value) => {
+                                                            initDistance();
+                                                            onChange({regionEnName: value, subwayLineId: null, subwayStationIdList: null,  keyword: null, distanceSearch: null})
+                                                        }}>
                                                             {
                                                                 region.list.map((item:any) => <OptionSpanRadio key={item.id} value={item.enName}>{item.cnName}</OptionSpanRadio>)
                                                             }
@@ -171,7 +261,10 @@ const SearchFilter = (props) => {
                                                         <div>
                                                             <Skeleton active={true} loading={subwayStationLoading} title={false}>
                                                                 <Checkbox.Group
-                                                                    onChange={(checkedValue) => onChange({regionEnName: null, subwayLineId: searchParams.subwayLineId, subwayStationIdList: checkedValue})}
+                                                                    onChange={(checkedValue) => {
+                                                                        initDistance();
+                                                                        onChange({regionEnName: null, subwayLineId: searchParams.subwayLineId, subwayStationIdList: checkedValue,  keyword: null, distanceSearch: null})
+                                                                    }}
                                                                     options={subwayStation.list.map((item:any) => ({value: item.id, label: item.name}))}
                                                                 />
                                                             </Skeleton>
@@ -186,24 +279,35 @@ const SearchFilter = (props) => {
                                                 <Col span={2}>公司地址</Col>
                                                 <Col span={22} className="option" style={{border: "none"}}>
                                                     <i className="iconfont">&#xe620;</i>
-                                                    <AutoComplete
-                                                        style={{ width: 250, border: "none"}}
-                                                        placeholder={"请输入公司地址..."}
-                                                    />
+                                                    <Select
+                                                        showSearch
+                                                        value={addressInput}
+                                                        onChange={setAddressInput}
+                                                        style={{ width: 250}}
+                                                        placeholder="请输入公司地址..."
+                                                        defaultActiveFirstOption={false}
+                                                        showArrow={false}
+                                                        filterOption={false}
+                                                        onSearch={handleAddressInputSearch}
+                                                        notFoundContent={null}
+                                                        onSelect={handleAddressSelect}
+                                                    >
+                                                        {addressHintList.map((item:any) => <Option value={item.uid} key={item.uid} location={item.location}>{item.name}</Option>)}
+                                                    </Select>
                                                 </Col>
                                                 <Col span={2}>距离</Col>
                                                 <Col span={22} className="option">
-                                                    <OptionSpanRadioGroup>
-                                                        <OptionSpanRadio value="西湖">1千米</OptionSpanRadio>
-                                                        <OptionSpanRadio value="下城">2千米</OptionSpanRadio>
-                                                        <OptionSpanRadio value="江干">3千米</OptionSpanRadio>
-                                                        <OptionSpanRadio value="拱墅">4千米</OptionSpanRadio>
-                                                        <OptionSpanRadio value="拱墅">5千米</OptionSpanRadio>
+                                                    <OptionSpanRadioGroup value={distanceType === 1 && distance} onChange={handleDistanceChange} cancelable={false}>
+                                                        <OptionSpanRadio value={1}>1千米</OptionSpanRadio>
+                                                        <OptionSpanRadio value={2}>2千米</OptionSpanRadio>
+                                                        <OptionSpanRadio value={3}>3千米</OptionSpanRadio>
+                                                        <OptionSpanRadio value={4}>4千米</OptionSpanRadio>
+                                                        <OptionSpanRadio value={5}>5千米</OptionSpanRadio>
                                                     </OptionSpanRadioGroup>
                                                     <OptionSpan>
-                                                        <NumericInput  style={{width: 55, height: 22, borderRadius: 0}}/>
+                                                        <NumericInput  style={{width: 55, height: 22, borderRadius: 0}} onChange={setDistanceInputValue} value={distanceInputValue}/>千米
                                                     </OptionSpan>
-                                                    <OptionSpan checked={true}>确定</OptionSpan>
+                                                    <OptionSpan checked={true} onClick={handleDistanceInputClick}>确定</OptionSpan>
                                                 </Col>
                                             </>
                                         }
@@ -478,7 +582,7 @@ const OptionSpan = styled.span`
     }
 `;
 
-const OptionSpanRadioGroup = ({children, value, onChange, mode = RadioModeEnum.SINGLE, defaultValue}: OptionSpanRadioGroupProp) => {
+const OptionSpanRadioGroup = ({children, value, onChange, mode = RadioModeEnum.SINGLE, defaultValue, cancelable = true}: OptionSpanRadioGroupProp) => {
 
     const [radioValue, setRadioValue] = useState<any |Array<any>>(defaultValue);
 
@@ -489,7 +593,11 @@ const OptionSpanRadioGroup = ({children, value, onChange, mode = RadioModeEnum.S
     const handleChange = (selectVal) => {
         let tmp;
         if(mode ===  RadioModeEnum.SINGLE){
-            tmp = radioValue === selectVal ? null : selectVal;
+            if(cancelable){
+                tmp = radioValue === selectVal ? null : selectVal;
+            }else{
+                tmp = selectVal;
+            }
         }
         else if(mode === RadioModeEnum.MULTI){
             const oldValue = [...(radioValue || [])];
