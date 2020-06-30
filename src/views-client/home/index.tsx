@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
-import Header from "./Header";
 import SearchBox from "./SearchBox";
 import SearchFilter from "./SearchFilter";
 import HouseList from "./HouseList";
-import styled from "styled-components";
 import {useSelector} from 'react-redux'
 import HouseApi from "@apis/house";
 import {handleResponse} from "@utils/handle-reponse";
 import SortOrderFilter, {SortDirectionEnum, SortTypeEnum} from "./SortOrderFilter";
+import styled from "styled-components";
+import Header from "../layout/Header";
 
 
 const initSearchParam = {
@@ -65,50 +65,41 @@ const ClientHome = () => {
     };
 
     return(
-        <Container>
+        <>
             <Header/>
             <ContentContainer>
-                <SearchBox onSearchClick={handleSearchClick} value={searchParams.keyword} onChange={value => setSearchParams(({...searchParams, keyword: value}))}/>
-                {
-                    flushFilter ?
-                        <SearchFilter key={1} searchParams={searchParams} onChange={handleParamsChange}/>
-                        :
-                        <SearchFilter key={2} searchParams={searchParams} onChange={handleParamsChange}/>
-                }
-                {
-                    flushFilter ?
-                        <SortOrderFilter key={3} sortType={searchParams.orderBy} sortDirection={searchParams.sortDirection} onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}/>
-                        :
-                        <SortOrderFilter key={4} sortType={searchParams.orderBy} sortDirection={searchParams.sortDirection} onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}/>
-                }
-                <HouseList data={houseData}
-                           listLoading={searchLoading}
-                           page={searchParams.page}
-                           pageSize={searchParams.pageSize}
-                           onPageChange={(page) => handleParamsChange({page: page})}
-                           onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
-                />
-                {/*<RecentList/>*/}
+                    <SearchBox onSearchClick={handleSearchClick} value={searchParams.keyword} onChange={value => setSearchParams(({...searchParams, keyword: value}))}/>
+                    {
+                        flushFilter ?
+                            <SearchFilter key={1} searchParams={searchParams} onChange={handleParamsChange}/>
+                            :
+                            <SearchFilter key={2} searchParams={searchParams} onChange={handleParamsChange}/>
+                    }
+                    {
+                        flushFilter ?
+                            <SortOrderFilter key={3} sortType={searchParams.orderBy} sortDirection={searchParams.sortDirection} onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}/>
+                            :
+                            <SortOrderFilter key={4} sortType={searchParams.orderBy} sortDirection={searchParams.sortDirection} onSortChange={(type, direction) => handleParamsChange({orderBy: type, sortDirection: direction, page: 1})}/>
+                    }
+                    <HouseList data={houseData}
+                               listLoading={searchLoading}
+                               page={searchParams.page}
+                               pageSize={searchParams.pageSize}
+                               onPageChange={(page) => handleParamsChange({page: page})}
+                               onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
+                    />
+                    {/*<RecentList/>*/}
             </ContentContainer>
-        </Container>
+        </>
     )
 }
 
-const Container = styled.div`
-    width: 100%;
-    position: absolute;
-    background: #FFFFFF;
-    color: rgba(0,0,0,.6);
-    font-size: 14px;
-    min-height: 100%;
-`;
 
 const ContentContainer = styled.div`
     min-height: 200px;
     width: 1152px;
     margin: 110px auto 0;
 `;
-
 
 
 export default ClientHome;

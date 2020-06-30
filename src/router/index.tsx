@@ -1,8 +1,7 @@
-import { Redirect } from "react-router-dom";
-
 import React, { lazy, Suspense } from "react";
 import homeRoutes from './homeRoutes'
 import Login from '../views/login/index';
+import clientRoute from "./ClientRoutes";
 const SuspenseComponent = Component => props => {
   return (
     <Suspense fallback={<div/>}>
@@ -14,7 +13,7 @@ const SuspenseComponent = Component => props => {
 const Layout = lazy(() => import("../views/layout"));
 const Test1 = lazy(() => import("../views/test1"));
 const Test2 = lazy(() => import("../views/test2"));
-const ClientHome = lazy(() => import("../views-client/home"));
+
 // 公用页面，不需要权限验证的
 let constantRoutes = [
   {
@@ -28,10 +27,6 @@ let constantRoutes = [
   {
     path: "/test2",
     component: Test2
-  },
-  {
-    path: "/client/home",
-    component: ClientHome
   }
 ];
 
@@ -47,9 +42,12 @@ let authRoutes = [
   }
 ];
 
+
+
 constantRoutes = constantRoutes.map((item) => ({ ...item, requiresAuth: false }))
 authRoutes = authRoutes.map((item) => ({ ...item, requiresAuth: true }))
 export default [
   ...constantRoutes,
+  ...clientRoute,
   ...authRoutes,
 ]

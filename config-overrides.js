@@ -1,4 +1,4 @@
-const { override, addWebpackAlias, fixBabelImports, addLessLoader, addDecoratorsLegacy, overrideDevServer } = require('customize-cra');
+const { override, addWebpackAlias, fixBabelImports, addLessLoader, addDecoratorsLegacy, overrideDevServer, addWebpackExternals } = require('customize-cra');
 const path = require('path')
 
 
@@ -66,6 +66,9 @@ module.exports = {
           // "@box-shadow-base": "0 2px 8px rgba(0, 0, 0, 0.15)" // 浮层阴影
         },
 
+    }),
+    addWebpackExternals({
+        'BMap': 'BMap'
     })
   ),
   devServer: overrideDevServer(

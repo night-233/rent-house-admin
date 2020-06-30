@@ -7,7 +7,9 @@ import BaiduApi from "@apis/baidu";
 import AddressApi from "@apis/address";
 import { useDispatch, useSelector } from 'react-redux'
 import {changeCity} from "../../store/redux/common.redux";
-const Header = () => {
+const Header = (props) => {
+
+    const {fixed = true, showCity = true} = props;
 
     const [supportCitiesList, setSupportCitiesList] = useState([]);
 
@@ -16,21 +18,23 @@ const Header = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        getSupportCities().then(res => {
-            if(res){
-                const cityList = res.list;
-                setSupportCitiesList(cityList);
-                getCurrentCity().then( (result:any) => {
-                    const city = result?.content?.address_detail?.city?.replace("市", "");
-                    const matchCity = cityList.find(item => item.cnName === city);
-                    if(matchCity){
-                        dispatch(changeCity({cnName: matchCity.cnName, enName: matchCity.enName}));
-                    }else if(cityList.length > 0){
-                        dispatch(changeCity({cnName: cityList[0].cnName, enName: cityList[0].enName}))
-                    }
-                })
-            }
-        })
+        if(showCity){
+            getSupportCities().then(res => {
+                if(res){
+                    const cityList = res.list;
+                    setSupportCitiesList(cityList);
+                    getCurrentCity().then( (result:any) => {
+                        const city = result?.content?.address_detail?.city?.replace("市", "");
+                        const matchCity = cityList.find(item => item.cnName === city);
+                        if(matchCity){
+                            dispatch(changeCity({cnName: matchCity.cnName, enName: matchCity.enName}));
+                        }else if(cityList.length > 0){
+                            dispatch(changeCity({cnName: cityList[0].cnName, enName: cityList[0].enName}))
+                        }
+                    })
+                }
+            })
+        }
     }, []);
 
     const getCurrentCity = () => {
@@ -42,27 +46,30 @@ const Header = () => {
     };
 
     const handleCityClick = ({item, key}) => {
-       if(city.enName !== key){
-           dispatch(changeCity({cnName: item.props.title,  enName: key}));
-       }
+        if(city.enName !== key){
+            dispatch(changeCity({cnName: item.props.title,  enName: key}));
+        }
     };
 
     return (
-        <Container>
+        <Container fixed={fixed}>
             <div className="content">
                 <div style={{display: "flex"}}>
                     <LogoContainer src={Logo}/>
-                    <LocationContainer>
-                        <Dropdown overlay={<Menu onClick={handleCityClick}>
-                            {
-                                supportCitiesList.map((item: any) => <Menu.Item key={item.enName} title={item.cnName}>{item.cnName}</Menu.Item>)
-                            }
-                        </Menu>}>
-                            <div className="city">
-                                <span style={{marginRight: "5px"}}>{city.cnName}</span><DownOutlined />
-                            </div>
-                        </Dropdown>
-                    </LocationContainer>
+                    {
+                        showCity &&
+                        <LocationContainer>
+                            <Dropdown overlay={<Menu onClick={handleCityClick}>
+                                {
+                                    supportCitiesList.map((item: any) => <Menu.Item key={item.enName} title={item.cnName}>{item.cnName}</Menu.Item>)
+                                }
+                            </Menu>}>
+                                <div className="city">
+                                    <span style={{marginRight: "5px"}}>{city.cnName}</span><DownOutlined />
+                                </div>
+                            </Dropdown>
+                        </LocationContainer>
+                    }
                 </div>
                 <div className="tab-menu">
                     <div className="item"><span className="title"> 首页 <span className="underline"/></span></div>
@@ -83,9 +90,15 @@ const Header = () => {
 };
 
 const Container = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
+    ${({fixed = true}: {fixed?: boolean}) => fixed ? 
+    `
+        position: fixed;
+        top: 0;
+        left: 0;
+    `
+    :
+        ``
+    }
     height: 60px;
     line-height: 60px;
     color: #fff;
