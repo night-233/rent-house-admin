@@ -9,7 +9,7 @@ import FemaleImg from "../../assets/img/female.png";
 const RoomMateInfo = () => {
 
     return (
-        <Container>
+        <Container id="components-anchor-roommate-info_2">
             <div className="nav-container">
                 <h2 className="title">室友信息</h2>
                 <div className="room-mate-container">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import 'swiper/css/swiper.css';
 import styled from "styled-components";
 import HouseImagePreview from "./HouseImagePreview";
@@ -11,7 +11,9 @@ import RightHouseDetailInfo from "./RightHouseDetailInfo";
 import RightHouseAdminSideFix from "./RightHouseAdminSideFix";
 import DistrictIntroduction from "./DistrictIntrodction";
 import RoundService from "./RoundService";
-
+import UserRights from "./UserRights";
+import RecommendHouse from "./RecommendHouse";
+import { StickyContainer, Sticky } from 'react-sticky';
 const HouseDetail = (props) => {
 
     const houseId = props.match.params.houseId;
@@ -21,26 +23,49 @@ const HouseDetail = (props) => {
         <>
             <Header fixed={false} showCity={false}/>
             <Container>
-                <HouseBodyContainer>
-                    <LeftInfoContainer>
-                        <HouseImagePreview/>
-                        {/* 导航栏*/}
-                        <HouseNavigation/>
-                        {/* 房屋简介 */}
-                        <HouseIntroduction/>
-                        {/* 租约信息*/}
-                        <RentInfo/>
-                        {/* 室友信息*/}
-                        <RoomMateInfo/>
-                        {/* 小区简介*/}
-                        <DistrictIntroduction/>
-                    </LeftInfoContainer>
-                    <RightInfoContainer>
-                        <RightHouseDetailInfo/>
-                        <RightHouseAdminSideFix/>
-                    </RightInfoContainer>
-                </HouseBodyContainer>
+                <StickyContainer>
+                    <HouseBodyContainer>
+                        <LeftInfoContainer>
+                            <HouseImagePreview/>
+                            {/* 导航栏*/}
+                            <HouseNavigation/>
+                            {/* 房屋简介 */}
+                            <HouseIntroduction/>
+                            {/* 租约信息*/}
+                            <RentInfo/>
+                            {/* 室友信息*/}
+                            <RoomMateInfo/>
+                            {/* 小区简介*/}
+                            <DistrictIntroduction/>
+                        </LeftInfoContainer>
+                        <RightInfoContainer>
+                            <RightHouseDetailInfo/>
+                                <Sticky topOffset={458}>
+                                    {({
+                                          style,
+                                          isSticky,
+                                          wasSticky,
+                                          distanceFromTop,
+                                          distanceFromBottom,
+                                          calculatedHeight
+                                      }) => (
+                                          <div style={{...style}}>
+                                              {
+                                                  console.log("distanceFromBottom:" + distanceFromBottom + "; isSticky :" + isSticky )
+                                              }
+                                              <RightHouseAdminSideFix isSticky={isSticky} distanceFromBottom={distanceFromBottom}/>
+                                          </div>
+                                    )}
+                                </Sticky>
+                        </RightInfoContainer>
+                    </HouseBodyContainer>
+                </StickyContainer>
+                {/* 周边配套 */}
                 <RoundService/>
+                {/*  用户权益 */}
+                <UserRights/>
+                {/*  推荐房源 */}
+                <RecommendHouse/>
             </Container>
         </>
     )
@@ -64,7 +89,6 @@ const Container = styled.div`
 `;
 
 const HouseBodyContainer = styled.div`
-    
     display: flex;
 `;
 

@@ -125,10 +125,13 @@ const HouseBoxContainer = styled.div`
             }
         }
         .title{
+            font-size: 17px;
             cursor: pointer;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            margin: 0;
+            line-height: 17px;
             &:hover {
                color: #51c6cf;
             }

@@ -5,16 +5,25 @@ import {CloseOutlined} from "@ant-design/icons/lib";
 /**
  *  右侧房屋联系人
  */
-const RightHouseAdminSideFix = () => {
+const RightHouseAdminSideFix = ({isSticky, distanceFromBottom}) => {
 
     const [qrCodeVisible, seQrCodetVisible] = useState(true);
 
     return (
         <Container>
+            {
+                isSticky &&
+                    <div style={{height: 80, zIndex: -1}}/>
+            }
             <div className="side-fix">
                 <div className="order">
-                    {/*<div className="title">自如友家·瑞立中央花城·4居室-05卧</div>
-                            <div className="price" style={{marginBottom: 20}}><span className="icon">￥</span><span className="number">1860 </span>/月（季付价）</div>*/}
+                    {
+                        isSticky &&
+                        <>
+                            <div className="title">自如友家·瑞立中央花城·4居室-05卧</div>
+                            <div className="price" style={{marginBottom: 20}}><span className="icon">￥</span><span className="number">1860 </span>/月（季付价）</div>
+                        </>
+                    }
                     <div className="btn">预约看房</div>
                     <div className="collect-tip">房源已被收藏0次</div>
                 </div>
@@ -44,7 +53,7 @@ const RightHouseAdminSideFix = () => {
 };
 
 const Container = styled.div`
-        .side-fix{
+    .side-fix{
         .order {
             border-radius: 2px;
             font-size: 0;
@@ -105,38 +114,38 @@ const Container = styled.div`
                margin-top: 10px;
            }
         }
+    }
+    .qrcode{
+        border-radius: 2px;
+        margin-top: 20px;
+        padding: 20px;
+        position: relative;
+        border: 1px solid rgba(0,0,0,.12);
+        border-radius: 4px;
+        display: flex;
+        .close{
+            position: absolute;
+            right: 14px;
+            top: 14px;
+            cursor: pointer;
+            font-size: 18px;
         }
-        .qrcode{
-            border-radius: 2px;
-            margin-top: 20px;
-            padding: 20px;
-            position: relative;
-            border: 1px solid rgba(0,0,0,.12);
-            border-radius: 4px;
-            display: flex;
-            .close{
-                position: absolute;
-                right: 14px;
-                top: 14px;
-                cursor: pointer;
-                font-size: 18px;
-            }
-            .code{
-                width: 60px;
-                height:60px;
-            }
-            .content {
-                padding-left: 15px;
-                 p {
-                    line-height: 30px;
-                    color: rgba(0,0,0,.85);
-                    font-size: 15px;
-                    font-weight: 600;
-                    line-height: 30px;
-                }
+        .code{
+            width: 60px;
+            height:60px;
+        }
+        .content {
+            padding-left: 15px;
+             p {
+                line-height: 30px;
+                color: rgba(0,0,0,.85);
+                font-size: 15px;
+                font-weight: 600;
+                line-height: 30px;
             }
         }
     }
+}
 `;
 
 export default RightHouseAdminSideFix;

@@ -8,7 +8,7 @@ import styled from "styled-components";
 const DistrictIntroduction = () => {
 
     return (
-        <Container>
+        <Container id="components-anchor-district-info_3">
             <div className="nav-container">
                 <h2 className="title">小区简介</h2>
                 <div className="district-container">

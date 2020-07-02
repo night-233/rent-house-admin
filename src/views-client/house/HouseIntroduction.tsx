@@ -8,7 +8,7 @@ import {HouseDevicesConfigIcon} from "../../base/HouseBaseEntity";
 const HouseIntroduction = () => {
 
     return (
-        <Container>
+        <Container id="components-anchor-house-introduction_0">
             <div className="house-introduction">
                 <h2 className="title">房屋简介</h2>
                 <div className="house-desc">
