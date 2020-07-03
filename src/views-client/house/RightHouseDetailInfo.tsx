@@ -1,46 +1,49 @@
 import React from "react";
 import styled from "styled-components";
-import {Popover} from "antd";
+import {Popover, Skeleton} from "antd";
 import {QuestionCircleOutlined} from "@ant-design/icons/lib";
-
+import {useSelector} from "react-redux"
+import {HouseDirectionList} from "../../base/HouseBaseEntity";
 /**
  * 右侧房屋详细信息
  */
 const RightHouseDetailInfo = () => {
 
+    const houseInfo = useSelector(state => state.house.house);
+
     return (
         <Container>
-            <div className="title">自如友家·协安蓝郡·4居室-05卧</div>
-            <div className="price"><span className="icon">￥</span><span className="number">1860 </span>/月（季付价）
+            <div className="title">
+                    {houseInfo.title}
+            </div>
+            <div className="price"><span className="icon">￥</span>
+                <span className="number">
+                    {houseInfo.price}
+                </span>/月（季付价）
             </div>
             <div className="tags">
-                <span>木棉4.0</span>
-                <span>独立阳台</span>
-                <span>智能锁</span>
-                <span>非首次出租</span>
-                <span>离地铁近</span>
-                <span>免物业费</span>
+                {houseInfo?.tags.map((item, index) => <span key={index}>{item}</span> )}
             </div>
             <div className="info">
                 <div className="info-block">
-                    <div className="value">18.2㎡</div>
+                    <div className="value">{houseInfo.area}㎡</div>
                     <div className="name">使用面积</div>
                 </div>
                 <div className="info-block">
-                    <div className="value">朝南</div>
+                    <div className="value">{HouseDirectionList.find(item => item.value === houseInfo.direction)?.label}</div>
                     <div className="name">朝向</div>
                 </div>
                 <div className="info-block">
-                    <div className="value">5室1厅</div>
+                    <div className="value">{houseInfo.room}室{houseInfo.parlour}厅{houseInfo.bathroom}卫</div>
                     <div className="name">户型</div>
                 </div>
             </div>
             <div className="detail">
                 <div className="detail-block">
-                    <div className="name">位置</div>
-                    <Popover content={"小区距滨和路站步行约128米小区距滨和路站步行约128米"}>
+                    <div className="name">交通</div>
+                    <Popover content={houseInfo?.houseDetail?.traffic}>
                         <div className="value">
-                            小区距滨和路站步行约128米小区距滨和路站步行约128米
+                            {houseInfo?.houseDetail?.traffic}
                         </div>
                     </Popover>
                     <Popover content={<div style={{width: 300, color: "rgba(0,0,0,.6)"}}>
@@ -58,7 +61,7 @@ const RightHouseDetailInfo = () => {
                 </div>
                 <div className="detail-block">
                     <div className="name">楼层</div>
-                    <div className="value">2/30</div>
+                    <div className="value">{houseInfo.floor}/{houseInfo.totalFloor}</div>
                 </div>
                 <div className="detail-block">
                     <div className="name">电梯</div>
@@ -66,7 +69,7 @@ const RightHouseDetailInfo = () => {
                 </div>
                 <div className="detail-block">
                     <div className="name">年代</div>
-                    <div className="value">2008年建成</div>
+                    <div className="value">{houseInfo.buildYear}年建成</div>
                 </div>
                 <div className="detail-block">
                     <div className="name">门锁</div>

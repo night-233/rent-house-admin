@@ -37,6 +37,16 @@ export const GlobalCss = createGlobalStyle`
       color: rgba(27, 29, 31, 0.65);
     }
   }
+.ant-spin-nested-loading > div > .ant-spin {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+}
 
 .fade-enter.fade-enter-active, .fade-appear.fade-appear-active {
   opacity: 1;

@@ -31,7 +31,6 @@ const HouseNavigation = () => {
               width: width,
               x: left
           });
-          console.log("width:" + width + "; left:" + left);
           setStickNav(true);
       }else{
           setStickNav(false);

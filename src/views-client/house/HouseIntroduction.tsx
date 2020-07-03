@@ -1,18 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 import {HouseDevicesConfigIcon} from "../../base/HouseBaseEntity";
+import {useSelector} from "react-redux"
 
 /**
  * 房屋简介
  */
 const HouseIntroduction = () => {
 
+    const houseInfo = useSelector(state => state.house.house);
+
     return (
         <Container id="components-anchor-house-introduction_0">
             <div className="house-introduction">
-                <h2 className="title">房屋简介</h2>
+                <h2 className="title">{houseInfo.title}</h2>
                 <div className="house-desc">
-                    感谢您选择自如！本房次卧朝南带阳台，温馨的卧室，等待着你的到来。让喜欢阳光，喜欢看书听音乐的你露出开心的笑容。
+                    {houseInfo?.houseDetail?.description || "这个人很懒，没有房屋描述"}
                 </div>
                 <div className="tag-icons">
                     {

@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import B1JPG from "@assets/tmp/b1.jpg";
-import B2JPG from "@assets/tmp/b2.jpg";
-import B3JPG from "@assets/tmp/b3.jpg";
-import B4JPG from "@assets/tmp/b4.jpg";
-import B5JPG from "@assets/tmp/b5.jpg";
-import B6JPG from "@assets/tmp/b6.jpg";
 import Swiper from "swiper"
 import "swiper/css/swiper.css"
-import { Button, Popover } from 'antd';
-import {LeftOutlined, RightOutlined, ShareAltOutlined, HeartOutlined} from "@ant-design/icons"
+import {Popover, Spin} from 'antd';
+import {HeartOutlined, LeftOutlined, RightOutlined, ShareAltOutlined} from "@ant-design/icons"
+import {useSelector} from "react-redux"
+
 const HouseImagePreview = () => {
+
+
+    const cover = useSelector(state => state.house.house.cover);
+
+    const pictureList = useSelector(state => state.house.house.housePictureList || []).filter(item => (item.cdnPrefix + item.path) !== cover);
+
 
 
     const [activeNav, setActiveNav] = useState(0);
@@ -23,6 +25,7 @@ const HouseImagePreview = () => {
         // 缩略图
         var thumbnail = new Swiper('.thumbnail .swiper-container', {
             // visibilityFullFit: true,
+            observer: true,
             slidesPerView: "auto",
             allowTouchMove: false,
             on:{
@@ -40,6 +43,7 @@ const HouseImagePreview = () => {
                     thumbnail.slideTo(index - 2)
                 }
             },
+            observer: true,
             effect : 'cube',
             cubeEffect: {
                 slideShadows: true,
@@ -71,57 +75,61 @@ const HouseImagePreview = () => {
         }
     };
 
+    const handleThumbClick = (index) => {
+        if(previewSwiper.activeIndex !== index){
+            previewSwiper.slideTo(index, 1000);
+        }
+    };
+
+
     return <Container>
-        <div className="preview" onMouseEnter={() => setPreviewArrowVisible(true)} onMouseLeave={() => setPreviewArrowVisible(false)}>
-            <div className="function-box">
-                <div className="btn" ><HeartOutlined style={{marginRight: 5}}/>收藏</div>
-                <Popover content={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
-                    <div style={{width: "100px", height: "100px"}}>
-                        <img src="//www.ziroom.com/qrcode.php?makeUrl=http://m.ziroom.com/HZ/room/61177299.html" alt="" style={{width: "100px", height: "100px"}}/>
-                    </div>
-                    <div>微信扫码分享</div>
-                </div>} title={null} trigger="hover" placement="bottom" overlayClassName="overlay-class">
-                    <div className="btn"><ShareAltOutlined style={{marginRight: 5}}/>分享</div>
-                </Popover>
-            </div>
-            <div className="swiper-container">
-                {
-                    previewArrowVisible &&
+            <div className="preview" onMouseEnter={() => setPreviewArrowVisible(true)} onMouseLeave={() => setPreviewArrowVisible(false)}>
+                <div className="function-box">
+                    <div className="btn" ><HeartOutlined style={{marginRight: 5}}/>收藏</div>
+                    <Popover content={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
+                        <div style={{width: "100px", height: "100px"}}>
+                            <img src="//www.ziroom.com/qrcode.php?makeUrl=http://m.ziroom.com/HZ/room/61177299.html" alt="" style={{width: "100px", height: "100px"}}/>
+                        </div>
+                        <div>微信扫码分享</div>
+                    </div>} title={null} trigger="hover" placement="bottom" overlayClassName="overlay-class">
+                        <div className="btn"><ShareAltOutlined style={{marginRight: 5}}/>分享</div>
+                    </Popover>
+                </div>
+                <div className="swiper-container">
+                    {
+                        previewArrowVisible && pictureList.length > 0 &&
                         <>
                             <ArrowContainer style={{left: 0, top: "50%", marginTop: "-45px"}} onClick={handleLeftArrowClick}><LeftOutlined /></ArrowContainer>
                             <ArrowContainer style={{right: 0, top: "50%", marginTop: "-45px"}} onClick={handleRightArrowClick}><RightOutlined /> </ArrowContainer>
                         </>
-                }
-                <div className="swiper-wrapper">
-                    <div className="swiper-slide"><img src={B1JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B2JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B3JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B4JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B5JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B6JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B6JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B6JPG} alt="" /></div>
-                    <div className="swiper-slide"><img src={B6JPG} alt="" /></div>
+                    }
+                    <div className="swiper-wrapper">
+                        <div className="swiper-slide"><img src={cover} alt="" /></div>
+                        {
+                            pictureList.map(item => <div className="swiper-slide" key={item.id}><img src={item.cdnPrefix + item.path} alt="" /></div>)
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
         <div className="thumbnail">
-            <ArrowContainer style={{left: 0}} onClick={handleLeftArrowClick}><LeftOutlined /></ArrowContainer>
-            <ArrowContainer style={{right: 0}} onClick={handleRightArrowClick}><RightOutlined /> </ArrowContainer>
-            <div className="swiper-container">
-                <div className="swiper-wrapper">
-                    <div className={"swiper-slide " + (activeNav === 0 ? "active-nav" : "")}><img src={B1JPG} alt="" /></div>
-                    <div className={"swiper-slide " + (activeNav === 1 ? "active-nav" : "")}><img src={B2JPG} alt="" /></div>
-                    <div className={"swiper-slide " + (activeNav === 2 ? "active-nav" : "")}><img src={B3JPG} alt="" /></div>
-                    <div className={"swiper-slide " + (activeNav === 3 ? "active-nav" : "")}><img src={B4JPG} alt="" /></div>
-                    <div className={"swiper-slide " + (activeNav === 4 ? "active-nav" : "")}><img src={B5JPG} alt="" /></div>
-                    <div className={"swiper-slide " + (activeNav === 5 ? "active-nav" : "")}><img src={B6JPG} alt="" /></div>
-                    <div className={"swiper-slide " + (activeNav === 6 ? "active-nav" : "")}><img src={B6JPG} alt="" /></div>
-                    <div className={"swiper-slide " + (activeNav === 7 ? "active-nav" : "")}><img src={B6JPG} alt="" /></div>
-                    <div className={"swiper-slide slide-last " + (activeNav === 8 ? "active-nav" : "")}><img src={B6JPG} alt="" /></div>
+                {
+                    pictureList.length > 0  &&
+                    <>
+                        <ArrowContainer style={{left: 0}} onClick={handleLeftArrowClick}><LeftOutlined /></ArrowContainer>
+                        <ArrowContainer style={{right: 0}} onClick={handleRightArrowClick}><RightOutlined /> </ArrowContainer>
+                    </>
+                }
+                <div className="swiper-container">
+                    <div className="swiper-wrapper">
+                        <div className={"swiper-slide " + (activeNav === 0 ? "active-nav" : "")}><img src={cover} alt="" /></div>
+                        {
+                            pictureList.map((item, index) =>  <div key={item.id} className={"swiper-slide " + (activeNav === index + 1? "active-nav" : "")}
+                                                                   onClick={() => handleThumbClick(index + 1)}><img src={item.cdnPrefix + item.path} alt="" />
+                            </div>)
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
     </Container>
 };
 

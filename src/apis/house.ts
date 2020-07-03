@@ -41,6 +41,15 @@ const HouseApi = {
             progress: false,
             noJweToken: true
         })
+    },
+
+    getHouseById(id: number){
+        return request({
+            url: `${base}/house/${id}`,
+            method: "get",
+            progress: true,
+            noJweToken: true
+        })
     }
 };
 

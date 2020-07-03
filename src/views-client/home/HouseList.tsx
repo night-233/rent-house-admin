@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import styled from "styled-components";
 import {Col, Empty, Pagination, Row, Spin} from "antd";
 import LazyLoad, {forceCheck} from 'react-lazyload';
+import {Link} from "react-router-dom";
 
 interface HouseListProps {
     data: {total: number, list: Array<any>},
@@ -216,9 +217,15 @@ export const HouseBox = (props) => {
     return (
         <HouseBoxContainer>
             <div className="pic">
-                <LazyLoad height="100%" placeholder={<div style={{height: "100%", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "30px"}}>图片加载中...</div>}>
-                    <img src={data.cover} style={{objectFit: "cover", width: "100%", height: "100%"}} alt={data.title}/>
-                </LazyLoad>
+                <Link to={{
+                    pathname: "/client/house/" + data.id,
+                }}
+                    target="_blank"
+                >
+                    <LazyLoad height="100%" placeholder={<div style={{height: "100%", display: "flex", justifyContent: "center", alignItems: "center", fontSize: "30px"}}>图片加载中...</div>}>
+                        <img src={data.cover} style={{objectFit: "cover", width: "100%", height: "100%"}} alt={data.title}/>
+                    </LazyLoad>
+                </Link>
             </div>
             <div className="info">
                 <div className="title-container"><span className="icon-sign">签</span><div className="title">{data.title}</div> </div>

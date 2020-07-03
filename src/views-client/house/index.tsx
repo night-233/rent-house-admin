@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import 'swiper/css/swiper.css';
 import styled from "styled-components";
 import HouseImagePreview from "./HouseImagePreview";
@@ -13,63 +13,73 @@ import DistrictIntroduction from "./DistrictIntrodction";
 import RoundService from "./RoundService";
 import UserRights from "./UserRights";
 import RecommendHouse from "./RecommendHouse";
-import { StickyContainer, Sticky } from 'react-sticky';
+import {Sticky, StickyContainer} from 'react-sticky';
+import {useDispatch} from "react-redux";
+import {Spin, Skeleton} from "antd";
+import {getHouseById} from "../../store/redux/house.redux";
+import {useSelector} from "react-redux"
+import FullScreenLoading from "../../components/FullScreenLoading"
 const HouseDetail = (props) => {
 
-    const houseId = props.match.params.houseId;
 
+    const loading = useSelector(state => state.house.loading);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const houseId = props.match.params.houseId;
+        dispatch(getHouseById(houseId));
+    }, []);
 
     return (
-        <>
+        <FullScreenLoading loading={loading}>
             <Header fixed={false} showCity={false}/>
             <Container>
                 <StickyContainer>
                     <HouseBodyContainer>
                         <LeftInfoContainer>
                             <HouseImagePreview/>
-                            {/* 导航栏*/}
+                            {/*导航栏*/}
                             <HouseNavigation/>
-                            {/* 房屋简介 */}
+                            {/*房屋简介*/}
                             <HouseIntroduction/>
-                            {/* 租约信息*/}
+                            {/*租约信息*/}
                             <RentInfo/>
-                            {/* 室友信息*/}
+                            {/*室友信息*/}
                             <RoomMateInfo/>
-                            {/* 小区简介*/}
+                            {/*小区简介*/}
                             <DistrictIntroduction/>
                         </LeftInfoContainer>
                         <RightInfoContainer>
                             <RightHouseDetailInfo/>
-                                <Sticky topOffset={458}>
-                                    {({
-                                          style,
-                                          isSticky,
-                                          wasSticky,
-                                          distanceFromTop,
-                                          distanceFromBottom,
-                                          calculatedHeight
-                                      }) => (
-                                          <div style={{...style}}>
-                                              {
-                                                  console.log("distanceFromBottom:" + distanceFromBottom + "; isSticky :" + isSticky )
-                                              }
-                                              <RightHouseAdminSideFix isSticky={isSticky} distanceFromBottom={distanceFromBottom}/>
-                                          </div>
-                                    )}
-                                </Sticky>
+                            <Sticky topOffset={458}>
+                                {({
+                                      style,
+                                      isSticky,
+                                      wasSticky,
+                                      distanceFromTop,
+                                      distanceFromBottom,
+                                      calculatedHeight
+                                  }) => (
+                                    <div style={{...style}}>
+                                        <RightHouseAdminSideFix isSticky={isSticky} distanceFromBottom={distanceFromBottom}/>
+                                    </div>
+                                )}
+                            </Sticky>
                         </RightInfoContainer>
                     </HouseBodyContainer>
                 </StickyContainer>
-                {/* 周边配套 */}
+                {/*周边配套*/}
                 <RoundService/>
-                {/*  用户权益 */}
+                {/*用户权益*/}
                 <UserRights/>
-                {/*  推荐房源 */}
+                {/*推荐房源*/}
                 <RecommendHouse/>
             </Container>
-        </>
+        </FullScreenLoading>
     )
 };
+
 
 const Container = styled.div`
     margin: 0 auto;
@@ -87,7 +97,6 @@ const Container = styled.div`
         margin: 16px 0;
    }
 `;
-
 const HouseBodyContainer = styled.div`
     display: flex;
 `;
