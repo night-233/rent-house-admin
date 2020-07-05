@@ -1,11 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-
+import {useSelector} from "react-redux"
 /**
  * 小区简介
  * @constructor
  */
 const DistrictIntroduction = () => {
+
+    const houseInfo = useSelector(state => state.house.house);
+
+    const houseCountInDistrict = useSelector(state => state.house.houseCountInDistrict);
 
     return (
         <Container id="components-anchor-district-info_3">
@@ -16,11 +20,11 @@ const DistrictIntroduction = () => {
                         <img src="http://img.ljcdn.com/hdic-resblock/m_fill,w_800,l_ziroom,lg_south_east,lx_-0.0625w,ly_-0.0625w,q_50/8d947eb0-4e6f-411c-8be4-c6a9fc9889a0.jpg" alt=""/>
                     </div>
                     <div className="district-info">
-                        <div className="district-name">顺发和美家</div>
+                        <div className="district-name">{houseInfo.district}</div>
                         <div className="district-body">
                             <div className="info-block">
                                 <span className="label">建筑年代</span>
-                                <span className="value"> 2008</span>
+                                <span className="value"> {houseInfo.buildYear}</span>
                             </div>
                             <div className="info-block">
                                 <span className="label">建筑类型</span>
@@ -46,7 +50,7 @@ const DistrictIntroduction = () => {
                     </div>
                 </div>
                 <div className="house-more">
-                    瞬发和美家小区19套在租房源
+                    {houseInfo.district}{houseCountInDistrict}套在租房源
                 </div>
             </div>
         </Container>

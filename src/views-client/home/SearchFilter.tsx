@@ -9,7 +9,7 @@ import AddressApi from "@apis/address";
 import { useSelector } from 'react-redux'
 import {handleResponse} from "@utils/handle-reponse";
 import { Checkbox } from 'antd';
-import debounce from "lodash/debounce"
+import { debounce } from "debounce";
 import {HouseDirectionList, HouseTagList} from "../../base/HouseBaseEntity";
 import BaiduApi from "@apis/baidu";
 const { Option } = Select;
@@ -82,29 +82,14 @@ const SearchFilter = (props) => {
 
     const [addressOption, setAddressOption] = useState();
 
-    const [addressInput, setAddressInput] = useState();
-
     const city = useSelector(state => state.common.city);
 
-
-   /* useEffect(() => {
-        setSearchType(null);
-        initDistance();
-    }, [city.enName]);
-
-    useEffect(() => {
-        if(searchParams.keyword){
-            setSearchType(null);
-            initDistance();
-        }
-    }, [searchParams.keyword]);*/
 
     const initDistance = () => {
         setDistanceType(1);
         setDistance(3);
         setAddressOption(undefined);
         setDistanceInputValue(undefined);
-        setAddressInput(undefined);
         setAddressHintList([]);
     };
 
@@ -281,8 +266,6 @@ const SearchFilter = (props) => {
                                                     <i className="iconfont">&#xe620;</i>
                                                     <Select
                                                         showSearch
-                                                        value={addressInput}
-                                                        onChange={setAddressInput}
                                                         style={{ width: 250}}
                                                         placeholder="请输入公司地址..."
                                                         defaultActiveFirstOption={false}

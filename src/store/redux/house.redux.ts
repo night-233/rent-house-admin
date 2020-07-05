@@ -17,6 +17,7 @@ const initState = {
     subwayStation: {},
     agent: {},
     houseCountInDistrict: null,
+    location: {},
     loading: false,
 };
 

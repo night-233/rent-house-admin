@@ -1,13 +1,17 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {CloseOutlined} from "@ant-design/icons/lib";
-
+import {useSelector} from "react-redux"
 /**
  *  右侧房屋联系人
  */
-const RightHouseAdminSideFix = ({isSticky, distanceFromBottom}) => {
+const RightHouseAdminSideFix = ({isSticky}) => {
 
     const [qrCodeVisible, seQrCodetVisible] = useState(true);
+
+    const houseInfo = useSelector(state => state.house.house);
+
+    const agent = useSelector(state => state.house.agent);
 
     return (
         <Container>
@@ -18,10 +22,10 @@ const RightHouseAdminSideFix = ({isSticky, distanceFromBottom}) => {
             <div className="side-fix">
                 <div className="order">
                     {
-                        isSticky &&
+                        isSticky&&
                         <>
-                            <div className="title">自如友家·瑞立中央花城·4居室-05卧</div>
-                            <div className="price" style={{marginBottom: 20}}><span className="icon">￥</span><span className="number">1860 </span>/月（季付价）</div>
+                            <div className="title">{houseInfo.title}</div>
+                            <div className="price" style={{marginBottom: 20}}><span className="icon">￥</span><span className="number">{houseInfo.price} </span>/月（季付价）</div>
                         </>
                     }
                     <div className="btn">预约看房</div>
@@ -32,8 +36,8 @@ const RightHouseAdminSideFix = ({isSticky, distanceFromBottom}) => {
                         <img src="http://pic.ziroom.com/steward_images/60026661.png" alt="房东头像"/>
                     </div>
                     <div className="admin-info">
-                        <div className="name">徐齐斌</div>
-                        <div className="phone">17879502601</div>
+                        <div className="name">{agent.nickName}</div>
+                        <div className="phone">{agent.phoneNumber}</div>
                     </div>
                 </div>
                 {

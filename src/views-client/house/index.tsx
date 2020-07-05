@@ -35,7 +35,6 @@ const HouseDetail = (props) => {
         <FullScreenLoading loading={loading}>
             <Header fixed={false} showCity={false}/>
             <Container>
-                <StickyContainer>
                     <HouseBodyContainer>
                         <LeftInfoContainer>
                             <HouseImagePreview/>
@@ -52,23 +51,24 @@ const HouseDetail = (props) => {
                         </LeftInfoContainer>
                         <RightInfoContainer>
                             <RightHouseDetailInfo/>
-                            <Sticky topOffset={458}>
-                                {({
-                                      style,
-                                      isSticky,
-                                      wasSticky,
-                                      distanceFromTop,
-                                      distanceFromBottom,
-                                      calculatedHeight
-                                  }) => (
-                                    <div style={{...style}}>
-                                        <RightHouseAdminSideFix isSticky={isSticky} distanceFromBottom={distanceFromBottom}/>
-                                    </div>
-                                )}
-                            </Sticky>
+                            <StickyContainer style={{flex: 1}}>
+                                <Sticky  disableCompensation={true} topOffset={-80}>
+                                    {({
+                                          style,
+                                          isSticky,
+                                          wasSticky,
+                                          distanceFromTop,
+                                          distanceFromBottom,
+                                          calculatedHeight
+                                      }) => (
+                                        <div style={{...style}}>
+                                            <RightHouseAdminSideFix isSticky={isSticky}/>
+                                        </div>
+                                    )}
+                                </Sticky>
+                            </StickyContainer>
                         </RightInfoContainer>
                     </HouseBodyContainer>
-                </StickyContainer>
                 {/*周边配套*/}
                 <RoundService/>
                 {/*用户权益*/}
@@ -99,6 +99,7 @@ const Container = styled.div`
 `;
 const HouseBodyContainer = styled.div`
     display: flex;
+    box-sizing: border-box;
 `;
 
 const LeftInfoContainer = styled.div`
@@ -111,6 +112,8 @@ const LeftInfoContainer = styled.div`
 const RightInfoContainer = styled.div`
     margin-left: 30px;
     width: 358px;
+    display: flex;
+    flex-direction: column;
     .price{
         color: #ff961e;
         margin-top: 10px;
