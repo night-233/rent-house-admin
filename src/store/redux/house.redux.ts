@@ -18,7 +18,7 @@ const initState = {
     agent: {},
     houseCountInDistrict: null,
     location: {},
-    loading: false,
+    loading: true,
 };
 
 export const house = (state = initState, action) =>{

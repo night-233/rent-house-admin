@@ -15,6 +15,9 @@ import IconLocationActivePng from "../../assets/img/icon-location-active.png";
 import {house} from "@store/redux/house.redux";
 
 const { Option } = AutoComplete;
+
+// 周边服务类型
+const roundServiceType = ["交通", "商超", "教育", "餐饮", "金融", "医疗"];
 /**
  * 周边配套
  */
@@ -25,7 +28,7 @@ const RoundService = () => {
 
     const [trafficType, setTrafficType] = useState(1); // 1: 公交 2: 步行  3: 驾车
 
-    const [nearbyType, setNearbyType] = useState(1); // 1: 公交 2: 商超 3:教育  4: 餐饮  5: 金融  6: 医疗
+    const [nearbyType, setNearbyType] = useState(0); // 0: 交通 1: 商超 2:教育  3: 餐饮  4: 金融  5: 医疗
 
     const [nearbyTrafficType, setNearbyTrafficType] = useState(1); // 1:地铁  2: 公交
 
@@ -39,11 +42,15 @@ const RoundService = () => {
 
     const [suggestRoute, setSuggestRoute] = useState();
 
+    const [roundServiceList, setRoundServiceList] = useState<any>([]);
+
+    const [activeMarker, setActiveMarker] = useState();
+
     const info = useSelector(state => state.house);
 
     useEffect(() => {
         if(info.city.cnName){
-            var map = new BMap.Map("round-service-map"); // 创建Map实例
+            const map = new BMap.Map("round-service-map", {enableMapClick:false}); // 创建Map实例
             map.addControl(new BMap.NavigationControl());
             // 解析房屋位置 将地址解析结果显示在地图上,并调整地图视野
             const geo = new BMap.Geocoder();
@@ -55,34 +62,42 @@ const RoundService = () => {
             geo.getPoint(address, function(point) {
                 if (point) {
                     map.centerAndZoom(point, 19);
-                    const houseIcon = new BMap.Icon(HouseImg, new BMap.Size(32, 32), {});
-                    const pointerMarker = new BMap.Marker(point, {icon: houseIcon});
-                    pointerMarker.setLabel(generateLabel(info.house.district));
-                    map.addOverlay(pointerMarker);
-                    setHousePoint({
-                        lat: point.lat,
-                        lng: point.lng
-                    });
+                    drawHousePoint(map, point);
                 } else {
                     message.warn("房源地址解析失败");
                 }
             });
             map.addEventListener("dragend", () => {
-               console.log("拖拽结束");
                setIsLocation(false);
             });
             setMap(map);
         }
     },  [info.city.cnName]);
 
-    const generateLabel = (title, clazz = "label-marker") => {
-        const span = `<span class=${clazz}>${title}</span>`
+    // 绘制房屋点
+    const drawHousePoint = (map, point) => {
+        const houseIcon = new BMap.Icon(HouseImg, new BMap.Size(32, 32), {});
+        const pointerMarker = new BMap.Marker(point, {icon: houseIcon});
+        pointerMarker.setZIndex(1000);
+        const label = generateLabel(info.house.district);
+        label.setZIndex(1000);
+        pointerMarker.setLabel(label);
+        map.addOverlay(pointerMarker);
+        setHousePoint({
+            lat: point.lat,
+            lng: point.lng
+        });
+    };
+
+    // 生成地图标签
+    const generateLabel = (title, clazz = "label-marker", offset = new BMap.Size(-10, -32)) => {
+        const span = `<span class=${clazz}>${title}</span>`;
         const label = new BMap.Label(span, {
-            offset: new BMap.Size(-10, -32)
+            offset: offset,
         });
         label.setStyle({
             border: "none",
-            background: "transparent"
+            background: "transparent",
         });
         return label;
     };
@@ -104,47 +119,133 @@ const RoundService = () => {
         }
     }, 500);
 
+    // 处理公司选择
     const handleCompanySelect = (value, option) => {
         setTargetCompanyLocation(option.location);
         searchSuggestRoute(housePoint, option.location, trafficType);
     };
 
+    // 搜索路线规划
     const searchSuggestRoute = (startPoint, endPoint, type) => {
         const center = {lat: (startPoint.lat + endPoint.lat) / 2, lng: (startPoint.lng + endPoint.lng) / 2};
-        map.centerAndZoom(new BMap.Point(center.lng, center.lat), 19);
+       // map.centerAndZoom(new BMap.Point(center.lng, center.lat), 12);
         const start = new BMap.Point(startPoint.lng, startPoint.lat);
         const end = new BMap.Point(endPoint.lng, endPoint.lat);
         let routeSuggestTmp = suggestRoute;
-        if(routeSuggestTmp){
+        /*if(routeSuggestTmp){
             routeSuggestTmp.clearResults();
-        }
+        }*/
+        map.clearOverlays();
         switch (type) {
-            case 1: routeSuggestTmp = new BMap.TransitRoute(map, {renderOptions: {map: map, panel: "r-result"},  onSearchComplete: function (res) {
-                    console.dir(res);
-                }});break;
-            case 2: routeSuggestTmp =  new BMap.WalkingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true},  onSearchComplete: function (res) {
-                    console.dir(res);
-                }}); break;
-            case 3: routeSuggestTmp =  new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true},  onSearchComplete: function (res) {
-                    console.dir(res);
-                }}); break;
-            default:  routeSuggestTmp = new BMap.TransitRoute(map, {renderOptions: {map: map, panel: "r-result"}});break;
+            case 1: routeSuggestTmp = new BMap.TransitRoute(map, {renderOptions: {map: map, panel: "r-result",  autoViewport: true}});break;
+            case 2: routeSuggestTmp =  new BMap.WalkingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}}); break;
+            case 3: routeSuggestTmp =  new BMap.DrivingRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}}); break;
+            default:  routeSuggestTmp = new BMap.TransitRoute(map, {renderOptions: {map: map, panel: "r-result", autoViewport: true}});break;
         }
         routeSuggestTmp.search(start, end);
         setSuggestRoute(routeSuggestTmp);
+        drawHousePoint(map, housePoint)
     };
 
-
+    // 处理定位点点击
     const handleLocationClick = () => {
-      map.centerAndZoom(new BMap.Point(housePoint.lng, housePoint.lat), 19) ;
+      map.panTo(new BMap.Point(housePoint.lng, housePoint.lat)) ;
       setIsLocation(true)
     };
 
+    // 处理交通方式改变
     const handleTrafficChange = (value) => {
         setTrafficType(value);
         if(targetCompanyLocation){
             searchSuggestRoute(housePoint, targetCompanyLocation, value);
         }
+    };
+
+     // 处理 上班通勤与周边配套切换
+    const handleMapSearchTypeChange = (value) => {
+        setMapSearchType(value);
+        map.clearOverlays();
+        if(value === 1){
+            handleTrafficChange(trafficType);
+            drawHousePoint(map, housePoint);
+        }
+        else if(value === 2){
+            handleNearbyTypeChange(nearbyType);
+        }
+    };
+
+    // 处理周边类型改变
+    const handleNearbyTypeChange = (value) => {
+        setNearbyType(value);
+        let keyword: any = roundServiceType[value];
+        if(value === 0){
+            keyword = "地铁";
+            setNearbyTrafficType(1);
+        }
+        if(value == 1){
+            keyword = "商场超市";
+        }
+        setActiveMarker(null);
+        roundSearchSearch(keyword)
+    };
+
+    // 处理周边类型公交方式改变
+    const handleNearbyTrafficTypeChange = (value) => {
+        setNearbyTrafficType(value);
+        setActiveMarker(null);
+        roundSearchSearch(value === 1 ? "地铁" : "公交");
+    };
+
+    // 周彪服务搜索 （4公里范围内）
+    const roundSearchSearch = (keyword) => {
+        const point = new BMap.Point(housePoint.lng, housePoint.lat);
+        map.centerAndZoom(point, 15);
+        const local =  new BMap.LocalSearch(map, {renderOptions: {map: map, autoViewport: false}, onMarkersSet: (arr) => {
+            map.clearOverlays();
+            const s: Array<any> = [];
+            for (let i = 0; i < arr.length; i ++){
+                s.push({
+                    title: arr[i].title,
+                    address: arr[i].address,
+                    point: arr[i].point,
+                    distance: calcDistance(housePoint, {lng: arr[i].point.lng, lat: arr[i].point.lat})
+                });
+                const label = generateLabel(arr[i].title, "label-marker-search", new BMap.Size(-22, -27));
+                label.setPosition(arr[i].point);
+
+                map.addOverlay(label);
+                label.addEventListener("click", () => {
+                    setActiveMarker(i);
+                    handleMarkerClick(arr[i].point, arr[i].title, arr[i].message);
+                });
+            }
+            setRoundServiceList(s);
+            drawHousePoint(map, point);
+        }});
+        local.searchNearby(keyword ,point, 4000);
+    };
+    // 标注点点击处理
+    const handleMarkerClick = (point, title, message) => {
+        const opts = {
+            width: 200,
+            title : title , // 信息窗口标题
+        };
+        const infoWindow = new BMap.InfoWindow(message, opts);
+        map.panTo(point);
+        map.openInfoWindow(infoWindow, point); //开启信息窗口
+        setIsLocation(false)
+    };
+    // 计算经纬度之间的距离
+    const calcDistance = function(startPoint, endPoint){
+        const radLat1 = startPoint.lat*Math.PI / 180.0;
+        const radLat2 = endPoint.lat*Math.PI / 180.0;
+        const a = radLat1 - radLat2;
+        const b = startPoint.lng*Math.PI / 180.0 - endPoint.lng*Math.PI / 180.0;
+        let s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a/2),2) +
+            Math.cos(radLat1)*Math.cos(radLat2)*Math.pow(Math.sin(b/2),2)));
+        s = s *6378.137 ;// EARTH_RADIUS;
+        s = Math.round(s * 1000);
+        return s;
     };
 
     return (
@@ -154,163 +255,69 @@ const RoundService = () => {
             <div className="map-container">
                 <div className="map-search-container">
                     <div className="map_nav">
-                        <span className={`nav-item ${mapSearchType === 1 && "active"}`} onClick={() => setMapSearchType(1)}>上班通勤</span>
-                        <span className={`nav-item ${mapSearchType === 2 && "active"}`} onClick={() => setMapSearchType(2)}>周边配套</span>
+                        <span className={`nav-item ${mapSearchType === 1 && "active"}`} onClick={() => handleMapSearchTypeChange(1)}>上班通勤</span>
+                        <span className={`nav-item ${mapSearchType === 2 && "active"}`} onClick={() => handleMapSearchTypeChange(2)}>周边配套</span>
                     </div>
                     {/* 上班通勤 */}
-                    {
-                        mapSearchType === 1 &&
-                        <div className="commute-search">
-                            <div className="company">
-                                <span className="company-label">公司</span>
-                                <AutoComplete
-                                    style={{ width: "244px" }}
-                                    placeholder="请输入你的公司"
-                                    onSearch={handleSearchCompany}
-                                    onSelect={handleCompanySelect}
-                                >
-                                    {companyOptions.filter((item: any) => item.location && item.uid).map((item:any) => <Option value={item.name} key={item.uid} location={item.location}>{item.name}</Option>)}
-                                </AutoComplete>
-                            </div>
-
-                            <div className="traffic-ways">
-                                <span className={`way ${trafficType === 1 && "active"}`} onClick={() => handleTrafficChange(1)}>公交</span>
-                                <span className={`way ${trafficType === 2 && "active"}`}  onClick={() => handleTrafficChange(2)}>步行</span>
-                                <span className={`way ${trafficType === 3 && "active"}`}  onClick={() => handleTrafficChange(3)}>驾车</span>
-                            </div>
-                            <Scrollbars style={{height: 220, marginTop: 10, width: "100%"}}
+                    <div className="commute-search" style={{display: mapSearchType === 1 ? "block" : "none"}}>
+                        <div className="company">
+                            <span className="company-label">公司</span>
+                            <AutoComplete
+                                style={{ width: "244px" }}
+                                placeholder="请输入你的公司"
+                                onSearch={handleSearchCompany}
+                                onSelect={handleCompanySelect}
                             >
-                                <div id="r-result" className="map-result"/>
-                            </Scrollbars>
+                                {companyOptions.filter((item: any) => item.location && item.uid).map((item:any) => <Option value={item.name} key={item.uid} location={item.location}>{item.name}</Option>)}
+                            </AutoComplete>
                         </div>
-                    }
+
+                        <div className="traffic-ways">
+                            <span className={`way ${trafficType === 1 && "active"}`} onClick={() => handleTrafficChange(1)}>公交</span>
+                            <span className={`way ${trafficType === 2 && "active"}`}  onClick={() => handleTrafficChange(2)}>步行</span>
+                            <span className={`way ${trafficType === 3 && "active"}`}  onClick={() => handleTrafficChange(3)}>驾车</span>
+                        </div>
+                        <Scrollbars style={{height: 220, marginTop: 10, width: "100%"}}
+                        >
+                            <div id="r-result" className="map-result"/>
+                        </Scrollbars>
+                    </div>
                     {/* 周边配套 */}
-                    {
-                        mapSearchType === 2 &&
-                        <div className="round-service">
+                    <div className="round-service" style={{display: mapSearchType === 2 ? "block" : "none"}}>
                             <div className="nearby-nav">
-                                <span className={`type ${nearbyType === 1 && "active"}`} onClick={() => setNearbyType(1)}>公交</span>
-                                <span className={`type ${nearbyType === 2 && "active"}`} onClick={() => setNearbyType(2)}>商超</span>
-                                <span className={`type ${nearbyType === 3 && "active"}`} onClick={() => setNearbyType(3)}>教育</span>
-                                <span className={`type ${nearbyType === 4 && "active"}`} onClick={() => setNearbyType(4)}>餐饮</span>
-                                <span className={`type ${nearbyType === 5 && "active"}`} onClick={() => setNearbyType(5)}>金融</span>
-                                <span className={`type ${nearbyType === 6 && "active"}`} onClick={() => setNearbyType(6)}>医疗</span>
+                                {
+                                    roundServiceType.map((item, index) => <span key={index} className={`type ${nearbyType === index && "active"}`} onClick={() => index !== nearbyType && handleNearbyTypeChange(index)}>{item}</span>)
+                                }
                             </div>
                             {
-                                nearbyType === 1 &&
+                                nearbyType === 0 &&
                                 <div className="traffic-way">
-                                    <span className={`item ${nearbyTrafficType === 1 && "active"}`}  onClick={() => setNearbyTrafficType(1)}>地铁</span>
-                                    <span className={`item ${nearbyTrafficType === 2 && "active"}`} onClick={() => setNearbyTrafficType(2)}>公交</span>
+                                    <span className={`item ${nearbyTrafficType === 1 && "active"}`}  onClick={() => 1 !== nearbyTrafficType && handleNearbyTrafficTypeChange(1)}>地铁</span>
+                                    <span className={`item ${nearbyTrafficType === 2 && "active"}`} onClick={() =>  2 !== nearbyTrafficType && handleNearbyTrafficTypeChange(2)}>公交</span>
                                 </div>
                             }
-                            <Scrollbars style={{height: 200}} autoHeight>
-                                <div className="service-item active">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
+                            <Scrollbars style={{height: 200}}>
+                                {
+                                    roundServiceList.map((item, index) => (
+                                    <div className={`service-item ` + (activeMarker === index && "active")}  key={index} onClick={() => {
+                                        setActiveMarker(index);
+                                        handleMarkerClick(item.point, item.title, item.address)
+                                    }}>
+                                        <div className="left">
+                                            <div className="title">
+                                                {item.title}
+                                            </div>
+                                            <div className="description">
+                                                {item.address}
+                                            </div>
                                         </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
+                                        <div className="right">
+                                            约{item.distance}m
                                         </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
-                                <div className="service-item">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
-                                        </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
-                                <div className="service-item">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
-                                        </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
-                                <div className="service-item">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
-                                        </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
-                                <div className="service-item">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
-                                        </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
-                                <div className="service-item">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
-                                        </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
-                                <div className="service-item">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
-                                        </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
-                                <div className="service-item">
-                                    <div className="left">
-                                        <div className="title">
-                                            万润达商场
-                                        </div>
-                                        <div className="description">
-                                            杭州市余杭区良运街与庙长桥路交叉路口往北约100米(山原宾馆南侧约100米)
-                                        </div>
-                                    </div>
-                                    <div className="right">
-                                        约973m
-                                    </div>
-                                </div>
+                                    </div>))
+                                }
                             </Scrollbars>
                         </div>
-                    }
                 </div>
                 <div className="house-location" style={{backgroundImage: `url( ${isLocation ? IconLocationActivePng : IconLocationPng})`}} onClick={handleLocationClick}/>
                 <div className="round-service-map" id="round-service-map"/>
@@ -322,9 +329,23 @@ const RoundService = () => {
 
 const Container = styled.div`
     margin-top: 60px;
+     .BMap_bubble_title {
+        font-size: 13px;
+        color: rgba(0,0,0,.85);
+        line-height: 16px;
+        font-weight: 600;
+     }
+     .BMap_pop div {
+        border: 0!important;
+     }
+     .BMap_bubble_content {
+        font-size: 12px;
+        color: rgba(0,0,0,.4);
+        line-height: 16px;
+     }
     .map-container{
         position: relative;
-
+        
        // 地图搜索容器
        .map-search-container{
             background: #fff;
@@ -482,6 +503,7 @@ const Container = styled.div`
                     .navtrans-view a{
                         display: none;
                     }
+                   
                 }
                  // 上班通勤结束
             }
@@ -539,7 +561,7 @@ const Container = styled.div`
                         background: rgba(0,0,0,.03);
                     }
                     .left{
-                        flex: 7.8;
+                        width: 200px;
                         .title{
                             color: rgba(0,0,0,.85);
                             display: block;
@@ -611,6 +633,7 @@ const Container = styled.div`
             font-size: 15px;
             padding: 3px 6px;
             position: relative;
+            z-index: 50;
             &:after{
                 border-color: #51C6CF transparent transparent;
                 border-style: solid;
@@ -622,6 +645,7 @@ const Container = styled.div`
                 position: absolute;
                 transform: rotate(9deg);
                 width: 0;
+                cursor: pointer;
             }
        }
        .label-marker{
@@ -631,6 +655,7 @@ const Container = styled.div`
             font-size: 15px;
             padding: 3px 6px;
             position: relative;
+            z-index: 80;
             &:after{
                 border-color: #ffba15 transparent transparent;
                 border-style: solid;
