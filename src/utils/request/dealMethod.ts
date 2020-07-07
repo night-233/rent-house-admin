@@ -59,51 +59,50 @@ export function dealResStatus (resData: any) {
 export function dealResError (error: any) {
   if (!error) return
   if (error && error.response) {
-    console.log('错误', error.response)
     switch (error.response.status) {
       case 400:
         error.message = '请求错误';
-        break
+        break;
       case 401:
-        error.message = '未授权，请至登录页面登录';
-        break
+        error.message = '未授权，跳转至登录页面';
+        break;
       case 403:
         error.message = '拒绝访问';
-        break
+        break;
       case 404:
         error.message = `请求地址出错: ${error.response.config.url}`;
-        break
+        break;
       case 408:
         error.message = '请求超时';
-        break
+        break;
       case 409:
         error.message = '资源冲突';
-        break
+        break;
       case 500:
         error.message = '服务器内部错误';
-        break
+        break;
       case 501:
         error.message = '服务未实现';
-        break
+        break;
       case 502:
         error.message = '网关错误';
-        break
+        break;
       case 503:
         error.message = '服务不可用';
-        break
+        break;
       case 504:
         error.message = '网关超时';
-        break
+        break;
       case 505:
         error.message = 'HTTP版本不受支持';
-        break
+        break;
       default:
         break
     }
   }
   if (error.response?.status === 401) {
     message.error(error.message, 1, () => {
-      history.push('/login')
+        window.location.href = "/login";
     })
   } else {
     message.error(error.message, 1)

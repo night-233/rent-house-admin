@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const TokenKey = 'Authorization';
+export const TokenKey = 'Authorization';
 
 export default {
 

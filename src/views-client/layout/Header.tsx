@@ -7,6 +7,12 @@ import BaiduApi from "@apis/baidu";
 import AddressApi from "@apis/address";
 import { useDispatch, useSelector } from 'react-redux'
 import {changeCity} from "../../store/redux/common.redux";
+import LoginRegisterModal, {ModalModeType} from "./LoginRegiestModal"
+import cookie, {TokenKey} from "@utils/cookie";
+import userApi from "@apis/user";
+import {changeUserInfo, loginOut, logout} from "../../store/redux/user.redux";
+import {RequestStatus} from "../../base/RequestStatus"
+import {useHistory} from "react-router";
 const Header = (props) => {
 
     const {fixed = true, showCity = true} = props;
@@ -15,7 +21,23 @@ const Header = (props) => {
 
     const city = useSelector(state => state.common.city);
 
+    // 登录注册模态框控制
+    const [loginRegisterModalType, setLoginRegisterModalType] = useState(ModalModeType.CODE_LOGIN);
+    const [loginRegisterModalVisible, setLoginRegisterModalVisible] = useState(false);
+
+    const user = useSelector(state => state.user);
+
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        const token = cookie.getCookie(TokenKey);
+        if(token){
+            getClientUser();
+        }
+    }, []);
+
+    const history = useHistory();
+
 
     useEffect(() => {
         if(showCity){
@@ -37,22 +59,55 @@ const Header = (props) => {
         }
     }, []);
 
+    // 获取当前城市
     const getCurrentCity = () => {
         return BaiduApi.getCurrentCity();
     };
 
+    // 获取支持城市列表
     const getSupportCities = async () => {
         return  AddressApi.getSupportCities();
     };
 
+    // 处理城市选择
     const handleCityClick = ({item, key}) => {
         if(city.enName !== key){
             dispatch(changeCity({cnName: item.props.title,  enName: key}));
         }
     };
 
+    // 处理登录成功
+    const handleLoginSuccess = () => {
+        getClientUser();
+        setLoginRegisterModalVisible(false);
+    };
+
+    // 获取当前用户
+    const getClientUser = () => {
+        userApi.clientGetUserInfo().then((res: any) => {
+            if (res.code === RequestStatus.SUCCESS) {
+                dispatch(changeUserInfo(res.data))
+            }else{
+                cookie.removeCookie(TokenKey);
+            }
+        });
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        history.push('/client/home');
+    };
+
     return (
         <Container fixed={fixed}>
+            {/* 登录注册模态框 */}
+            <LoginRegisterModal
+                visible={loginRegisterModalVisible}
+                type={loginRegisterModalType}
+                onTypeChange={setLoginRegisterModalType}
+                onCancel={() => setLoginRegisterModalVisible(false)}
+                onOk={handleLoginSuccess}
+            />
             <div className="content">
                 <div style={{display: "flex"}}>
                     <LogoContainer src={Logo}/>
@@ -80,9 +135,28 @@ const Header = (props) => {
                     <div className="item"><span className="title"> 房东中心 <span className="underline"/></span></div>
                 </div>
                 <div className="login-register">
-                    <span className="btn">登录</span>
-                    <span className="btn">|</span>
-                    <span className="btn">注册</span>
+                    {
+                        !user.authed ?
+                        <>
+                        <span className="btn" onClick={() => {
+                            setLoginRegisterModalType(ModalModeType.CODE_LOGIN)
+                            setLoginRegisterModalVisible(true);
+                        }}>登录</span>
+                            <span className="btn" style={{margin: "0 10px"}}>|</span>
+                            <span className="btn" onClick={() => {
+                            setLoginRegisterModalType(ModalModeType.REGISTER)
+                            setLoginRegisterModalVisible(true);
+                            }}>注册</span>
+                        </>
+                            :
+                            <>
+                        <span className="btn" style={{marginRight: 10}}>
+                            {user.userInfo.nickName}
+                        </span>
+                        <span className="btn" onClick={handleLogout}>退出</span>
+                        </>
+                    }
+
                 </div>
             </div>
         </Container>
@@ -158,10 +232,9 @@ const Container = styled.div`
         }
     }
     .login-register{
-        width: 80px;
         height: 100%;
         display: flex;
-        justify-content: space-between;
+        align-items: center;
         .btn{
            cursor: pointer;
         }

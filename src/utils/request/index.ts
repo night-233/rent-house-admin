@@ -17,17 +17,21 @@ interface Response {
 }
 // 响应拦截
 axios.interceptors.response.use(
-  response => {
-    NProgress.done()
-    const dataAxios = response.data
-    const dealData = dealResStatus(dataAxios)
-    if (dealData) return dealData
+  (response: any) => {
+    NProgress.done();
+    const dataAxios = response.data;
+    if(response?.config?.delStatus){
+        const dealData = dealResStatus(dataAxios);
+        if (dealData) return dealData;
+    }
     return dataAxios
   },
   error => {
-    dealResError(error)
+      if(error?.config?.delStatus){
+          dealResError(error)
+      }
     return Promise.reject(error)
-  })
+  });
 
 // 请求拦截
 axios.interceptors.request.use(
@@ -42,14 +46,24 @@ axios.interceptors.request.use(
 
 
 const request = (config: any) => {
-
-  const customConfig = Object.assign(config);
+  const customConfig = Object.assign({...config, delStatus: true});
   return axios(customConfig)
     .then((response) => {
       return response.data || response || true;
     }, (err) => {
-      console.log(err, err.response);
+      console.error(err, err.response);
       return false;
+    });
+};
+// 不处理响应状态请求
+export const requestWithoutDealStatus = (config: any) => {
+    const customConfig = Object.assign({...config, delStatus: false});
+    return axios(customConfig)
+        .then((response) => {
+            return response;
+        }, (err) => {
+            console.error(err, err.response);
+            return false;
     });
 };
 

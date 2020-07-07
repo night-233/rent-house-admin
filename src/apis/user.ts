@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request, {requestWithoutDealStatus} from '@/utils/request';
 
 const base = '/dev';
 
@@ -49,6 +49,12 @@ export default {
   test () {
     return request({
       url: this.urls().test,
+      method: 'get',
+    });
+  },
+  clientGetUserInfo(){
+    return requestWithoutDealStatus({
+      url: this.urls().getUserInfo,
       method: 'get',
     });
   }

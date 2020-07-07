@@ -22,7 +22,10 @@ export function user (state = initState, action) {
       state.userInfo = action.payload
       return state;
     case LOGIN_OUT:
-      return initState;
+      return {
+        authed: false,
+        userInfo: {},
+      };
     default:
       return state;
   }
@@ -40,6 +43,11 @@ export function loginIn (payload, token) {
 
 export async function loginOut () {
   cookie.removeCookie()
+  return { type: LOGIN_OUT }
+}
+
+export function logout() {
+  cookie.removeCookie();
   return { type: LOGIN_OUT }
 }
 

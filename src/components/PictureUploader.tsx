@@ -96,12 +96,12 @@ const PictureUploader = (props) => {
       }
       return resolve();
     });
-  }
+  };
   //  处理设置封面
   const handleSetCover = () => {
     handleChange({ cover: previewUid });
     setPreviewModalVisible(false);
-  }
+  };
   // 处理上传文件改变
   const handleFileChange = ({ file, fileList }) => {
     const tmp = [...fileList];
@@ -123,8 +123,7 @@ const PictureUploader = (props) => {
       tmpCover = fileList.length > 0 ? fileList[0].uid : null;
     }
     handleChange({ imageList: tmp, cover: tmpCover })
-
-  }
+  };
   // 处理上传图片
   const handleUpload = ({ file, onError, onSuccess }) => {
     return AdminApi.uploadPhoto(file).then(async (res) => {

@@ -10,7 +10,8 @@ export default {
       sendMessage: `${base}/open/sendSmsToPhone`,
       loginInNoPwd: `${base}/open/noPassLogin`,
       registerPhone: `${base}/open/registryByPhone`,
-      judgeNickName: `${base}/open/nickName`
+      judgeNickName: `${base}/open/nickName`,
+      checkPhoneExist: `${base}/open/phone?phone=`,
     };
   },
   getLimits () {
@@ -58,6 +59,14 @@ export default {
       method: 'post',
       data,
       noJweToken: true
+    });
+  },
+  checkPhoneExist (phone: string) {
+    return request({
+      url: this.urls().checkPhoneExist + phone,
+      method: 'get',
+      noJweToken: true,
+      progress: false
     });
   },
 };
