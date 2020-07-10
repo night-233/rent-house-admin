@@ -5,9 +5,11 @@ import HouseList from "./HouseList";
 import {useSelector} from 'react-redux'
 import HouseApi from "@apis/house";
 import {handleResponse} from "@utils/handle-reponse";
-import SortOrderFilter, {SortDirectionEnum, SortTypeEnum} from "./SortOrderFilter";
 import styled from "styled-components";
 import Header from "../layout/Header";
+import Footer from "../layout/Footer";
+import {SortDirectionEnum, SortTypeEnum} from "@components/HouseSortComponent";
+import SortOrderFilter from "@views-client/home/SortOrderFilter";
 
 
 const initSearchParam = {
@@ -17,7 +19,7 @@ const initSearchParam = {
     orderBy: SortTypeEnum.DEFAULT,
     sortDirection: SortDirectionEnum.DESC,
     keyword: null
-}
+};
 
 /**
  * 客户端首页
@@ -89,6 +91,7 @@ const ClientHome = () => {
                                onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
                     />
                     {/*<RecentList/>*/}
+                    <Footer/>
             </ContentContainer>
         </>
     )
@@ -99,6 +102,7 @@ const ContentContainer = styled.div`
     min-height: 200px;
     width: 1152px;
     margin: 110px auto 0;
+    background-color: rgb(255, 255, 255);
 `;
 
 

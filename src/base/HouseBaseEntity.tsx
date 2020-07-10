@@ -1,5 +1,5 @@
 // 房屋标签集合
-export const HouseTagList = ["集体供暖", "独立阳台", "独立卫生间", "空调", "精装修", "路由器", "热水器", "桌子", "衣柜", "拎包入住", "洗衣机", "电磁炉"];
+export const HouseTagList = ["离地铁近",  "独立阳台", "独立厨卫", "可养宠物", "视频看房", "绿化率高", "拎包入住", "集体供暖", "中央供暖", "独立供暖"];
 
 // 房屋朝向集合
 export const HouseDirectionList = [{value: 1, label: "朝东"}, {value: 2, label: "朝南"}, {value: 3, label: "朝西"}, {value: 4, label: "朝北"}];

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import 'swiper/css/swiper.css';
 import styled from "styled-components";
 import HouseImagePreview from "./HouseImagePreview";
@@ -14,11 +14,11 @@ import RoundService from "./RoundService";
 import UserRights from "./UserRights";
 import RecommendHouse from "./RecommendHouse";
 import {Sticky, StickyContainer} from 'react-sticky';
-import {useDispatch} from "react-redux";
-import {Spin, Skeleton} from "antd";
+import {useDispatch, useSelector} from "react-redux";
 import {getHouseById} from "../../store/redux/house.redux";
-import {useSelector} from "react-redux"
 import FullScreenLoading from "../../components/FullScreenLoading"
+import Footer from "../layout/Footer";
+
 const HouseDetail = (props) => {
 
 
@@ -76,6 +76,7 @@ const HouseDetail = (props) => {
                 {/*推荐房源*/}
                 <RecommendHouse/>
             </Container>
+            <Footer/>
         </FullScreenLoading>
     )
 };

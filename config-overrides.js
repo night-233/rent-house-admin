@@ -38,7 +38,11 @@ module.exports = {
       "@views": path.resolve(__dirname, 'src/views'),
       "@utils": path.resolve(__dirname, 'src/utils'),
       "@apis": path.resolve(__dirname, 'src/apis'),
-      "@assets": path.resolve(__dirname, 'src/assets')
+      "@assets": path.resolve(__dirname, 'src/assets'),
+      "@views-client": path.resolve(__dirname, 'src/views-client'),
+      "@base": path.resolve(__dirname, 'src/base'),
+      "@components": path.resolve(__dirname, 'src/components'),
+      "@store": path.resolve(__dirname, 'src/store'),
     }),
     fixBabelImports('import', {
       libraryName: 'antd',

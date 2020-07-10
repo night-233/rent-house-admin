@@ -12,7 +12,6 @@ const ClientLayout = (props) => {
     return (
         <Container>
             {renderRoutes(route.routes)}
-            <Footer/>
         </Container>
     )
 };

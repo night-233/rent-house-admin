@@ -29,42 +29,41 @@ const HouseList = (props: HouseListProps) => {
 
     return (
         <Container>
-                    {
-                        data.total === 0 ?
-                        <Empty description={"未搜到对应房源，换个搜索条件试试"} style={{marginTop: 100, fontSize: "12px", color: "rgba(0, 0, 0, 0.2)"}}/> :
-                        <Spin spinning={listLoading}>
-                            {/* 房源列表*/}
-                            <ListContainer>
-                                <Row gutter={[21, 21]}>
-                                    {
-                                        data.list.map(item => <Col span={8} key={item.id}><HouseBox data={item}/></Col>)
-                                    }
-                                </Row>
-                            </ListContainer>
-                            {/* 分页器*/}
-                            <PaginationContainer>
-                                <Pagination
-                                    hideOnSinglePage={false}
-                                    total={data.total}
-                                    pageSize={pageSize}
-                                    current={page}
-                                    pageSizeOptions={['20', '30', '50']}
-                                    showSizeChanger
-                                    showQuickJumper
-                                    onChange={onPageChange}
-                                    onShowSizeChange={onPageSizeChange}
-                                    showTotal={total => `共${total}条数据`}
-                                />
-                                {/*<Button type="primary" style={{marginLeft: "15px"}}>确认</Button>*/}
-                            </PaginationContainer>
-                        </Spin>
+            {
+                data.total === 0 ?
+                <Empty description={"未搜到对应房源，换个搜索条件试试"} style={{marginTop: 100, fontSize: "12px", color: "rgba(0, 0, 0, 0.2)"}}/> :
+                <Spin spinning={listLoading}>
+                    {/* 房源列表*/}
+                    <ListContainer>
+                        <Row gutter={[21, 21]}>
+                            {
+                                data.list.map(item => <Col span={8} key={item.id}><HouseBox data={item}/></Col>)
+                            }
+                        </Row>
+                    </ListContainer>
+                    {/* 分页器*/}
+                    <PaginationContainer>
+                        <Pagination
+                            hideOnSinglePage={false}
+                            total={data.total}
+                            pageSize={pageSize}
+                            current={page}
+                            pageSizeOptions={['20', '30', '50']}
+                            showSizeChanger
+                            showQuickJumper
+                            onChange={onPageChange}
+                            onShowSizeChange={onPageSizeChange}
+                            showTotal={total => `共${total}条数据`}
+                        />
+                        {/*<Button type="primary" style={{marginLeft: "15px"}}>确认</Button>*/}
+                    </PaginationContainer>
+                </Spin>
             }
         </Container>
     )
 };
 
 const Container = styled.div`
-    margin-top: 30px;
 `;
 
 const ListContainer = styled.div`

@@ -12,7 +12,6 @@ import BaiduApi from "@apis/baidu";
 import IconCheckPng from "../../assets/img/icon-check.png";
 import IconLocationPng from "../../assets/img/icon-location.png";
 import IconLocationActivePng from "../../assets/img/icon-location-active.png";
-import {house} from "@store/redux/house.redux";
 
 const { Option } = AutoComplete;
 
@@ -250,7 +249,6 @@ const RoundService = () => {
 
     return (
         <Container id="components-anchor-round-service_4">
-            <div id="diver"/>
             <h2 className="title">周边配套</h2>
             <div className="map-container">
                 <div className="map-search-container">

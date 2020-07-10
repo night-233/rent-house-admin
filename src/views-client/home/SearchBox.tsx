@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useRef, useState} from "react";
 import {AutoComplete, Input} from "antd";
 import styled from "styled-components";
 import MapBtnImage from "@assets/img/map-bg.png";
@@ -7,6 +7,7 @@ import debounce from "lodash/debounce"
 import HouseApi from "@apis/house";
 import {handleResponse} from "@utils/handle-reponse";
 import axios from 'axios'
+import {Link} from "react-router-dom";
 const SEARCH_HISTORY_KEY = "SEARCH_HISTORY";
 
 
@@ -28,18 +29,22 @@ const SearchBox = (props) => {
 
     const [searchButtonLoading ,setSearchButtonLoading] = useState(false);
 
+
     // 取消回车请求标识
     let cancelTokenSource: any = null;
 
     // 输入框改变处理
-    const handleSearchChange = debounce((value) => {
+    const handleSearchChange = (value) => {
         if(value){
             getOption(value);
         }
         else{
             setOptions([]);
         }
-    }, 300);
+    };
+
+    const debounceSearch = useCallback(debounce(handleSearchChange, 300), []);
+
 
     // 获取自动补全
     const getOption = (value) => {
@@ -146,10 +151,8 @@ const SearchBox = (props) => {
         <Container>
             <AutoComplete
                 dropdownMatchSelectWidth={252}
-                onSearch={handleSearchChange}
-                onChange={(value) => {
-                    onChange && onChange(value);
-                }}
+                onSearch={debounceSearch}
+                onChange={onChange}
                 value={value}
                 options={optionSwitcher()}
                 onSelect={(value) => {
@@ -173,7 +176,7 @@ const SearchBox = (props) => {
                 } loading={searchButtonLoading}/>
             </AutoComplete>
 
-            <div className="map-btn" onMouseOver={() => setMapSearchBtnShow(true)} onMouseLeave={() => setMapSearchBtnShow(false)}>
+            <Link to="/client/map/house" className="map-btn" onMouseOver={() => setMapSearchBtnShow(true)} onMouseLeave={() => setMapSearchBtnShow(false)}>
                 <i className="iconfont icon-location">
                     &#xe620;
                 </i>
@@ -181,7 +184,7 @@ const SearchBox = (props) => {
                     <i className="hover-background"/>
                 </CSSTransition>
                 地图找房
-            </div>
+            </Link>
         </Container>
     )
 };
