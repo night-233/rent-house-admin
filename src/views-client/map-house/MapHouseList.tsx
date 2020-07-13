@@ -1,214 +1,76 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import HouseSortComponent from "@components/HouseSortComponent";
 import {Link} from "react-router-dom";
-import { Scrollbars } from 'react-custom-scrollbars';
-import SortOrderFilter from "@views-client/home/SortOrderFilter";
+import {Scrollbars} from 'react-custom-scrollbars';
+import {LoadingOutlined} from "@ant-design/icons/lib";
+import NoHousePng from "@assets/img/none.png"
+
 /**
  *  地图房屋列表
  */
-const MapHouseList = ({orderBy, sortDirection, onSortChange}) => {
+const MapHouseList = ({orderBy, sortDirection, onSortChange, houseData, onArriveBottom, loading}) => {
 
+    const handleScrollFrame = (frame) => {
+        if(frame.top > 0.8 && !loading && houseData.list.length < houseData.total){
+            onArriveBottom();
+        }
+    };
 
     return (
         <Container>
             <div className="sort">
                 <HouseSortComponent  sortType={orderBy} sortDirection={sortDirection} onSortChange={onSortChange}/>
             </div>
-            <Scrollbars  className="house-list" renderThumbVertical={(props) => <div {...props}  style={{...props.style, backgroundColor: "rgba(0, 0, 0, 0.1)"}}/>}>
-                <Link to="/client/house/10" target="_black"  >
-                    <div className="house-item">
-                        <div className="img">
-                            <img src="http://img.ziroom.com/pic/static/images/slist_1207/defaultPZZ/misu-loading.jpg_C_640_480_Q100.jpg" alt="房屋图片"/>
-                        </div>
-                        <div className="content">
-                            <h3>合租·协安蓝郡4居室-南卧</h3>
-                            <div className="desc">
-                                <span className="floor">18㎡ | 5/17层</span>
-                                <span className="price"><span className="number">¥1860</span>/月</span>
-                            </div>
-                            <div className="position">
-                                <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> 小区距金家渡站步行约237米
-                            </div>
-                            <div className="tags">
-                                <span>独立卫生间</span>
-                                <span>独立阳台</span>
-                                <span>空调</span>
-                                <span>精装修</span>
-                                <span>洗衣机</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-                <Link to="/client/house/10" target="_black"  >
-                    <div className="house-item">
-                        <div className="img">
-                            <img src="http://img.ziroom.com/pic/static/images/slist_1207/defaultPZZ/misu-loading.jpg_C_640_480_Q100.jpg" alt="房屋图片"/>
-                        </div>
-                        <div className="content">
-                            <h3>合租·协安蓝郡4居室-南卧</h3>
-                            <div className="desc">
-                                <span className="floor">18㎡ | 5/17层</span>
-                                <span className="price"><span className="number">¥1860</span>/月</span>
-                            </div>
-                            <div className="position">
-                                <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> 小区距金家渡站步行约237米
-                            </div>
-                            <div className="tags">
-                                <span>独立卫生间</span>
-                                <span>独立阳台</span>
-                                <span>空调</span>
-                                <span>精装修</span>
-                                <span>洗衣机</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-                <Link to="/client/house/10" target="_black"  >
-                    <div className="house-item">
-                        <div className="img">
-                            <img src="http://img.ziroom.com/pic/static/images/slist_1207/defaultPZZ/misu-loading.jpg_C_640_480_Q100.jpg" alt="房屋图片"/>
-                        </div>
-                        <div className="content">
-                            <h3>合租·协安蓝郡4居室-南卧</h3>
-                            <div className="desc">
-                                <span className="floor">18㎡ | 5/17层</span>
-                                <span className="price"><span className="number">¥1860</span>/月</span>
-                            </div>
-                            <div className="position">
-                                <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> 小区距金家渡站步行约237米
-                            </div>
-                            <div className="tags">
-                                <span>独立卫生间</span>
-                                <span>独立阳台</span>
-                                <span>空调</span>
-                                <span>精装修</span>
-                                <span>洗衣机</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-                <Link to="/client/house/10" target="_black"  >
-                    <div className="house-item">
-                        <div className="img">
-                            <img src="http://img.ziroom.com/pic/static/images/slist_1207/defaultPZZ/misu-loading.jpg_C_640_480_Q100.jpg" alt="房屋图片"/>
-                        </div>
-                        <div className="content">
-                            <h3>合租·协安蓝郡4居室-南卧</h3>
-                            <div className="desc">
-                                <span className="floor">18㎡ | 5/17层</span>
-                                <span className="price"><span className="number">¥1860</span>/月</span>
-                            </div>
-                            <div className="position">
-                                <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> 小区距金家渡站步行约237米
-                            </div>
-                            <div className="tags">
-                                <span>独立卫生间</span>
-                                <span>独立阳台</span>
-                                <span>空调</span>
-                                <span>精装修</span>
-                                <span>洗衣机</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-                <Link to="/client/house/10" target="_black"  >
-                    <div className="house-item">
-                        <div className="img">
-                            <img src="http://img.ziroom.com/pic/static/images/slist_1207/defaultPZZ/misu-loading.jpg_C_640_480_Q100.jpg" alt="房屋图片"/>
-                        </div>
-                        <div className="content">
-                            <h3>合租·协安蓝郡4居室-南卧</h3>
-                            <div className="desc">
-                                <span className="floor">18㎡ | 5/17层</span>
-                                <span className="price"><span className="number">¥1860</span>/月</span>
-                            </div>
-                            <div className="position">
-                                <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> 小区距金家渡站步行约237米
-                            </div>
-                            <div className="tags">
-                                <span>独立卫生间</span>
-                                <span>独立阳台</span>
-                                <span>空调</span>
-                                <span>精装修</span>
-                                <span>洗衣机</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-                <Link to="/client/house/10" target="_black"  >
-                    <div className="house-item">
-                        <div className="img">
-                            <img src="http://img.ziroom.com/pic/static/images/slist_1207/defaultPZZ/misu-loading.jpg_C_640_480_Q100.jpg" alt="房屋图片"/>
-                        </div>
-                        <div className="content">
-                            <h3>合租·协安蓝郡4居室-南卧</h3>
-                            <div className="desc">
-                                <span className="floor">18㎡ | 5/17层</span>
-                                <span className="price"><span className="number">¥1860</span>/月</span>
-                            </div>
-                            <div className="position">
-                                <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> 小区距金家渡站步行约237米
-                            </div>
-                            <div className="tags">
-                                <span>独立卫生间</span>
-                                <span>独立阳台</span>
-                                <span>空调</span>
-                                <span>精装修</span>
-                                <span>洗衣机</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                                <span>热水器</span>
-                            </div>
-                        </div>
-                    </div>
-                </Link>
-            </Scrollbars>
+            {
+                houseData.dirty && houseData.list.length > 0 &&
+                <Scrollbars  className="house-list"
+                             renderThumbVertical={(props) => <div {...props}  style={{...props.style, backgroundColor: "rgba(0, 0, 0, 0.1)", transform: "translateY(0px)"}}/>}
+                             onScrollFrame={handleScrollFrame}
+                >
+                    {
+                        houseData.list.map(item => (
+                            <Link to={`/client/house/${item.id}`} target="_black" key={item.id}>
+                                <div className="house-item">
+                                    <div className="img">
+                                        <img src={item.cover} alt="房屋图片"/>
+                                    </div>
+                                    <div className="content">
+                                        <h3>{item.title}</h3>
+                                        <div className="desc">
+                                            <span className="floor">{item.area}㎡ | {item.floor}/{item.totalFloor}层</span>
+                                            <span className="price"><span className="number">¥{item.price}</span>/月</span>
+                                        </div>
+                                        <div className="position">
+                                            <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> {item.houseDetail.traffic}
+                                        </div>
+                                        <div className="tags">
+                                            {
+                                                item.tags.map((tag, index) => <span key={index}>{tag}</span>)
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        ))
+                    }
+                    {
+                        houseData.total === houseData.list.length && houseData.dirty && houseData.list.length > 5 &&
+                        <div className="bottom-hint">我也是有底线的...</div>
+                    }
+                    {
+                        loading && houseData.dirty && houseData.list.length > 5 &&
+                        <div className="bottom-hint"><LoadingOutlined />更多加载中...</div>
+                    }
+                </Scrollbars>
+            }
+            {
+                houseData.dirty && houseData.list.length === 0 &&
+                <div className="no-house">
+                    <img src={NoHousePng}/>
+                    <p>地球上没有你要找的房子...</p>
+                </div>
+            }
         </Container>
     )
 };
@@ -301,8 +163,21 @@ const Container = styled.div`
                 }
             }
         }
+        .bottom-hint{
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+        }     
    }
-   
+   .no-house{
+        text-align: center;
+        font-size: 12px;
+        color: #999;
+        line-height: 30px;
+        padding: 20% 0 0 0;
+   }
 `;
 
 export default MapHouseList;

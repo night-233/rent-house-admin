@@ -1,18 +1,24 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
 // @ts-ignore
-import BMap  from 'BMap';
+import BMap from 'BMap';
+import {useSelector} from 'react-redux'
 /**
  * 地图容器
  */
 const MapContainer = () => {
 
 
+    const city = useSelector(state => state.common.city);
+
     useEffect(() => {
-        const map = new BMap.Map("map-search-house", {enableMapClick:false}); // 创建Map实例
-        map.setCurrentCity("杭州");
-        map.centerAndZoom(new BMap.Point(116.404, 39.915), 11);  // 初始化地图,设置中心点坐标和地图级别
-    }, []);
+        if(city.enName){
+            const map = new BMap.Map("map-search-house", {enableMapClick:false, minZoom: 11,maxZoom: 15}); // 创建Map实例
+            map.setCurrentCity(city.cnName);
+            map.enableScrollWheelZoom(true);
+            map.centerAndZoom(new BMap.Point(city.baiduMapLng, city.baiduMapLat), 11);  // 初始化地图,设置中心点坐标和地图级别
+        }
+    }, [city.enName]);
 
     return (
         <Container>

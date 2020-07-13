@@ -35,9 +35,9 @@ const SupportCityDropMenu = (props) => {
                     const city = result?.content?.address_detail?.city?.replace("市", "");
                     const matchCity = cityList.find(item => item.cnName === city);
                     if(matchCity){
-                        dispatch(changeCity({cnName: matchCity.cnName, enName: matchCity.enName}));
+                        dispatch(changeCity({ ...matchCity}));
                     }else if(cityList.length > 0){
-                        dispatch(changeCity({cnName: cityList[0].cnName, enName: cityList[0].enName}))
+                        dispatch(changeCity({...cityList[0]}))
                     }
                 })
             }

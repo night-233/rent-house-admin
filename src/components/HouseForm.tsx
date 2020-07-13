@@ -398,6 +398,7 @@ const HouseForm = (props) => {
                       style={{ textAlign: "left" }}
                       showSearch={true}
                       optionFilterProp="children"
+                      allowClear={true}
                       notFoundContent={isSubwayLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   subways.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)
@@ -415,6 +416,7 @@ const HouseForm = (props) => {
                       style={{ textAlign: "left" }}
                       showSearch={true}
                       optionFilterProp="children"
+                      allowClear={true}
                       notFoundContent={isSubwayStationLoading ? <Spin size="small" /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}>
                 {
                   subwayStations.map(item => <Option key={item.id} value={item.id}>{item.name}</Option>)

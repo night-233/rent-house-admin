@@ -9,42 +9,29 @@ import {CloseSquareFilled, CloseSquareOutlined} from "@ant-design/icons/lib";
 /**
  * 搜索过滤
  */
-const MapSearchFilter = () => {
+const MapSearchFilter = ({searchParams, onChange, onClearAll}) => {
 
-    const [rentWay, setRentWay] = useState();
-
-    const [priceRange, setPriceRange] = useState();
-
-    const [direction, setDirection] = useState();
-
-    const [moreOptions, setMoreOptions] = useState<any>({
-        tags: [],
-        rentType: null,
-        rentStatus: null
-    });
-
-    const handleClearAll = () => {
-      setRentWay(undefined);
-      setPriceRange(undefined);
-      setDirection(undefined);
-      setMoreOptions({
-          tags: [],
-          rentType: null,
-          rentStatus: null
-      })
-    };
 
 
     return (
         <Container>
-            <FilterItemComponent value={rentWay} name={rentWayItems.find(item => item.value === rentWay)?.title || "合租整租"} items={rentWayItems} onSelect={(params) =>setRentWay(params.key) }/>
-            <FilterItemComponent value={priceRange} name={priceItems.find(item => item.value === priceRange)?.title || "价格"} items={priceItems} onSelect={(params) => setPriceRange(params.key)}/>
-            <FilterItemComponent value={rentWay} name={directionItems.find(item => item.value === direction)?.title || "朝向"} items={directionItems} onSelect={(params) => setDirection(params.key)}/>
-            {/*<FilterItemComponent value={rentWay} name="更多" items={rentWayItems}/>*/}
-            <MoreOptionComponent  moreOptions={moreOptions} setMoreOptions={setMoreOptions}/>
+            <FilterItemComponent value={searchParams.rentWay} name={rentWayItems.find(item => item.value === searchParams.rentWay)?.title || "合租整租"}
+                                 items={rentWayItems} onSelect={(params) =>onChange({rentWay: params.key}) }
+            />
+            <FilterItemComponent value={searchParams.priceRange} name={priceItems.find(item => item.value === searchParams.priceRange)?.title || "价格"} items={priceItems} onSelect={(params) => {
+                const priceArr = params.key.split("-");
+                const priceMin = priceArr.length > 0 ? priceArr[0] : undefined;
+                const priceMax = priceArr.length > 1 ? priceArr[1] : undefined;
+                onChange({priceMin: priceMin, priceMax: priceMax, priceRange: params.key});
+            }}/>
+            <FilterItemComponent value={searchParams.direction} name={directionItems.find(item => item.value === searchParams.direction)?.title || "朝向"}
+                                 items={directionItems} onSelect={(params) => onChange({direction: params.key})}/>
+            <MoreOptionComponent  moreOptions={{
+                tags: searchParams.tags,
+            }} onMoreOptionChange={(params) => onChange({tags: params.tags})}/>
             {
-                (rentWay !== undefined || priceRange != undefined || direction !== undefined || moreOptions.tags.length > 0 ||moreOptions.rentType !== null || moreOptions.rentStatus !== null) &&
-                <div className="clear-all" onClick={handleClearAll}><CloseSquareOutlined style={{marginRight: 5}}/>清除所有选项</div>
+                (searchParams.rentWay !== null || searchParams.priceRange != null || searchParams.direction  !== null || searchParams.tags.length > 0 ) &&
+                <div className="clear-all" onClick={onClearAll}><CloseSquareOutlined style={{marginRight: 5}}/>清除所有选项</div>
             }
         </Container>
     )
@@ -93,17 +80,19 @@ const FilterItemComponent = (props) => {
     )
 };
 
-const MoreOptionComponent = ({moreOptions, setMoreOptions}) => {
+const MoreOptionComponent = ({moreOptions, onMoreOptionChange}) => {
 
     const [menuVisible, setMenuVisible] = useState(false);
 
     const [option, setOption] = useState<any>({
         tags: [],
-        rentType: null,
-        rentStatus: null
+        /*rentType: null,
+        rentStatus: null*/
     });
 
-    const count = option.tags.length + (option.rentType !== null ? 1 : 0) + (option.rentStatus !== null ? 1 : 0);
+  //  const count = option.tags.length + (option.rentType !== null ? 1 : 0) + (option.rentStatus !== null ? 1 : 0);
+
+    const count = option.tags.length;
 
     useEffect(() => {
         setOption(moreOptions);
@@ -115,7 +104,7 @@ const MoreOptionComponent = ({moreOptions, setMoreOptions}) => {
            setMoreOptions={setOption}
            onOk={() => {
                setMenuVisible(false);
-               setMoreOptions(option);
+               onMoreOptionChange(option);
            }}
            onCancel={() => {
                setMenuVisible(false);
@@ -153,9 +142,9 @@ const MoreOptionOverLay = ({moreOption, setMoreOptions, onOk, onCancel}) => {
                 <div className="checkbox-container">
                     <Checkbox.Group options={houseTagsOption} value={moreOption.tags} onChange={(checkedValue) => setMoreOptions({...moreOption, tags: checkedValue})}/>
                 </div>
-                <div className="title">租约类型</div>
+           {/*     <div className="title">租约类型</div>
                 <div className="checkbox-container">
-                    {/*<Checkbox.Group options={rentTypeOptions} value={moreOption.rentType} onChange={(checkedValue) => setMoreOptions({...moreOption, rentType: checkedValue})}/>*/}
+                    <Checkbox.Group options={rentTypeOptions} value={moreOption.rentType} onChange={(checkedValue) => setMoreOptions({...moreOption, rentType: checkedValue})}/>
                     {
                         rentTypeOptions.map(item => <Checkbox key={item.value} checked={moreOption.rentType === item.value} onChange={e => {
                             if(e.target.checked){
@@ -177,7 +166,7 @@ const MoreOptionOverLay = ({moreOption, setMoreOptions, onOk, onCancel}) => {
                             }
                         }}>{item.label}</Checkbox>)
                     }
-                </div>
+                </div>*/}
             </div>
             <div className="buttons">
                 <Button onClick={onCancel}>取消</Button>
@@ -299,7 +288,6 @@ const Container = styled.div`
     }
     .clear-all{
         cursor: pointer;
-        width: 400px;
         border-right: none;
         z-index: 3;
         height: 40px;

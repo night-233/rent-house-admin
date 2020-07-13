@@ -17,7 +17,27 @@ interface HouseSearchForm {
     sortDirection?: string,
     areaMin?: number,
     areaMax?: number,
-
+}
+// 地图房源表单查询
+interface MapHouseSearchForm {
+    cityEnName: string,
+    regionEnName?: string,
+    rentWay?: number,
+    priceMin?: number,
+    priceMax?: number,
+    tags?: Array<String>,
+    page?: number,
+    pageSize?: number,
+    orderBy?: string,
+    sortDirection?: string,
+    bounds?: MapBounds
+}
+// 地图视野范围
+interface MapBounds {
+    leftTopLongitude: number,
+    leftTopLatitude: number,
+    rightBottomLongitude: number,
+    rightBottomLatitude: number,
 }
 const base = '/dev';
 
@@ -42,7 +62,7 @@ const HouseApi = {
             noJweToken: true
         })
     },
-
+    // 通过房源id获取房源信息
     getHouseById(id: number){
         return request({
             url: `${base}/house/${id}`,
@@ -50,7 +70,24 @@ const HouseApi = {
             progress: true,
             noJweToken: true
         })
-    }
+    },
+    // 地图找房获取房源信息
+    mapSearchHouseList(searchData: MapHouseSearchForm){
+        return request({
+            url: `${base}/house/map/city/houses`,
+            method: 'post',
+            data: searchData,
+            noJweToken: true
+        });
+    },
+    // 城市房源聚合
+    mapCityHouseAgg(cityEnName: string){
+        return request({
+            url: `${base}map/${cityEnName}/regions`,
+            method: 'get',
+            noJweToken: true
+        });
+    },
 };
 
 export default HouseApi;
