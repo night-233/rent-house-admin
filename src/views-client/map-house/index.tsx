@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from "styled-components";
 import MapHeader from "@views-client/map-house/MapHeader";
 import MapSearchFilter from "@views-client/map-house/MapSearchFilter";
@@ -8,22 +8,24 @@ import {SortDirectionEnum, SortTypeEnum} from "@components/HouseSortComponent";
 import HouseApi from "@apis/house";
 import {useSelector} from 'react-redux'
 import {handleResponse} from "@utils/handle-reponse";
-import {house} from "@store/redux/house.redux";
 // 初始查询参数
 const initSearchParam = {
     page: 1,
     pageSize: 5,
     orderBy: SortTypeEnum.DEFAULT,
     sortDirection: SortDirectionEnum.DESC,
-    keyword: null,
-    bound: null,
     rentWay: null,
     priceMin: null,
     priceMax: null,
     direction: null,
     priceRange: null,
-    tags: []
+    tags: [],
+    bounds: null
 };
+// 存储视野改变前的视野信息
+let boundsStore = null;
+// 存储视野改变前的 查询参数
+let searchParamStore: any = null;
 
 /**
  * 地图找房
@@ -39,13 +41,21 @@ const MapHouse = () => {
         dirty: false
     });
 
+    const mapRef = useRef<any>();
+
+    const [keyword, setKeyword] = useState();
+
     const [houseSearchLoading, setHouseSearchLoading] = useState(false);
+
+    searchParamStore = searchParams;
 
     const city = useSelector(state => state.common.city);
 
     useEffect(() => {
         if(city.enName){
-            getHouseList(initSearchParam, setHouseData);
+            handleClearAllFilter();
+            setKeyword(null);
+            boundsStore = null;
         }
     }, [city.enName]);
 
@@ -74,13 +84,35 @@ const MapHouse = () => {
     };
 
     const handleClearAllFilter = () => {
-      setSearchParams(initSearchParam);
-      getHouseList(initSearchParam, setHouseData);
+      const tmp = {...initSearchParam, bounds: boundsStore};
+      setSearchParams(tmp);
+      getHouseList(tmp, setHouseData);
+    };
+
+    // 处理地图视野改变
+    const handleBoundsChange = (zoomLevel, bounds) => {
+        // 缩放级别小于13不查询视野
+        if(zoomLevel < 13){
+            if(boundsStore != null){
+                handleSearchFilterChange({...searchParamStore, bounds: null});
+            }
+            boundsStore = null;
+            return;
+        }
+        // 如果缩放级别大于13则查询视野房源
+        handleSearchFilterChange({...searchParamStore, bounds: bounds});
+        boundsStore = bounds
     };
 
     return(
         <Container>
-            <MapHeader value={searchParams.keyword}/>
+            <MapHeader value={keyword} onSelect={data => {
+                console.log(data);
+                const longitude = data.location?.lng;
+                const latitude = data.location?.lat;
+                const title = data.label;
+                mapRef.current.zoomToPoint(title, longitude, latitude);
+            }}  onChange={setKeyword}/>
             <MapSearchFilter searchParams={searchParams} onChange={handleSearchFilterChange} onClearAll={handleClearAllFilter}/>
             <Content>
                 <MapHouseList orderBy={searchParams.orderBy} sortDirection={searchParams.sortDirection}
@@ -89,7 +121,7 @@ const MapHouse = () => {
                               onArriveBottom={handleArriveBottom}
                               loading={houseSearchLoading}
                 />
-                <MapContainer/>
+                <MapContainer onBoundsChange={handleBoundsChange} childRef={mapRef}/>
             </Content>
         </Container>
     )

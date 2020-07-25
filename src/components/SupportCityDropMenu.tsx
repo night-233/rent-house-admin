@@ -11,7 +11,7 @@ import HouseDropdown from "@components/HouseDropdown";
  */
 const SupportCityDropMenu = (props) => {
 
-    const [supportCitiesList, setSupportCitiesList] = useState([]);
+    const [supportCitiesList, setSupportCitiesList] = useState<any>([]);
 
     const dispatch = useDispatch();
 
@@ -22,7 +22,8 @@ const SupportCityDropMenu = (props) => {
     // 处理城市选择
     const handleCityClick = ({item, key}) => {
         if(city.enName !== key){
-            dispatch(changeCity({cnName: item.props.title,  enName: key}));
+            const matchCity = supportCitiesList.find(city => city.cnName === item.props.title);
+            dispatch(changeCity({...matchCity}));
         }
     };
 
@@ -53,7 +54,7 @@ const SupportCityDropMenu = (props) => {
     const getSupportCities = async () => {
         return  AddressApi.getSupportCities();
     };
-    const items = supportCitiesList.map((item:any) => ({value: item.enName, title: item.cnName}))
+    const items = supportCitiesList.map((item:any) => ({value: item.enName, title: item.cnName}));
 
     return (
         <HouseDropdown items={items} value={city.enName} onSelect={handleCityClick} color={color} menuItemStyle={{fontSize: fontSize, color: color}}>

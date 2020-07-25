@@ -54,7 +54,8 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:view": "cross-env GENERATE_SOURCEMAP=false ANALYZER=true react-app-rewired build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -75,10 +76,14 @@
     "@types/styled-components": "^5.1.0",
     "@types/webpack-env": "^1.15.2",
     "antd-img-crop": "^3.2.0",
-    "customize-cra": "^0.9.1",
+    "compression-webpack-plugin": "^4.0.0",
+    "cross-env": "^7.0.2",
+    "customize-cra": "^1.0.0",
     "js-cookie": "^2.2.1",
-    "less": "^3.12.0",
+    "less": "^3.11.1",
+    "progress-bar-webpack-plugin": "^2.1.0",
     "react-app-rewired": "^2.1.6",
+    "react-dev-utils": "^10.2.1",
     "webpack-bundle-analyzer": "^3.8.0"
   }
 }

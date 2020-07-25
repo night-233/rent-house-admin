@@ -1,7 +1,6 @@
 import React from "react";
 import styled, {createGlobalStyle} from "styled-components";
 import {Dropdown, Menu} from "antd";
-import {ClickParam} from "antd/lib/menu";
 
 
 interface HouseDropdownMenuItemProp{

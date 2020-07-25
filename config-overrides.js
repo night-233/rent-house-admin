@@ -1,17 +1,10 @@
-const { override, addWebpackAlias, fixBabelImports, addLessLoader, addDecoratorsLegacy, overrideDevServer, addWebpackExternals } = require('customize-cra');
+const { override, addWebpackAlias, fixBabelImports, addLessLoader, addDecoratorsLegacy, overrideDevServer, addWebpackExternals  } = require('customize-cra');
 const path = require('path')
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const mockIp = '10.0.5.199:13000/mock';
 const IP = 'rent-house.touchfish.top';
 // const IP = 'localhost:8080';
-const addAnalyzer = () => config => {
-  if (process.env.ANALYZER) {
-    config.plugins.push(new BundleAnalyzerPlugin());
-  }
-  return config;
-};
-
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {
@@ -36,7 +29,16 @@ const addProxy = () => (configFunction) => {
   };
 
   return configFunction;
-}
+};
+
+// 查看打包后各包大小
+const addAnalyzer = () => config => {
+    if (process.env.ANALYZER) {
+        config.plugins.push(new BundleAnalyzerPlugin());
+    }
+
+    return config;
+};
 
 module.exports = {
   webpack: override(

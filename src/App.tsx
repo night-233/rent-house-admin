@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { BrowserRouter, withRouter } from 'react-router-dom';
-import { InitStyle, GlobalStyle } from '@/assets/scss/initStyle';
+import { InitStyle, GlobalStyle } from './assets/scss/initStyle';
 import renderRoutes from './router/routingGuard'
 import routes from './router/index';
 import { Provider } from 'react-redux';

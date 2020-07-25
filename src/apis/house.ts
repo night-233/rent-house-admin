@@ -94,7 +94,7 @@ const HouseApi = {
   // 城市房源聚合
   mapCityHouseAgg (cityEnName: string) {
     return request({
-      url: `${base}map/${cityEnName}/regions`,
+      url: `${base}/house/map/${cityEnName}/regions`,
       method: 'get',
       noJweToken: true
     });

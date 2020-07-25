@@ -25,33 +25,33 @@ const MapHouseList = ({ orderBy, sortDirection, onSortChange, houseData, onArriv
       {
         houseData.dirty && houseData.list.length > 0 &&
         <Scrollbars className="house-list"
-          renderThumbVertical={(props) => <div {...props} style={{ ...props.style, backgroundColor: "rgba(0, 0, 0, 0.1)", transform: "translateY(0px)" }} />}
-          onScrollFrame={handleScrollFrame}
+                    renderThumbVertical={(props) => <div {...props} style={{ ...props.style, backgroundColor: "rgba(0, 0, 0, 0.1)", transform: "translateY(0px)" }} />}
+                    onScrollFrame={handleScrollFrame}
         >
           {
             houseData.list.map(item => (
-              <Link to={`/client/house/${item.id}`} target="_black" key={item.id}>
-                <div className="house-item">
-                  <div className="img">
-                    <img src={item.cover} alt="房屋图片" />
+                <Link to={`/client/house/${item.id}`} target="_black" key={item.id}>
+                  <div className="house-item">
+                    <div className="img">
+                      <img src={item.cover} alt="房屋图片" />
+                    </div>
+                    <div className="content">
+                      <h3>{item.title}</h3>
+                      <div className="desc">
+                        <span className="floor">{item.area}㎡ | {item.floor}/{item.totalFloor}层</span>
+                        <span className="price"><span className="number">¥{item.price}</span>/月</span>
+                      </div>
+                      <div className="position">
+                        <i className="iconfont" style={{ fontSize: "12px", fontWeight: "bold" }}>&#xe620;</i> {item.houseDetail.traffic}
+                      </div>
+                      <div className="tags">
+                        {
+                          item.tags.map((tag, index) => <span key={index}>{tag}</span>)
+                        }
+                      </div>
+                    </div>
                   </div>
-                  <div className="content">
-                    <h3>{item.title}</h3>
-                    <div className="desc">
-                      <span className="floor">{item.area}㎡ | {item.floor}/{item.totalFloor}层</span>
-                      <span className="price"><span className="number">¥{item.price}</span>/月</span>
-                    </div>
-                    <div className="position">
-                      <i className="iconfont" style={{ fontSize: "12px", fontWeight: "bold" }}>&#xe620;</i> {item.houseDetail.traffic}
-                    </div>
-                    <div className="tags">
-                      {
-                        item.tags.map((tag, index) => <span key={index}>{tag}</span>)
-                      }
-                    </div>
-                  </div>
-                </div>
-              </Link>
+                </Link>
             ))
           }
           {
@@ -76,10 +76,15 @@ const MapHouseList = ({ orderBy, sortDirection, onSortChange, houseData, onArriv
 };
 
 const Container = styled.div`
-   width: 30%;
-   height: 100%;
-   display: flex;
-   flex-direction: column;
+   @media (min-width: 1280px){
+      width: 30%;
+   }
+   @media (min-width: 1920px){
+      width: 25%;
+   }
+    height: 100%;
+    display: flex;
+    flex-direction: column;
    .sort{
         width: 300px;
         border: solid 1px #eee;

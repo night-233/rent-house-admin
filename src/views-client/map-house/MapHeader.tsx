@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styled, {createGlobalStyle} from "styled-components";
 import {Link} from "react-router-dom";
 import Logo from "@assets/img/logo178-28.png"
@@ -15,13 +15,15 @@ const { Option } = Select;
 /**
  * 头部
  */
-const MapHeader = ({value}) => {
+const MapHeader = ({value, onSelect, onChange}) => {
 
     const city = useSelector(state => state.common.city);
 
     const [addressHintList, setAddressHintList] = useState([]);
 
     const [keyword, setKeyword] = useState();
+
+    const [test, setTest] = useState("aaa");
 
      const debounceSearchKeyword = useCallback(debounce((value, cityCnName) => {
          if(value && cityCnName){
@@ -39,6 +41,17 @@ const MapHeader = ({value}) => {
          }
      }, 300), []);
 
+     const handleKeywordSelect = (value, option) => {
+       onSelect(option);
+     };
+
+     useEffect(() => {
+         console.log("value改变:" + value);
+         setKeyword(value);
+     }, [value]);
+
+     console.log("keyword:" + keyword);
+
     return (
         <Container>
             <MapSearchDropdownGlobalStyle/>
@@ -53,12 +66,18 @@ const MapHeader = ({value}) => {
                 </div>
             </SupportCityDropMenu>
             <div className="search-input">
-                <AutoComplete value={keyword}
+                <AutoComplete
+                              allowClear={true}
+                              value={keyword}
                               listHeight={300}
                               dropdownStyle={{padding: 0}}
                               onSearch={(value) => debounceSearchKeyword(value, city.cnName)}
-                              onChange={setKeyword}
+                              onChange={(value) => {
+                                  setKeyword(value);
+                                  onChange(value);
+                              }}
                               options={addressHintList.filter((item, index) => index < 5).map((item:any) => ({label: item.name, value: item.name, key: item.uid, location: item.location}))}
+                              onSelect={handleKeywordSelect}
                               dropdownClassName="map-search-dropdown"
                 >
                     <Input style={{height: 70, width: "100%", fontSize: "16px"}} placeholder="请输入小区丶商圈"

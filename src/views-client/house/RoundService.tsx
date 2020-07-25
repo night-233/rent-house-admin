@@ -89,7 +89,7 @@ const RoundService = () => {
     };
 
     // 生成地图标签
-    const generateLabel = (title, clazz = "label-marker", offset = new BMap.Size(-10, -32)) => {
+     const generateLabel = (title, clazz = "label-marker", offset = new BMap.Size(-10, -32)) => {
         const span = `<span class=${clazz}>${title}</span>`;
         const label = new BMap.Label(span, {
             offset: offset,
@@ -215,7 +215,7 @@ const RoundService = () => {
                 map.addOverlay(label);
                 label.addEventListener("click", () => {
                     setActiveMarker(i);
-                    handleMarkerClick(arr[i].point, arr[i].title, arr[i].message);
+                    handleMarkerClick(arr[i].point, arr[i].title, arr[i].address);
                 });
             }
             setRoundServiceList(s);
