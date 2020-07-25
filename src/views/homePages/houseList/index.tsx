@@ -149,8 +149,8 @@ const statusMap = [
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-function HouseList (props) {
 
+function HouseList (props) {
   const [data, setData] = useState([]);
   const [total, setTotals] = useState(0)
   const [cities, setCities] = useState<address[]>([]);
@@ -159,7 +159,6 @@ function HouseList (props) {
     cityEnName: "",
     createTimeMax: "2021-06-01",
     createTimeMin: "2015-06-01",
-    // direction: "",
     orderBy: "createTime",
     page: 1,
     pageSize: 5,

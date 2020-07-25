@@ -31,27 +31,27 @@ const LoginBlock = (props: Props) => {
     })
   };
 
-  const checkTel = (rule, value, callback) => {
+  const checkTel = (rule, value) => {
     try {
       if (!new RegExp(limits?.phoneRegex).test(value)) {
-        throw new Error('请检查电话是否符合规范');
+        return Promise.reject('请检查电话是否符合规范')
       } else {
-        callback()
+        return Promise.resolve()
       }
     } catch (err) {
-      callback()
+      return Promise.reject(err)
     }
   }
 
-  const checkPwd = (rule, value, callback) => {
+  const checkPwd = (rule, value) => {
     try {
       if (!new RegExp(limits?.userPasswordRegex).test(value)) {
-        throw new Error('请检查输入密码是否符合规范');
+        return Promise.reject('请检查输入密码是否符合规范')
       } else {
-        callback()
+        return Promise.resolve()
       }
     } catch (err) {
-      callback(err);
+      return Promise.reject(err)
     }
   }
 

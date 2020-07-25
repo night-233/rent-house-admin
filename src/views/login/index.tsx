@@ -47,7 +47,6 @@ function Login () {
               <div className={block === 'login' ? "active-item nav-item" : 'nav-item'} onClick={() => changeNavTitle('login')}>密码登录</div>
             </div>
           </section>
-
           {block === 'login' && <LoginBlock goToRegister={changeNavTitle} limits={limits} />}
           {block === 'register' && <Register goToLogin={changeNavTitle} limits={limits} />}
           {block === 'capcha' && <Capcha goToRegister={changeNavTitle} limits={limits} />}

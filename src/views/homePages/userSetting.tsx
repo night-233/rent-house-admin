@@ -103,13 +103,6 @@ const UserSetting = () => {
         >
           <Input defaultValue={user.phoneNumber} disabled />
         </Form.Item>
-        {/* <Form.Item
-          label="邮箱"
-          name="email"
-          rules={[{ required: true }]}
-        >
-          <Input defaultValue={user.email} disabled />
-        </Form.Item> */}
         <Form.Item
           label="介绍"
           name="introduction"

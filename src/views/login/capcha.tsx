@@ -107,9 +107,6 @@ const RegisterBlock = (props: Props) => {
               </Col>
             </Row>
           </Form.Item>
-
-
-
           <div className='footer-btn'>
             <Button className="plain-btn" onClick={() => props.goToRegister('register')}>
               注册

@@ -1,82 +1,82 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import HouseSortComponent from "@components/HouseSortComponent";
-import {Link} from "react-router-dom";
-import {Scrollbars} from 'react-custom-scrollbars';
-import {LoadingOutlined} from "@ant-design/icons/lib";
+import { Link } from "react-router-dom";
+import { Scrollbars } from 'react-custom-scrollbars';
+import { LoadingOutlined } from "@ant-design/icons/lib";
 import NoHousePng from "@assets/img/none.png"
 
 /**
  *  地图房屋列表
  */
-const MapHouseList = ({orderBy, sortDirection, onSortChange, houseData, onArriveBottom, loading}) => {
+const MapHouseList = ({ orderBy, sortDirection, onSortChange, houseData, onArriveBottom, loading }) => {
 
-    const handleScrollFrame = (frame) => {
-        if(frame.top > 0.8 && !loading && houseData.list.length < houseData.total){
-            onArriveBottom();
-        }
-    };
+  const handleScrollFrame = (frame) => {
+    if (frame.top > 0.8 && !loading && houseData.list.length < houseData.total) {
+      onArriveBottom();
+    }
+  };
 
-    return (
-        <Container>
-            <div className="sort">
-                <HouseSortComponent  sortType={orderBy} sortDirection={sortDirection} onSortChange={onSortChange}/>
-            </div>
-            {
-                houseData.dirty && houseData.list.length > 0 &&
-                <Scrollbars  className="house-list"
-                             renderThumbVertical={(props) => <div {...props}  style={{...props.style, backgroundColor: "rgba(0, 0, 0, 0.1)", transform: "translateY(0px)"}}/>}
-                             onScrollFrame={handleScrollFrame}
-                >
-                    {
-                        houseData.list.map(item => (
-                            <Link to={`/client/house/${item.id}`} target="_black" key={item.id}>
-                                <div className="house-item">
-                                    <div className="img">
-                                        <img src={item.cover} alt="房屋图片"/>
-                                    </div>
-                                    <div className="content">
-                                        <h3>{item.title}</h3>
-                                        <div className="desc">
-                                            <span className="floor">{item.area}㎡ | {item.floor}/{item.totalFloor}层</span>
-                                            <span className="price"><span className="number">¥{item.price}</span>/月</span>
-                                        </div>
-                                        <div className="position">
-                                            <i className="iconfont" style={{fontSize: "12px", fontWeight: "bold"}}>&#xe620;</i> {item.houseDetail.traffic}
-                                        </div>
-                                        <div className="tags">
-                                            {
-                                                item.tags.map((tag, index) => <span key={index}>{tag}</span>)
-                                            }
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                        ))
-                    }
-                    {
-                        houseData.total === houseData.list.length && houseData.dirty && houseData.list.length > 5 &&
-                        <div className="bottom-hint">我也是有底线的...</div>
-                    }
-                    {
-                        loading && houseData.dirty && houseData.list.length > 5 &&
-                        <div className="bottom-hint"><LoadingOutlined />更多加载中...</div>
-                    }
-                </Scrollbars>
-            }
-            {
-                houseData.dirty && houseData.list.length === 0 &&
-                <div className="no-house">
-                    <img src={NoHousePng}/>
-                    <p>地球上没有你要找的房子...</p>
+  return (
+    <Container>
+      <div className="sort">
+        <HouseSortComponent sortType={orderBy} sortDirection={sortDirection} onSortChange={onSortChange} />
+      </div>
+      {
+        houseData.dirty && houseData.list.length > 0 &&
+        <Scrollbars className="house-list"
+          renderThumbVertical={(props) => <div {...props} style={{ ...props.style, backgroundColor: "rgba(0, 0, 0, 0.1)", transform: "translateY(0px)" }} />}
+          onScrollFrame={handleScrollFrame}
+        >
+          {
+            houseData.list.map(item => (
+              <Link to={`/client/house/${item.id}`} target="_black" key={item.id}>
+                <div className="house-item">
+                  <div className="img">
+                    <img src={item.cover} alt="房屋图片" />
+                  </div>
+                  <div className="content">
+                    <h3>{item.title}</h3>
+                    <div className="desc">
+                      <span className="floor">{item.area}㎡ | {item.floor}/{item.totalFloor}层</span>
+                      <span className="price"><span className="number">¥{item.price}</span>/月</span>
+                    </div>
+                    <div className="position">
+                      <i className="iconfont" style={{ fontSize: "12px", fontWeight: "bold" }}>&#xe620;</i> {item.houseDetail.traffic}
+                    </div>
+                    <div className="tags">
+                      {
+                        item.tags.map((tag, index) => <span key={index}>{tag}</span>)
+                      }
+                    </div>
+                  </div>
                 </div>
-            }
-        </Container>
-    )
+              </Link>
+            ))
+          }
+          {
+            houseData.total === houseData.list.length && houseData.dirty && houseData.list.length > 5 &&
+            <div className="bottom-hint">我也是有底线的...</div>
+          }
+          {
+            loading && houseData.dirty && houseData.list.length > 5 &&
+            <div className="bottom-hint"><LoadingOutlined />更多加载中...</div>
+          }
+        </Scrollbars>
+      }
+      {
+        houseData.dirty && houseData.list.length === 0 &&
+        <div className="no-house">
+          <img src={NoHousePng} />
+          <p>地球上没有你要找的房子...</p>
+        </div>
+      }
+    </Container>
+  )
 };
 
 const Container = styled.div`
-   width: 480px;
+   width: 30%;
    height: 100%;
    display: flex;
    flex-direction: column;
@@ -107,6 +107,7 @@ const Container = styled.div`
                 width: 238px;
                 position: relative;
                 height: 132px;
+                margin-left: 15px;
                 h3{
                     line-height: 20px;
                     position: relative;

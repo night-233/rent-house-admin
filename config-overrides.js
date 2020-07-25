@@ -1,10 +1,17 @@
 const { override, addWebpackAlias, fixBabelImports, addLessLoader, addDecoratorsLegacy, overrideDevServer, addWebpackExternals } = require('customize-cra');
 const path = require('path')
-
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const mockIp = '10.0.5.199:13000/mock';
 const IP = 'rent-house.touchfish.top';
 // const IP = 'localhost:8080';
+const addAnalyzer = () => config => {
+  if (process.env.ANALYZER) {
+    config.plugins.push(new BundleAnalyzerPlugin());
+  }
+  return config;
+};
+
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {
@@ -72,10 +79,12 @@ module.exports = {
 
     }),
     addWebpackExternals({
-        'BMap': 'BMap'
+        'BMap': 'BMap',
+        'BMapLib':'BMapLib'
     })
   ),
   devServer: overrideDevServer(
-    addProxy()
+    addProxy(),
+    addAnalyzer()
   )
 }
