@@ -4,8 +4,12 @@ import Swiper from "swiper"
 import "swiper/css/swiper.css"
 import {Popover, Spin} from 'antd';
 import {HeartOutlined, LeftOutlined, RightOutlined, ShareAltOutlined} from "@ant-design/icons"
-import {useSelector} from "react-redux"
-
+import {changeLoginModalType, changeLoginModalVisible, setLoginModalCallback} from "@store/redux/common.redux";
+import { useDispatch, useSelector } from 'react-redux'
+import {ModalModeType} from "@components/LoginRegiestModal";
+import {HeartFilled} from "@ant-design/icons/lib";
+import {decreaseHouseStarNumber, increaseHouseStarNumber, setHouseStar} from "@store/redux/house.redux";
+import UserApi from "@apis/user";
 const HouseImagePreview = () => {
 
 
@@ -13,13 +17,20 @@ const HouseImagePreview = () => {
 
     const pictureList = useSelector(state => state.house.house.housePictureList || []).filter(item => (item.cdnPrefix + item.path) !== cover);
 
+    const user = useSelector(state => state.user);
 
+    const houseId = useSelector(state => state.house.house.id);
+
+    const star = useSelector(state => state.house.star);
 
     const [activeNav, setActiveNav] = useState(0);
 
     const [previewArrowVisible, setPreviewArrowVisible] = useState(false);
 
     const [previewSwiper, setPreviewSwiper] = useState<any>(null);
+
+
+
 
     useEffect(() => {
         // 缩略图
@@ -81,11 +92,56 @@ const HouseImagePreview = () => {
         }
     };
 
+    const dispatch = useDispatch();
+    const setLoginRegisterModalVisible = (visible) => dispatch(changeLoginModalVisible(visible));
+    const setLoginRegisterModalType = (type) => dispatch(changeLoginModalType(type));
+
+    const handleStarClick = () => {
+        if(user.authed){
+            houseStarSwitch(star);
+        }else{
+            setLoginRegisterModalVisible(true);
+            setLoginRegisterModalType(ModalModeType.CODE_LOGIN);
+        }
+    };
+
+    const houseStarSwitch = (isStar) => {
+        if(isStar){
+            cancelHouseStar(houseId);
+        }else{
+            starHouse(houseId);
+        }
+    };
+
+    const starHouse = (houseId) => {
+        UserApi.starHouse(houseId).then((res: any) => {
+            if(res){
+                dispatch(setHouseStar(true));
+                dispatch(increaseHouseStarNumber());
+            }
+        })
+    };
+
+    const cancelHouseStar = (houseId) => {
+        UserApi.cancelStarHouse(houseId).then((res: any) => {
+            if(res){
+                dispatch(setHouseStar(true));
+                dispatch(decreaseHouseStarNumber());
+            }
+        })
+    };
 
     return <Container>
             <div className="preview" onMouseEnter={() => setPreviewArrowVisible(true)} onMouseLeave={() => setPreviewArrowVisible(false)}>
                 <div className="function-box">
-                    <div className="btn" ><HeartOutlined style={{marginRight: 5}}/>收藏</div>
+                    <div className="btn"  onClick={handleStarClick}>
+                        {
+                            star ?
+                                <><HeartFilled style={{color: "#51c6cf", marginRight: 5}}/>已收藏</>
+                                :
+                                <><HeartOutlined style={{marginRight: 5}}/>收藏</>
+                        }
+                    </div>
                     <Popover content={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
                         <div style={{width: "100px", height: "100px"}}>
                             <img src="//www.ziroom.com/qrcode.php?makeUrl=http://m.ziroom.com/HZ/room/61177299.html" alt="" style={{width: "100px", height: "100px"}}/>

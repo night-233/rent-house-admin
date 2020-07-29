@@ -1,18 +1,8 @@
 import {Redirect} from "react-router";
 import React, {lazy, Suspense} from "react";
+import SuspenseComponent from "@components/SuspenseComponent";
 
-const SuspenseComponent = Component => props => {
-    return (
-        <Suspense fallback={<div style={{
-            height: 'calc(100vh-150px)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}> loading...</div >}>
-            <Component {...props}/>
-        </Suspense >
-    )
-}
+
 const ClientLayout = lazy(() => import("../views-client/layout/ClientLayout"));
 const ClientHome = lazy(() => import("../views-client/home"));
 const ClientHouseDetail = lazy(() => import("../views-client/house"));

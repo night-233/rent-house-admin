@@ -84,7 +84,7 @@ const RightHouseDetailInfo = () => {
     )
 };
 const Container = styled.div`
-       .tags{
+   .tags{
         margin-top: 15px;
         span {
             display: inline-block;

@@ -1,30 +1,13 @@
 import React from 'react';
-import { BrowserRouter, withRouter } from 'react-router-dom';
-import { InitStyle, GlobalStyle } from './assets/scss/initStyle';
-import renderRoutes from './router/routingGuard'
+import {BrowserRouter} from 'react-router-dom';
+import {GlobalStyle, InitStyle} from './assets/scss/initStyle';
 import routes from './router/index';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import store from './store/index';
-// import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import './App.css';
+import renderRoutes from "@/router/routingGuard";
 
-const authPath = '/login'
-// const RoutesTransitionWrap = withRouter(({ location }) => {
-//   const switchProps = { location: location }
-//   console.log('dd', location)
-//   return (
-//     <TransitionGroup className={'router-wrapper'}>
-//       <CSSTransition
-//         timeout={5000}
-//         classNames={'fade'}
-//         key={location.pathname}
-//       >
-//         {renderRoutes(routes, authPath, switchProps)}
-//       </CSSTransition>
-//     </TransitionGroup>
-//   )
-// });
-
+const authPath = '/login';
 
 function App () {
   return (

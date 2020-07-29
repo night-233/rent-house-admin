@@ -10,7 +10,7 @@ const SuspenseComponent = Component => props => {
       justifyContent: 'center',
       alignItems: 'center'
     }}> loading...</div >}>
-      <Component {...props}/>
+      <Component/>
     </Suspense >
   )
 }

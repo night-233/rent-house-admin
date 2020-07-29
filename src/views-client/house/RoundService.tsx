@@ -371,7 +371,7 @@ const Container = styled.div`
                 }
                 .active{
                     background: hsla(0,0%,100%,.03) !important;
-                    color: #ff961e !important;
+                    color: #51c6cf !important;
                 }
             }
             // 上班通勤
@@ -462,7 +462,7 @@ const Container = styled.div`
                     }
                     .tranroute-plan-list.expand .trans-title p:first-child {
                         background: #fff url(${IconCheckPng});
-                        color: #ff961e!important;
+                        color: #51c6cf!important;
                         padding-right: 33px;
                         background-position: right -9px;
                         background-repeat: no-repeat;
@@ -541,10 +541,11 @@ const Container = styled.div`
                         margin-right: 14px;
                         padding: 0 0 4px;
                         cursor: pointer;
+                        display: inline-block;
                     }
                     .active{
-                        border-bottom: 1px solid #ff961e;
-                        color: #ff961e;
+                        border-bottom: 1px solid #51c6cf;
+                        color: #51c6cf;
                     }
                 }
                 .service-item{
@@ -585,13 +586,13 @@ const Container = styled.div`
                     }
                 }
                 .active{
-                    color: #ff961e;
+                    color: #51c6cf;
                     .left{
                         .title{
-                            color: #ff961e;
+                            color: #51c6cf;
                         }
                         .description{
-                            color: #ff961e;
+                            color: #51c6cf;
                         }
                     }
                 }

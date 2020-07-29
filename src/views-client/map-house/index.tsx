@@ -107,7 +107,6 @@ const MapHouse = () => {
     return(
         <Container>
             <MapHeader value={keyword} onSelect={data => {
-                console.log(data);
                 const longitude = data.location?.lng;
                 const latitude = data.location?.lat;
                 const title = data.label;
@@ -121,7 +120,7 @@ const MapHouse = () => {
                               onArriveBottom={handleArriveBottom}
                               loading={houseSearchLoading}
                 />
-                <MapContainer onBoundsChange={handleBoundsChange} childRef={mapRef}/>
+                <MapContainer onBoundsChange={handleBoundsChange} childRef={mapRef} houseList={houseData.list}/>
             </Content>
         </Container>
     )

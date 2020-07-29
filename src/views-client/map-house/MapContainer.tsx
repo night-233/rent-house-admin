@@ -6,24 +6,24 @@ import BMap from 'BMap';
 import {useSelector} from 'react-redux'
 import HouseApi from "@apis/house";
 import {message} from "antd";
-import {house} from "@store/redux/house.redux";
 import LocationPng from "../../assets/img/location.png";
-import HouseImg from "@assets/img/house.png";
 
 // 地图对象
 let map:any = null;
 // 区域标签
 let regionLabels:any = [];
+
 /**
  * 地图容器
  */
-const MapContainer = ({onBoundsChange, childRef}) => {
+const MapContainer = ({onBoundsChange, childRef, houseList}) => {
 
 
     const city = useSelector(state => state.common.city);
 
     const [locationPng, setLocationPng] = useState();
 
+    const [houseListLayerStore, setHouseListLayerStore] = useState<any>([]);
 
     useEffect(() => {
         if(city.enName){
@@ -40,7 +40,6 @@ const MapContainer = ({onBoundsChange, childRef}) => {
     useImperativeHandle(childRef, () => ({
         zoomToPoint: (title, longiitude, latitude ) => {
             if(locationPng){
-                console.log("移出旧的地点");
                 map.removeOverlay(locationPng);
             }
             const point = new BMap.Point(longiitude, latitude);
@@ -83,7 +82,7 @@ const MapContainer = ({onBoundsChange, childRef}) => {
             const label = new BMap.Label(content, {
                 position: point,
             });
-            label.setStyle(tmp);
+            label.setStyle(regionStyle);
             map.addOverlay(label);
 
             // 添加行政区域覆盖物
@@ -132,7 +131,6 @@ const MapContainer = ({onBoundsChange, childRef}) => {
         }
         // 创建百度云麻点
         // const customLayer=new BMap.CustomLayer(BaiduMapConfig.geoTableId); //新建麻点图图层对象
-        //map.addTileLayer(customLayer); //将麻点图添加到地图当中
     };
 
     // 地图缩放处理
@@ -160,8 +158,38 @@ const MapContainer = ({onBoundsChange, childRef}) => {
             regionLabels.forEach(item => {
                 item.hide();
             });
+            // 绘制房源麻点
         }
         onBoundsChange(zoomLevel, boundsParam);
+    };
+
+    useEffect(() => {
+        if(map){
+            houseListLayerStore.forEach(overlay => {
+                map.removeOverlay(overlay);
+            });
+            if(map.getZoom() >= 13){
+                drawHousePoint(houseList);
+            }
+        }
+    }, [houseList]);
+
+    // 绘制房源点
+    const drawHousePoint = (list) => {
+        const tmp:any = [];
+        list.forEach((house: any) => {
+            if(house.location){
+                const point = new BMap.Point(house.location?.lon, house.location?.lat);
+                const content = `<div class="house-marker-content"><span class="title">${house.title}</span><span>￥${house.price}/月</span> <b/></div>`;
+                const label = new BMap.Label(content, {
+                    position: point,
+                });
+                label.setStyle(houseMarkerStyle);
+                tmp.push(label);
+                map.addOverlay(label);
+            }
+        });
+        setHouseListLayerStore(tmp);
     };
 
 
@@ -193,8 +221,54 @@ const Container = styled.div`
             z-index: 99 !important;
         }   
     }
+    .house-marker-content {
+        padding: 0 10px;
+        position: relative;
+        z-index: 2;
+        white-space: nowrap;
+        min-width: 60px;
+        color: #FFFFFF;
+        font-size: 12px;
+        box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.20);
+        z-index:  9 !important;
+        cursor: pointer;
+        border: 0px solid rgb(255, 0, 0);
+        background: #51C6CF;
+        display: flex;
+        height: 27px;
+        line-height: 27px;
+        .title{
+            display: inline-block;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+   
+        b{
+            border: 6px solid transparent;
+            border-top-color: #51C6CF;
+            border-top-width: 8px;
+            display: block;
+            width: 0;
+            height: 0;
+            position: absolute;
+            left: 20px;
+            top: 25px;
+        }
+        &:hover{
+            background: rgba(255, 98, 98, 0.90);
+            b{
+                 border-top-color: rgba(255, 98, 98, 0.90);
+            }
+        }
+    }
 `;
-const tmp = {
+const houseMarkerStyle = {
+    border: "0px solid rgb(255, 0, 0)",
+    backgroundColor: "rgba(255, 255, 255, 0)"
+};
+const regionStyle = {
     zIndex: 2,
     background: "#51C6CF",
     boxShadow: "0 0 8px 0 rgba(0, 0, 0, 0.10)",
