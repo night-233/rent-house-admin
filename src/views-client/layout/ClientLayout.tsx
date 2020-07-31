@@ -1,8 +1,7 @@
 import React from "react";
-import Header from "./Header";
 import styled from "styled-components";
-import { renderRoutes } from 'react-router-config'
-import Footer from "../layout/Footer"
+import renderRoutes from "@router/routingGuard";
+
 /**
  * 客户端布局
  */

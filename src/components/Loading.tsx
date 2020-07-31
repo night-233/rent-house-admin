@@ -18,6 +18,9 @@ const Loading = () => {
 };
 const Container = styled.div`
     display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
     .lds-ellipsis {
       display: inline-block;
       position: relative;

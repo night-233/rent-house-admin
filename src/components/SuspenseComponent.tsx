@@ -8,9 +8,7 @@ import Loading from "@components/Loading";
 const SuspenseComponent =  Component => props => {
 
     return (
-        <Suspense fallback={<div style={{position: "absolute", width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
-            <Loading/>
-        </div>}>
+        <Suspense fallback={<Loading/>}>
          <Component {...props}/>
         </Suspense>
     )

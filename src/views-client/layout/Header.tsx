@@ -32,12 +32,12 @@ const Header = (props) => {
                     }
                 </div>
                 <div className="tab-menu">
-                    <div className="item"><span className="title"> 首页 <span className="underline"/></span></div>
-                    <div className="item"><span className="title"> 租房 <span className="underline"/></span></div>
-                    <div className="item"><span className="title"> 一夜租房 <span className="underline"/></span></div>
-                    <div className="item"><span className="title"> 拼室友 <span className="underline"/></span></div>
-                    <div className="item"><span className="title"> APP下载 <span className="underline"/></span></div>
-                    <div className="item"><span className="title"> 房东中心 <span className="underline"/></span></div>
+                    <div className="item"><Link to={"/client/home"}><span className="title"> 首页 <span className="underline"/></span></Link></div>
+                    <div className="item"><Link to={"/client/home"}> <span className="title"> 租房 <span className="underline"/></span></Link></div>
+                    <div className="item"><Link to={"/client/home"}> <span className="title"> 一夜租房 <span className="underline"/></span></Link></div>
+                    <div className="item"><Link to={"/client/home"}> <span className="title"> 拼室友 <span className="underline"/></span></Link></div>
+                    <div className="item"><Link to={"/client/home"}> <span className="title"> APP下载 <span className="underline"/></span></Link></div>
+                    <div className="item"><Link to={"/client/home"}> <span className="title"> 房东中心 <span className="underline"/></span></Link></div>
                 </div>
                 <LoginRegisterBtn/>
             </div>
@@ -93,6 +93,7 @@ const Container = styled.div`
             .title{
                 padding: 9px 5px;
                 position: relative;
+                color: rgba(0,0,0,.85)!important;
                 .underline{
                     content: "";
                     position: absolute;

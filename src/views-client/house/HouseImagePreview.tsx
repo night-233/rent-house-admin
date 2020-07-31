@@ -10,6 +10,9 @@ import {ModalModeType} from "@components/LoginRegiestModal";
 import {HeartFilled} from "@ant-design/icons/lib";
 import {decreaseHouseStarNumber, increaseHouseStarNumber, setHouseStar} from "@store/redux/house.redux";
 import UserApi from "@apis/user";
+import QRCode from "qrcode.react";
+import {useHistory} from "react-router";
+
 const HouseImagePreview = () => {
 
 
@@ -131,6 +134,8 @@ const HouseImagePreview = () => {
         })
     };
 
+    const url = window.location.href;
+
     return <Container>
             <div className="preview" onMouseEnter={() => setPreviewArrowVisible(true)} onMouseLeave={() => setPreviewArrowVisible(false)}>
                 <div className="function-box">
@@ -144,7 +149,7 @@ const HouseImagePreview = () => {
                     </div>
                     <Popover content={<div style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
                         <div style={{width: "100px", height: "100px"}}>
-                            <img src="//www.ziroom.com/qrcode.php?makeUrl=http://m.ziroom.com/HZ/room/61177299.html" alt="" style={{width: "100px", height: "100px"}}/>
+                            <QRCode value={url} style={{width: "100px", height: "100px"}}/>
                         </div>
                         <div>微信扫码分享</div>
                     </div>} title={null} trigger="hover" placement="bottom" overlayClassName="overlay-class">

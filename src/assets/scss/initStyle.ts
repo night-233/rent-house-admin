@@ -56,6 +56,6 @@ export const InitStyle = createGlobalStyle`
 	}
 	a {
 		text-decoration: none;
-		color: #fff;
+		color: #666666;
   }
 `

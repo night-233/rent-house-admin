@@ -27,6 +27,7 @@ export default [
     exact: true,
     render: () => <Redirect to={"/home"} />
   },
+
   {
     path: "/UserSetting",
     meta: { title: '个人信息', showInHeader: false },

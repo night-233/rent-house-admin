@@ -40,4 +40,4 @@ html, body {
   color: #61dafb;
 }
  */
-body{overflow-y: scroll;}
+body{overflow-y: auto;}
