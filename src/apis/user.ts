@@ -17,6 +17,7 @@ const UserApi = {
       getHouseOperate: `${base}/user/house/${key}/operate`,
       getUserStarHouseList: `${base}/user/house/star/list`,
       reserveHouse: `${base}/user/house/subscribe`,
+      getReserveHouseList: `${base}/user/house/subscribes`,
     };
   },
   updateUserInfo (data: Object) {
@@ -92,13 +93,21 @@ const UserApi = {
       data: data
     })
   },
-  // 获取当前用户收藏的房源列表
+  // 预约房源
   reserveHouse (data){
     return request({
       url: this.urls().reserveHouse,
       method: "post",
       data: data
     })
-  }
+  },
+  // 获取当前用户收藏的房源列表
+  getReserveHouseList (data){
+    return request({
+      url: this.urls().getReserveHouseList,
+      method: "post",
+      data: data
+    })
+  },
 };
 export default UserApi;

@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {Avatar, Button, Form, Input, message, Modal, notification} from "antd";
+import {Avatar, Button, DatePicker, Form, Input, message, Modal, notification} from "antd";
 import {useSelector, useDispatch} from "react-redux"
 import {MessageFilled, PhoneFilled} from "@ant-design/icons/lib";
 import UserApi from "@apis/user";
 import {setHouseReserve} from "@store/redux/house.redux";
+import {handleResponse} from "@utils/handle-reponse";
+import moment from "moment";
 /**
  * 预约看房模态框
  * Created by Administrator on 2020/7/28
@@ -32,17 +34,20 @@ const MakeAppointmentHouseModal = ({visible = true, onCancel, houseId, onSuccess
     const handleFormFinish = (values) => {
         const phone = values.phone;
         const description = values.description;
+        const time = values.time;
         reserveHouse({
             phone,
             description,
+            time,
             houseId
         })
     };
 
     const reserveHouse = (data) => {
+      setLoading(true);
       UserApi.reserveHouse(data).then(res => {
+          setLoading(false);
           if(res){
-              message.success("预约成功");
               dispatch(setHouseReserve(true));
               onSuccess();
           }
@@ -77,6 +82,15 @@ const MakeAppointmentHouseModal = ({visible = true, onCancel, houseId, onSuccess
                                style={{marginTop: 10}}
                     >
                         <Input prefix={<PhoneFilled style={{color: "#ccc", marginRight: 5}}/>} size="large" style={{height: 50, borderRadius: 0}} placeholder="请输入您的手机号"/>
+                    </Form.Item>
+                    <Form.Item label={null}
+                               name="time"
+                               rules={[{required: true, message: '请选择约看时间' }]}
+                               style={{marginTop: 10}}
+                    >
+                        <DatePicker size="large" style={{height: 50, borderRadius: 0, width: "100%"}} disabledDate={(time) => {
+                            return time.isBefore(moment()) || time.isAfter(moment().add(10, "day"))
+                        }}/>
                     </Form.Item>
                     <Form.Item     label={null}
                                    name="description"

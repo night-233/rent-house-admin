@@ -17,7 +17,8 @@ const UserStar = () => {
         page: 1,
         pageSize: 5,
         sortDirection: "DESC",
-        orderBy: "createTime"
+        orderBy: "createTime",
+        showSizeChanger: false
     });
 
     const [starData, setStarData] = useState({
@@ -32,23 +33,7 @@ const UserStar = () => {
             title: '房源信息',
             dataIndex: 'house',
             key: 'house',
-            render: (record) => (
-                <div className="info-container">
-                    <div className="img">
-                        <Link to={"/client/house/" + record.id} target="_blank">
-                            <img  src={record.cover} alt=""/>
-                        </Link>
-                    </div>
-                    <div className="info">
-                        <Link to={"/client/house/" + record.id} target="_blank">
-                            <p className="title">
-                                {record.title}
-                            </p>
-                        </Link>
-                        <p>{record.floor}/{record.totalFloor}层 | {record.area}平方米 | { record.houseDetail?.rentWay === 0 ? "合租" : "整租"}</p>
-                    </div>
-                </div>
-            ),
+            render: (record) => <HouseInfoColumnComponent data={record}/>,
             width: 500,
         },
         {
@@ -139,41 +124,56 @@ const UserStar = () => {
     };
 
     return (
-        <Container>
            <Table
                columns={columns}
                dataSource={dataSource}
                pagination={pagination}
                loading={loading}
            />
-        </Container>
     )
 };
-const Container = styled.div`
-    .info-container{
-        display: flex;
-        .img{
-            cursor: pointer;
-            img{
-                width: 140px;
-                height: 90px;
-            }
-            margin-right: 15px;
+const HouseInfoContainer = styled.div`
+    display: flex;
+    .img{
+        cursor: pointer;
+        img{
+            width: 140px;
+            height: 90px;
         }
-        .info{
-            .title{
-                color: #666;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
-                &:hover{
-                    color: #5cc6cf;
-                }
+        margin-right: 15px;
+    }
+    .info{
+        .title{
+            color: #666;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            &:hover{
+                color: #5cc6cf;
             }
         }
     }
 `;
 
+export const HouseInfoColumnComponent = ({data}) => {
+    return (
+        <HouseInfoContainer>
+            <div className="img">
+                <Link to={"/client/house/" + data.id} target="_blank">
+                    <img  src={data.cover} alt=""/>
+                </Link>
+            </div>
+            <div className="info">
+                <Link to={"/client/house/" + data.id} target="_blank">
+                    <p className="title">
+                        {data.title}
+                    </p>
+                </Link>
+                <p>{data.floor}/{data.totalFloor}层 | {data.area}平方米 | { data.houseDetail?.rentWay === 0 ? "合租" : "整租"}</p>
+            </div>
+        </HouseInfoContainer>
+    )
+};
 export default UserStar;
