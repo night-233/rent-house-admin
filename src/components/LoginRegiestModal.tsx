@@ -5,8 +5,7 @@ import "./LoginRegiestModal.scss"
 import {LoadingOutlined} from "@ant-design/icons/lib";
 import openApi from '@apis/open'
 import { useDispatch } from 'react-redux'
-import {getUserInfo, loginIn} from "../../store/redux/user.redux";
-import {verify} from "crypto";
+import {loginIn} from "@/store/redux/user.redux";
 /**
  * 登录注册模态框
  * @constructor
@@ -181,7 +180,7 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
                 title={null}
                 footer={null}
                 width={486}
-                getContainer={false}
+                forceRender={true}
                 wrapClassName="login-register-modal-wrap"
             >
                 <Container>
@@ -207,6 +206,7 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
                     }
                     <Form
                         form={form}
+                        preserve={false}
                         onFinish={onFinish}
                     >
                         <Form.Item
@@ -215,7 +215,7 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
                             name="phone"
                             rules={[
                                 { required: true, message: '请输入手机号' },
-                                {pattern: /^1[3|4|5|7|8][0-9]\d{8}$/, message: '请输入正确的手机号'},
+                                {pattern: /^1[3|4|5|7|8][0-9]\d{8}$/, message: '手机号格式错误'},
                                 phoneRegisterValidator,
                                 ]}
                         >

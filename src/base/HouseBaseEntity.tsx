@@ -23,3 +23,10 @@ export const HouseDevicesConfigIcon = [
     {value: "icondianshi", name: "电视"},
     // {value: "iconqita", name: "其他"},
 ];
+// 房屋状态映射
+export const HouseStatusMap = {
+    0: "未审核",
+    1: "可入住",
+    2: "已出租",
+    3: "已下架",
+};

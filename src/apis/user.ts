@@ -2,7 +2,7 @@ import request, {requestWithoutDealStatus} from '@/utils/request';
 
 const base = '/dev';
 
-export default {
+const UserApi = {
   urls (key = '') {
     return {
       getUserInfo: `${base}/user`,
@@ -11,7 +11,13 @@ export default {
       postImage: `${base}/user/avatar/img`,
       removeUserLogo: `${base}/user/avatar`,
       updateUserInfo: `${base}/user/basicInfo`,
-      uploadPhoto: `${base}/user/upload/photo`
+      uploadPhoto: `${base}/user/upload/photo`,
+      starHouse: `${base}/user/house/${key}/star`,
+      cancelStarHouse: `${base}/user/house/${key}/star`,
+      getHouseOperate: `${base}/user/house/${key}/operate`,
+      getUserStarHouseList: `${base}/user/house/star/list`,
+      reserveHouse: `${base}/user/house/subscribe`,
+      getReserveHouseList: `${base}/user/house/subscribes`,
     };
   },
   updateUserInfo (data: Object) {
@@ -57,5 +63,51 @@ export default {
       url: this.urls().getUserInfo,
       method: 'get',
     });
-  }
+  },
+  // 收藏房源
+  starHouse (houseId){
+    return request({
+      url: this.urls(houseId).starHouse,
+      method: "post"
+    })
+  },
+  // 取消收藏房源
+  cancelStarHouse (houseId){
+    return request({
+      url: this.urls(houseId).cancelStarHouse,
+      method: "delete"
+    })
+  },
+  // 判断当前用户是否了指定房源
+  getHouseOperate (houseId){
+    return request({
+      url: this.urls(houseId).getHouseOperate,
+      method: "get"
+    })
+  },
+  // 获取当前用户收藏的房源列表
+  getUserStarHouseList (data){
+    return request({
+      url: this.urls().getUserStarHouseList,
+      method: "post",
+      data: data
+    })
+  },
+  // 预约房源
+  reserveHouse (data){
+    return request({
+      url: this.urls().reserveHouse,
+      method: "post",
+      data: data
+    })
+  },
+  // 获取当前用户收藏的房源列表
+  getReserveHouseList (data){
+    return request({
+      url: this.urls().getReserveHouseList,
+      method: "post",
+      data: data
+    })
+  },
 };
+export default UserApi;

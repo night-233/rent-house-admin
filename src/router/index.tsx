@@ -1,14 +1,9 @@
 import React, { lazy, Suspense } from "react";
 import homeRoutes from './homeRoutes'
 import Login from '../views/login/index';
-import clientRoute from "./ClientRoutes";
-const SuspenseComponent = Component => props => {
-  return (
-    <Suspense fallback={<div/>}>
-      <Component {...props}/>
-    </Suspense>
-  )
-}
+import ClientRoutes from "./ClientRoutes";
+import UserRoutes from "./UserRoutes";
+import SuspenseComponent from "@components/SuspenseComponent";
 
 const Layout = lazy(() => import("../views/layout"));
 const Test1 = lazy(() => import("../views/test1"));
@@ -41,13 +36,11 @@ let authRoutes = [
     ]
   }
 ];
-
-
-
 constantRoutes = constantRoutes.map((item) => ({ ...item, requiresAuth: false }))
 authRoutes = authRoutes.map((item) => ({ ...item, requiresAuth: true }))
 export default [
   ...constantRoutes,
-  ...clientRoute,
+  ...ClientRoutes,
+  ...UserRoutes,
   ...authRoutes,
 ]

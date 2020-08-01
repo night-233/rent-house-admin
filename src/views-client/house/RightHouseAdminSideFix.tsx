@@ -1,7 +1,15 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import {CloseOutlined} from "@ant-design/icons/lib";
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
+import MakeAppointmentHouseModal from "@views-client/house/MakeAppointmentHouseModal";
+import {Avatar, Button, notification} from 'antd';
+import {ModalModeType} from "@components/LoginRegiestModal";
+import {
+    changeLoginModalType,
+    changeLoginModalVisible,
+    setLoginModalCallback
+} from "@store/redux/common.redux";
 /**
  *  右侧房屋联系人
  */
@@ -13,6 +21,43 @@ const RightHouseAdminSideFix = ({isSticky}) => {
 
     const agent = useSelector(state => state.house.agent);
 
+    const user = useSelector(state => state.user);
+
+    const dispatch = useDispatch();
+
+    const reserve = useSelector(state => state.house.reserve);
+
+    const [reserveModalVisible, setReserveModalVisible] = useState(false);
+
+
+    // 处理预约看房点击
+    const handleHouseClick = () => {
+            if(user.authed){
+                if(reserve) {
+                    notification.info({
+                        message: "不能重复预约",
+                        description: "您已约看过该房源,可在 个人中心->我的约看, 中查看预约信息"
+                    });
+                }else{
+                    setReserveModalVisible(true);
+                }
+            }else{
+                dispatch(changeLoginModalType(ModalModeType.CODE_LOGIN));
+                dispatch(changeLoginModalVisible(true));
+                dispatch(setLoginModalCallback(() => setReserveModalVisible(true)));
+            }
+    };
+
+    // 预约成功
+    const handleReserveSuccess = () => {
+        setReserveModalVisible(false);
+        notification.success({
+            message: "预看成功",
+            description: "您已成功约看当前房源，稍后房东确认后将会通过手机号与您联系确认。请保持电话畅通",
+            duration: 0
+        });
+    };
+
     return (
         <Container>
             {
@@ -22,18 +67,21 @@ const RightHouseAdminSideFix = ({isSticky}) => {
             <div className="side-fix">
                 <div className="order">
                     {
-                        isSticky&&
+                        isSticky &&
                         <>
                             <div className="title">{houseInfo.title}</div>
                             <div className="price" style={{marginBottom: 20}}><span className="icon">￥</span><span className="number">{houseInfo.price} </span>/月（季付价）</div>
                         </>
                     }
-                    <div className="btn">预约看房</div>
-                    <div className="collect-tip">房源已被收藏0次</div>
+                    <Button type="primary" style={{width: "100%", height: "46px", borderRadius: "2px"}} onClick={handleHouseClick}>
+                        { reserve ? "已预约" : "预约看房" }
+                    </Button>
+                    <div className="collect-tip">房源已被收藏{houseInfo.starNumber || 0}次</div>
                 </div>
                 <div className="admin">
                     <div className="avatar">
-                        <img src="http://pic.ziroom.com/steward_images/60026661.png" alt="房东头像"/>
+                        <Avatar  size={60} src={agent.avatar}>房东</Avatar>
+                        {/*<img src={agent.avatar} alt="房东头像"/>*/}
                     </div>
                     <div className="admin-info">
                         <div className="name">{agent.nickName}</div>
@@ -44,7 +92,7 @@ const RightHouseAdminSideFix = ({isSticky}) => {
                     qrCodeVisible &&
                     <div className="qrcode">
                         <div className="close" onClick={() => seQrCodetVisible(false)}><CloseOutlined/></div>
-                        <div className="code"> <img src="//static8.ziroom.com/phoenix/pc/images/qrcode/2019/PC_info.png" alt="自如app"></img></div>
+                        <div className="code"> <img src="//static8.ziroom.com/phoenix/pc/images/qrcode/2019/PC_info.png" alt="自如app"/></div>
                         <div className="content">
                             <p>扫码下载自如APP</p>
                             <p>即时接收房源优惠及订阅信息～</p>
@@ -52,6 +100,7 @@ const RightHouseAdminSideFix = ({isSticky}) => {
                     </div>
                 }
             </div>
+            <MakeAppointmentHouseModal visible={reserveModalVisible} onCancel={() => setReserveModalVisible(false)} houseId={houseInfo.id} onSuccess={handleReserveSuccess}/>
         </Container>
     )
 };
@@ -70,7 +119,7 @@ const Container = styled.div`
                 margin: 0;
             }
             .btn{
-                background: #ff961e;
+                background: #51c6cf;
                 color: #fff;
                 display: flex;
                 justify-content: center;

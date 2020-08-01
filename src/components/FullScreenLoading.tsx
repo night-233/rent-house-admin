@@ -1,6 +1,7 @@
 import React from "react";
 import {Spin} from "antd";
 import styled from "styled-components";
+import Loading from "@components/Loading";
 
 /**
  * 全屏loading
@@ -14,7 +15,7 @@ const FullScreenLoading = (props) => {
             {
                 loading ?
                     <Container>
-                        <Spin spinning={true} tip="努力加载中" />
+                        <Loading/>
                     </Container>
                     :
                     children

@@ -10,7 +10,7 @@ const SuspenseComponent = Component => props => {
       justifyContent: 'center',
       alignItems: 'center'
     }}> loading...</div >}>
-      <Component {...props}/>
+      <Component/>
     </Suspense >
   )
 }
@@ -27,6 +27,7 @@ export default [
     exact: true,
     render: () => <Redirect to={"/home"} />
   },
+
   {
     path: "/UserSetting",
     meta: { title: '个人信息', showInHeader: false },

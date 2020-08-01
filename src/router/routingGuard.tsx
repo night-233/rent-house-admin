@@ -11,10 +11,14 @@ const renderRoutes = (routes, authPath = '/login', switchProps = {}, extraProps 
         exact={route.exact}
         strict={route.strict}
         render={(props) => {
-          const token = cookie.getCookie('Authorization') || false
+          if(route.redirect){
+            return <Redirect to={{ pathname: route.redirect, state: { from: props.location } }} />
+          }
+          const token = cookie.getCookie('Authorization') || false;
           if (!route.requiresAuth || token || route.path === authPath) {
             return <route.component {...props} {...extraProps} route={route} />
           }
+
           return <Redirect to={{ pathname: authPath, state: { from: props.location } }} />
         }}
       />

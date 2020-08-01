@@ -1,8 +1,7 @@
 import React from "react";
-import Header from "./Header";
 import styled from "styled-components";
-import { renderRoutes } from 'react-router-config'
-import Footer from "../layout/Footer"
+import renderRoutes from "@router/routingGuard";
+
 /**
  * 客户端布局
  */
@@ -22,6 +21,7 @@ const Container = styled.div`
     color: rgba(0,0,0,.6);
     font-size: 14px;
     min-height: 100%;
+    padding-left: calc(100vw - 100%);
 `;
 
 export default ClientLayout;

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import 'swiper/css/swiper.css';
 import styled from "styled-components";
 import HouseImagePreview from "./HouseImagePreview";
@@ -15,42 +15,52 @@ import UserRights from "./UserRights";
 import RecommendHouse from "./RecommendHouse";
 import {Sticky, StickyContainer} from 'react-sticky';
 import {useDispatch, useSelector} from "react-redux";
-import {getHouseById} from "../../store/redux/house.redux";
+import {getHouseById, getHouseOperateById} from "../../store/redux/house.redux";
 import FullScreenLoading from "../../components/FullScreenLoading"
 import Footer from "../layout/Footer";
+import UserApi from "@apis/user";
 
 const HouseDetail = (props) => {
 
 
     const loading = useSelector(state => state.house.loading);
 
+    const user = useSelector(state => state.user);
+
+    const houseId = props.match.params.houseId;
+
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const houseId = props.match.params.houseId;
         dispatch(getHouseById(houseId));
     }, []);
+
+      useEffect(() => {
+        if(user.authed && houseId){
+            dispatch(getHouseOperateById(houseId))
+        }
+    }, [user.userInfo, houseId]);
 
     return (
         <FullScreenLoading loading={loading}>
             <Header fixed={false} showCity={false}/>
             <Container>
-                    <HouseBodyContainer>
-                        <LeftInfoContainer>
-                            <HouseImagePreview/>
-                            {/*导航栏*/}
-                            <HouseNavigation/>
-                            {/*房屋简介*/}
-                            <HouseIntroduction/>
-                            {/*租约信息*/}
-                            <RentInfo/>
-                            {/*室友信息*/}
-                            <RoomMateInfo/>
-                            {/*小区简介*/}
-                            <DistrictIntroduction/>
-                        </LeftInfoContainer>
-                        <RightInfoContainer>
-                            <RightHouseDetailInfo/>
+                <HouseBodyContainer>
+                    <LeftInfoContainer>
+                        <HouseImagePreview/>
+                        {/*导航栏*/}
+                        <HouseNavigation/>
+                        {/*房屋简介*/}
+                        <HouseIntroduction/>
+                        {/*租约信息*/}
+                        <RentInfo/>
+                        {/*室友信息*/}
+                        <RoomMateInfo/>
+                        {/*小区简介*/}
+                        <DistrictIntroduction/>
+                    </LeftInfoContainer>
+                    <RightInfoContainer>
+                        <RightHouseDetailInfo/>
                             <StickyContainer style={{flex: 1}}>
                                 <Sticky  disableCompensation={true} topOffset={-80}>
                                     {({
@@ -62,13 +72,13 @@ const HouseDetail = (props) => {
                                           calculatedHeight
                                       }) => (
                                         <div style={{...style}}>
-                                            <RightHouseAdminSideFix isSticky={isSticky}/>
+                                            <RightHouseAdminSideFix isSticky={isSticky} />
                                         </div>
                                     )}
                                 </Sticky>
                             </StickyContainer>
-                        </RightInfoContainer>
-                    </HouseBodyContainer>
+                    </RightInfoContainer>
+                </HouseBodyContainer>
                 {/*周边配套*/}
                 <RoundService/>
                 {/*用户权益*/}
@@ -116,7 +126,7 @@ const RightInfoContainer = styled.div`
     display: flex;
     flex-direction: column;
     .price{
-        color: #ff961e;
+        color: #51c6cf;
         margin-top: 10px;
         font-size: 28px;
         display: flex;

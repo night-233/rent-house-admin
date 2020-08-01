@@ -23,8 +23,6 @@ const MapHeader = ({value, onSelect, onChange}) => {
 
     const [keyword, setKeyword] = useState();
 
-    const [test, setTest] = useState("aaa");
-
      const debounceSearchKeyword = useCallback(debounce((value, cityCnName) => {
          if(value && cityCnName){
              BaiduApi.getAddressHint(value, cityCnName, 0, 5).then(res => {
@@ -46,11 +44,8 @@ const MapHeader = ({value, onSelect, onChange}) => {
      };
 
      useEffect(() => {
-         console.log("value改变:" + value);
          setKeyword(value);
      }, [value]);
-
-     console.log("keyword:" + keyword);
 
     return (
         <Container>
