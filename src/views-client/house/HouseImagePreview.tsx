@@ -128,7 +128,7 @@ const HouseImagePreview = () => {
     const cancelHouseStar = (houseId) => {
         UserApi.cancelStarHouse(houseId).then((res: any) => {
             if(res){
-                dispatch(setHouseStar(true));
+                dispatch(setHouseStar(false));
                 dispatch(decreaseHouseStarNumber());
             }
         })
