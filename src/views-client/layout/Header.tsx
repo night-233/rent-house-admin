@@ -55,7 +55,7 @@ const Container = styled.div`
     :
         ``
     }
-    padding-left: calc(100vw - 100%);
+    // padding-left: calc(100vw - 100%);
     height: 60px;
     line-height: 60px;
     color: #fff;

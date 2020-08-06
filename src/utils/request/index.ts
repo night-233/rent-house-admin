@@ -27,6 +27,7 @@ axios.interceptors.response.use(
     return dataAxios
   },
   error => {
+      NProgress.done();
       if(error?.config?.delStatus){
           dealResError(error)
       }

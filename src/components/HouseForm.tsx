@@ -184,7 +184,7 @@ const HouseForm = (props) => {
       }
       return Promise.reject(message);
     },
-  })
+  });
   // 禁用大于当前年的建筑日期
   const disabledBuildDate = current => {
     return current.isAfter(moment());
@@ -496,7 +496,7 @@ const HouseForm = (props) => {
 }
 
 // 房屋标签
-const HouseTags = (props) => {
+export const HouseTags = (props) => {
 
   const { value = [], onChange } = props;
   // 处理标签点击

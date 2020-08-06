@@ -18,6 +18,7 @@ const UserApi = {
       getUserStarHouseList: `${base}/user/house/star/list`,
       reserveHouse: `${base}/user/house/subscribe`,
       getReserveHouseList: `${base}/user/house/subscribes`,
+      cancelReserveHouse: `${base}/user/house/${key}/subscribe`,
     };
   },
   updateUserInfo (data: Object) {
@@ -107,6 +108,13 @@ const UserApi = {
       url: this.urls().getReserveHouseList,
       method: "post",
       data: data
+    })
+  },
+  // 取消预约房源
+  cancelReserveHouse (subscribeId){
+    return request({
+      url: this.urls(subscribeId).cancelReserveHouse,
+      method: "delete",
     })
   },
 };

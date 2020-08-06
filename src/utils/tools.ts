@@ -58,7 +58,23 @@ const Tools = {
       throw new Error(e);
     }
     return destSize;
+  },
+  // 排序方向名称转换
+  sortDirectionMap(direction: any){
+    if(direction === "DESC"){
+      return "descend";
+    }
+    if(direction === "ASC"){
+      return "ascend";
+    }
+    if(direction === "descend"){
+      return "DESC";
+    }
+    if(direction === "ascend"){
+      return "ASC";
+    }
+    return undefined;
   }
-}
+};
 
 export default Tools;

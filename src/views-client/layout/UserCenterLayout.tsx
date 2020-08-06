@@ -7,7 +7,7 @@ import renderRoutes from "@/router/routingGuard";
 const menuItemsMap = {
     "/user/center/center": {
         key: "/user/center/center",
-        name: "个人中心",
+        name: "用户中心",
         to: "/user/center/center",
         icon: <HomeFilled/>,
     },
@@ -35,7 +35,7 @@ const UserCenterLayout = (props) => {
 
     return (
         <Container>
-            <div className="side-left left">
+            <div className="side-left">
                 <MenuPathRender itemsMap={menuItemsMap} itemKeyArray={menuItemArray} style={{textAlign: "center"}}/>
             </div>
            <div className="side-right">
@@ -45,12 +45,6 @@ const UserCenterLayout = (props) => {
     )
 };
 const Container = styled.div`
-    .left{
-        padding: 20px 0;
-    }
-    .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
-        border-right: 0px solid #f0f0f0; 
-    }
 `;
 
 export default UserCenterLayout;

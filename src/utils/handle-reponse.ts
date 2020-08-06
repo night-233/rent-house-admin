@@ -9,7 +9,6 @@ import {message} from "antd";
  */
 export const handleResponse = (request, successCallBack, failMsg, loadingCallback?) => {
     loadingCallback && loadingCallback(true);
-    debugger
     return request.then(data => {
         if(data){
             successCallBack(data);

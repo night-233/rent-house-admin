@@ -48,7 +48,7 @@ const MenuPathRender = (menuPathRenderProps: MenuPathRenderProps) => {
         <Menu mode={menuPathRenderProps.mode || "vertical"} className={menuPathRenderProps.className}  style={menuPathRenderProps.style} selectedKeys={[selectKey]}>
             {
                 itemKeyArray.map(item => (
-                    <Menu.Item key={item} icon={itemsMap[item].icon} >
+                    <Menu.Item key={item} icon={itemsMap[item]?.icon} >
                         <Link to={itemsMap[item].to}>
                             {itemsMap[item].name}
                         </Link>

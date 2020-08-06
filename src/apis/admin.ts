@@ -5,7 +5,7 @@ const base = '/dev';
  * 地区与地铁接口
  */
 
-export default {
+const AdminApi = {
   urls () {
     return {
       getHouseList: `${base}/admin/houses`,
@@ -55,6 +55,31 @@ export default {
       method: "put",
       data: houseForm
     })
+  },
+  updateHouseStatus(houseId: number, status: number){
+    return request({
+      url: `${base}/admin/house/operate/${houseId}/${status}`,
+      method: "put",
+    })
+  },
+  getReserveData(data){
+    return request({
+      url: `${base}/admin/house/subscribes`,
+      method: "post",
+      data: data
+    })
+  },
+  cancelReserve(reserveId: number){
+    return request({
+      url: `${base}/admin/house/subscribe/${reserveId}`,
+      method: "delete",
+    })
+  },
+  updateHouseReserveStatus(reserveId: number, status: (2 | 3)){
+    return request({
+      url: `${base}/admin/house/subscribe/${reserveId}/${status}`,
+      method: "put",
+    })
   }
-
 };
+export default AdminApi;

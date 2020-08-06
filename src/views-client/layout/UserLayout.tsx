@@ -9,8 +9,6 @@ import renderRoutes from "@router/routingGuard";
 const UserLayout = (props) => {
 
     const {route} = props;
-
-    console.log(route);
     return (
         <Container>
             {/*<Header fixed={false} showCity={false}/>*/}
@@ -31,14 +29,18 @@ const Container = styled.div`
     padding-left: calc(100vw - 100%);
     .content-container{
         width: 1200px;
-        margin: 110px auto 0;
+        margin: 100px auto 0;
         font-size: 14px;
         line-height: 180%;
     }
     .side-left{
         float: left;
         width: 200px;
+        padding: 20px 0;
         border: solid 1px #eee;
+        .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+            border-right: 0px solid #f0f0f0; 
+        }
     }
     .side-right{
         float: right;

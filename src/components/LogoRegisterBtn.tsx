@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect} from "react";
 import LoginRegisterModal, {ModalModeType} from "@components/LoginRegiestModal";
 import styled from "styled-components";
-import { useDispatch, useSelector } from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import userApi from "@apis/user";
 import {RequestStatus} from "@base/RequestStatus";
 import {changeUserInfo, logout} from "@store/redux/user.redux";
@@ -10,6 +10,8 @@ import {useHistory} from "react-router";
 import {changeLoginModalType, changeLoginModalVisible} from "@store/redux/common.redux";
 import {Avatar, Dropdown, Menu} from 'antd';
 import {Link} from "react-router-dom";
+import {menuItemArray, menuItemMap} from "@views-client/layout/UserNavigationBar";
+
 /**
  * 登录注册按钮
  * @constructor
@@ -84,7 +86,19 @@ const LoginRegisterBtn = () => {
                     </>
                     :
                     <>
-                        <Dropdown overlay={menu}>
+                        <Dropdown overlay={<DropDownContainer>
+                            <Menu>
+                                {
+                                    menuItemArray.map(item => (
+                                            <Menu.Item key={item}>
+                                                <Link to={item} >
+                                                {menuItemMap[item].name}
+                                                </Link>
+                                            </Menu.Item>
+                                    ))
+                                }
+                            </Menu>
+                        </DropDownContainer>}>
                             <Link to="/user/center">
                                 <div className="avatar">
                                     <Avatar src={user?.userInfo?.avatar} size={32} style={{marginRight: 5}}>{user?.userInfo?.nickName}</Avatar>
@@ -115,27 +129,7 @@ const DropDownContainer = styled.div`
     margin-top: 0 !important;
  }
 `;
-const menu = (
-    <DropDownContainer>
-        <Menu>
-            <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/" className="self-item">
-                    个人资料
-                </a>
-            </Menu.Item>
-            <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/" className="self-item">
-                    我的约看
-                </a>
-            </Menu.Item>
-            <Menu.Item>
-                <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/" className="self-item">
-                    我的收藏
-                </a>
-            </Menu.Item>
-        </Menu>
-    </DropDownContainer>
-);
+
 
 const Container = styled.div`
     height: 100%;

@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import {message, Popconfirm, Table} from "antd";
+import {Empty, message, Popconfirm, Table} from "antd";
 import UserApi from "@apis/user";
 import {handleResponse} from "@utils/handle-reponse";
 import moment from "moment";
 import {DeleteOutlined} from "@ant-design/icons/lib";
 import {Link} from "react-router-dom";
 import {HouseStatusMap} from "@base/HouseBaseEntity";
+import Tools from "@utils/tools";
 
 /**
  * Created by Administrator on 2020/7/29
@@ -16,8 +17,8 @@ const UserStar = () => {
     const [searchParams, setSearchParams] = useState({
         page: 1,
         pageSize: 5,
-        sortDirection: "DESC",
-        orderBy: "createTime",
+        sortDirection: undefined,
+        orderBy: undefined,
         showSizeChanger: false
     });
 
@@ -28,13 +29,13 @@ const UserStar = () => {
 
     const [loading,setLoading] = useState(false);
 
-    const columns = [
+    const columns:any = [
         {
             title: '房源信息',
             dataIndex: 'house',
             key: 'house',
             render: (record) => <HouseInfoColumnComponent data={record}/>,
-            width: 500,
+            width: 400,
         },
         {
             title: '价格',
@@ -52,17 +53,19 @@ const UserStar = () => {
             render: value => <span>{HouseStatusMap[value]}</span>,
         },
         {
+            title: '收藏人气',
+            dataIndex: 'starNumber',
+            key: 'starNumber',
+            align: "center" as "center",
+        },
+        {
             title: '收藏时间',
             dataIndex: 'createTime',
             key: 'createTime',
             render: value => <span>{moment(value).fromNow()}</span>,
-            align: "center" as "center"
-        },
-        {
-            title: '收藏人气',
-            dataIndex: 'starNumber',
-            key: 'starNumber',
-            align: "center" as "center"
+            align: "center" as "center",
+            sorter: true,
+            sortOrder: searchParams.orderBy === 'createTime' && Tools.sortDirectionMap(searchParams.sortDirection)
         },
         {
             title: '操作',
@@ -112,6 +115,7 @@ const UserStar = () => {
 
     const pagination = {
         hideOnSinglePage: true,
+        showSizeChanger: false,
         total: starData.total,
         pageSize: searchParams.pageSize,
         current: searchParams.page,
@@ -123,12 +127,26 @@ const UserStar = () => {
         }
     };
 
+    const handleChange = (pagination, filters, sorter, extra) => {
+        const direction = Tools.sortDirectionMap(sorter.order);
+        const orderBy = direction ? sorter.field : undefined;
+        if((orderBy !== searchParams.orderBy) || (direction !== searchParams.sortDirection)){
+            const tmp:any = {...searchParams, page: 1, orderBy: orderBy, sortDirection: direction};
+            setSearchParams(tmp);
+            getHouseStarList(tmp);
+        }
+    };
+
     return (
            <Table
                columns={columns}
                dataSource={dataSource}
                pagination={pagination}
                loading={loading}
+               locale={{
+                   emptyText: <Empty description="您还没有搜查房源，快去看看吧"/>
+               }}
+               onChange={handleChange}
            />
     )
 };

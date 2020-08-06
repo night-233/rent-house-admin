@@ -47,6 +47,7 @@ const RightHouseAdminSideFix = ({isSticky}) => {
                 dispatch(setLoginModalCallback(() => setReserveModalVisible(true)));
             }
     };
+    console.log(user.authed);
 
     // 预约成功
     const handleReserveSuccess = () => {
@@ -54,7 +55,6 @@ const RightHouseAdminSideFix = ({isSticky}) => {
         notification.success({
             message: "预看成功",
             description: "您已成功约看当前房源，稍后房东确认后将会通过手机号与您联系确认。请保持电话畅通",
-            duration: 0
         });
     };
 

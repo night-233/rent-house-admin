@@ -6,13 +6,18 @@ import zhCN from 'antd/es/locale/zh_CN';
 import { ConfigProvider } from "antd";
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import Loading from "@components/Loading";
+import {Simulate} from "react-dom/test-utils";
 
 
 moment.locale('zh-cn');
 
+const loading = document.getElementById("init-loading");
+loading?.remove();
+
 ReactDOM.render(
   // <React.StrictMode>
-  <Suspense fallback={<div>Loading... </div>}>
+  <Suspense fallback={<Loading/>}>
     <ConfigProvider locale={zhCN}>
       <App />
     </ConfigProvider>

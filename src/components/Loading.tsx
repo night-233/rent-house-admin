@@ -21,6 +21,8 @@ const Container = styled.div`
     position: absolute;
     top: 50%;
     left: 50%;
+    margin-top: -40px;
+    margin-left: -40px;
     .lds-ellipsis {
       display: inline-block;
       position: relative;

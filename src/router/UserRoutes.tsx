@@ -1,12 +1,16 @@
 import React, {lazy} from "react";
 import SuspenseComponent from "@components/SuspenseComponent";
-import {Redirect} from "react-router";
 
 const UserLayout= lazy(() => import("@views-client/layout/UserLayout"));
 const UserCenterLayout= lazy(() => import("@views-client/layout/UserCenterLayout"));
 const UserStar= lazy(() => import("@views-client/user/user-center/star"));
 const UserReserve= lazy(() => import("@views-client/user/user-center/reserve"));
 const UserCenter= lazy(() => import("@views-client/user/user-center/center"));
+const HousePublish = lazy(() => import("@views-client/user/public-manage/house-publish"));
+const PublishManageLayout = lazy(() => import("@views-client/layout/PublishManageLayout"));
+const ReserveManage = lazy(() => import("@views-client/user/public-manage/reserve-manage"));
+const HouseManage = lazy(() => import("@views-client/user/public-manage/house-manage"));
+
 
 const UserRoute =   [{
     path: "/user",
@@ -41,13 +45,34 @@ const UserRoute =   [{
                     exact: true,
                     component: SuspenseComponent(UserReserve),
                 },
+            ]
+        },
+        {
+            path: "/user/publish",
+            component: SuspenseComponent(PublishManageLayout),
+            routes: [
                 {
-                    path: "/user/center/contract",
+                    path: "/user/publish",
                     exact: true,
-                    component: SuspenseComponent(UserReserve),
+                    redirect: "/user/publish/manage",
+                },
+                {
+                    path: "/user/publish/manage",
+                    exact: true,
+                    component: SuspenseComponent(HouseManage),
+                },
+                {
+                    path: "/user/publish/reserve",
+                    exact: true,
+                    component: SuspenseComponent(ReserveManage),
                 },
             ]
         },
+        {
+            path: "/user/house-publish",
+            exact: true,
+            component: SuspenseComponent(HousePublish),
+        }
     ]
 }];
 export default UserRoute;

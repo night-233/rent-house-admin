@@ -227,7 +227,13 @@ export const HouseBox = (props) => {
                 </Link>
             </div>
             <div className="info">
+                <Link to={{
+                    pathname: "/client/house/" + data.id,
+                }}
+                      target="_blank"
+                >
                 <div className="title-container"><span className="icon-sign">签</span><div className="title">{data.title}</div> </div>
+                </Link>
                 <div className="desc">
                     <span>{data.area}㎡ | {data.floor}/{data.totalFloor}层 </span>
                     <span className="price"><span className="number">{data.price}</span> <span className="unit">/月</span></span>
