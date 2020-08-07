@@ -5,7 +5,7 @@ import { Button, Form, message, Modal, Upload } from "antd";
 import styled from "styled-components";
 import Tools from "@utils/tools";
 import AdminApi from "@apis/admin";
-
+import style from '@assets/global-style';
 interface PictureUploaderParams {
   hint?: string | ReactNode,
   value: {
@@ -146,7 +146,7 @@ const PictureUploader = (props) => {
   }
 
   return (
-    <>
+    <Container>
       <UploadHintContainer>{hint || "请上传清晰、实拍的室内图片，请不要在图片上添加文字、数字、网址等内容，请勿上传名片、二维码、自拍照、风景照等与房源无关的图片，最多上传12张，每张最大10M"}</UploadHintContainer>
       <div className='global-center'>
         <FlipMove style={{ display: "flex", flexWrap: "wrap" }}>
@@ -199,7 +199,7 @@ const PictureUploader = (props) => {
           }
         </PreviewModalBodyContainer>
       </Modal>
-    </>
+    </Container>
   )
 }
 /**
@@ -216,6 +216,86 @@ const uploadButton = (
 interface ModalCoverContainerProps {
   bgColor?: string;
 }
+
+const Container = styled.div`
+  .img-file-item {
+    margin-right: 10px;
+    padding: 8px;
+    margin-bottom: 10px;
+    width: 104px;
+    height: 104px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+  &:hover {
+    .img-hover {
+      opacity: 1;
+    }
+  }
+  .img-cover {
+    position: absolute;
+    width: 20%;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 0px;
+    width: 100%;
+    font-size: 13px;
+    background: ${style['theme-color']};
+    color: #fff;
+  }
+  .img-wrap {
+    width: 86px;
+    height: 86px;
+    position: relative;
+  }
+  .img-hover {
+    opacity: 0;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 0.5s;
+    .iconfont {
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .iconeye {
+      margin-right: 10px;
+      position: relative;
+    }
+    /* .iconeye::after {
+      position
+    } */
+  }
+  .img-file {
+    width: 100%;
+    height: 100%;
+    transition: all 1s;
+  }
+}
+ .global-center {
+   display: flex;
+   align-items: center;
+   flex-wrap:wrap;
+ }
+ .thumbnail-icon{
+    color: white;
+    fontSize: 16px;
+    cursor: pointer;
+    padding: 2px 5px;
+ }
+ .ant-upload-picture-card-wrapper{
+    width: auto;
+ }
+`;
 
 const UploadHintContainer = styled.div`
     margin: 0 0 20px;

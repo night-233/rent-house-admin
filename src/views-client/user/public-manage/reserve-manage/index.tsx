@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import Tools from "@utils/tools";
-import {Divider, Empty, message, Popconfirm, Table, Tabs} from "antd";
+import {Divider, Empty, message, Popconfirm, Table, Tabs, Tag, Modal, Avatar} from "antd";
 import {CarryOutOutlined, CheckCircleOutlined, DeleteOutlined} from "@ant-design/icons/lib";
 import AdminApi from "@apis/admin";
 import {handleResponse} from "@utils/handle-reponse";
 import ReserveCommonProps from "@views-client/user/common/ReserveCommonProps";
+import {HouseInfoColumnComponent} from "@views-client/user/user-center/star";
 
 const { TabPane } = Tabs;
 /**
@@ -29,7 +30,54 @@ const ReserveManage = () => {
         list: []
     });
 
-    const columns: any = ReserveCommonProps.columns(searchParams);
+    const [userInfoModal, setUserInfoModal] = useState<any>({
+        visible: false,
+        user: {}
+    });
+
+    const columns: any = [
+        {
+            title: '房源信息',
+            dataIndex: 'house',
+            key: 'house',
+            width: 370,
+            render: (record) => <HouseInfoColumnComponent data={record}/>,
+        },
+        {
+            title: '联系电话',
+            dataIndex: 'telephone',
+            key: 'telephone',
+            align: "center" as "center",
+            width: 120,
+            render: value => <span>{value}</span>,
+        },
+        {
+            title: '约看时间',
+            dataIndex: 'orderTime',
+            key: 'orderTime',
+            align: "center" as "center",
+            sorter: true,
+            sortOrder: searchParams.orderBy === 'orderTime' && Tools.sortDirectionMap(searchParams.sortDirection),
+        },
+        {
+            title: '约看描述',
+            dataIndex: 'description',
+            key: 'description',
+            align: "center" as "center",
+            width: 100,
+            ellipsis: true
+        },
+        {
+            title: '用户信息',
+            dataIndex: 'user',
+            key: 'user',
+            align: "center" as "center",
+            render: (user) => <Tag color="#51c6cf" style={{cursor: "pointer"}} onClick={() => setUserInfoModal({
+                visible: true,
+                user: user
+            })}>{user?.name}</Tag>,
+        }
+    ];
 
     if(searchParams.status === "1"){
         columns.push(  {
@@ -160,11 +208,59 @@ const ReserveManage = () => {
             <Table columns={columns} pagination={pagination} loading={loading} locale={{
                 emptyText: <Empty description="暂无数据"/>
             }} onChange={handleChange} dataSource={dataSource}/>
+            <Modal title={null} footer={null} bodyStyle={{padding: "60px 40px 90px"}} visible={userInfoModal.visible} onCancel={() => setUserInfoModal({...userInfoModal, visible: false})}>
+                <ModalBodyContainer>
+                    <h3>用户信息</h3>
+                    <div className="info">
+                        <Avatar src={userInfoModal.user?.avatar} size={60} style={{marginRight: 20, marginLeft: 30}}>
+                            {userInfoModal.user?.name}
+                        </Avatar>
+                        <div>
+                            <div className="name">{userInfoModal.user?.name}</div>
+                            <div className="phone">{userInfoModal.user?.phoneNumber}</div>
+                        </div>
+                    </div>
+                    <p className="tip">
+                        温馨提示：为保障您的租住权益以及财产安全，请务必通过管家与自如签订房屋租赁合同。
+                    </p>
+                </ModalBodyContainer>
+            </Modal>
         </Container>
     )
 };
 const Container = styled.div`
 
+`;
+const ModalBodyContainer = styled.div`
+    h3{
+        font-size: 30px;
+        color: rgba(0,0,0,.85);
+    }
+    .info{
+        background: rgba(0,0,0,.03);
+        border-radius: 2px;
+        margin-top: 30px;
+        padding: 30px 0;
+        display: flex;
+        align-items: center;
+    }
+    .name{
+        font-size: 24px;
+        color: rgba(0,0,0,.85);
+        line-height: 27px;
+    }
+    .phone{
+        font-size: 24px;
+        color: rgba(0,0,0,.6);
+        margin-top: 6px;
+        line-height: 27px;
+    }
+    .tip{
+        font-size: 15px;
+        color: rgba(0,0,0,.4);
+        line-height: 22px;
+        margin-top: 16px;
+    }
 `;
 
 export default ReserveManage;

@@ -12,8 +12,9 @@ import {
 import moment from "moment";
 import AdminApi from "@apis/admin";
 import {handleResponse} from "@utils/handle-reponse";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Tools from "@utils/tools";
+import { Prompt } from 'react-router'
 
 const { TabPane } = Tabs;
 /**
@@ -33,6 +34,8 @@ const HouseManage = () => {
         total: 0,
         list: []
     });
+
+    const history = useHistory();
 
     const [loading, setLoading] = useState(false);
 
@@ -73,7 +76,9 @@ const HouseManage = () => {
             align: "center" as "center",
             render: (text, record) => (
                 <div style={{display: "flex", justifyContent: "center"}}>
-                    <EditOutlined style={{cursor: "pointer", color: "#51c6cf"}} title="编辑"/>
+                    <EditOutlined style={{cursor: "pointer", color: "#51c6cf"}} title="编辑" onClick={() => {
+                        history.push("/user/house-edit/" + record.key);
+                    }}/>
                     <Divider type="vertical"/>
                     <Popconfirm title="修改房屋状态为已出租？" okText="确认" cancelText="取消"  onConfirm={() => handleHouseStatusUpdate(record.key, 2)}>
                         <CheckCircleOutlined title="已出租" style={{cursor: "pointer", color: "#51c6cf"}}/>

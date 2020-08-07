@@ -31,7 +31,7 @@ const HouseEdit = (props) => {
 
 
     const getHouseInfoById = (houseId) => {
-        handleResponse(AdminApi.getHouse(houseId), (data) => {
+        handleResponse(AdminApi.getEditHouse(houseId), (data) => {
             const imageList = data.house.housePictureList.map(item => {
                return {
                    ...item,
@@ -40,7 +40,6 @@ const HouseEdit = (props) => {
                }
             });
             const cover = imageList.find(item => item.url === data.house.cover)?.uid;
-
             const form = {
                 title: data.house.title,
                 city: data.city.enName,

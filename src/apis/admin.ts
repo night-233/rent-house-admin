@@ -37,13 +37,14 @@ const AdminApi = {
     });
   },
   /**
-   * 通过房源id获取房源具体信息
+   * 获取待编辑房源信息
    * @param houseId 房源id
    */
-  getHouse(houseId){
+  getEditHouse(houseId){
     return request({
-      url: `${base}/admin/house/` + houseId,
-      method: "get"
+      url: `${base}/admin/house/edit/` + houseId,
+      method: "get",
+      delStatus: false
     })
   },
   /**

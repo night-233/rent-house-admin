@@ -60,9 +60,10 @@ const UserApi = {
     });
   },
   clientGetUserInfo(){
-    return requestWithoutDealStatus({
+    return request({
       url: this.urls().getUserInfo,
       method: 'get',
+      delStatus: false
     });
   },
   // 收藏房源

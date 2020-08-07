@@ -47,10 +47,13 @@ axios.interceptors.request.use(
 
 
 const request = (config: any) => {
-  const customConfig = Object.assign({...config, delStatus: true});
+  const customConfig = Object.assign({delStatus: true, ...config});
   return axios(customConfig)
     .then((response) => {
-      return response.data || response || true;
+        if(customConfig.delStatus){
+            return response.data || response || true;
+        }
+        return response;
     }, (err) => {
       console.error(err, err.response);
       return false;

@@ -12,17 +12,17 @@ const menuItemsMap = {
         to: "/user/publish/manage",
         icon: <HomeFilled/>,
     },
-    "/user/house-publish": {
-        key: "/user/house-publish",
-        name: "我要出租",
-        to: "/user/house-publish",
-        icon: <PlusSquareOutlined/>,
-    },
     "/user/publish/reserve": {
         key: "/user/publish/reserve",
         name: "预约管理",
         to: "/user/publish/reserve",
         icon: <CalendarFilled/>,
+    },
+    "/user/house-publish": {
+        key: "/user/house-publish",
+        name: "我要出租",
+        to: "/user/house-publish",
+        icon: <PlusSquareOutlined/>,
     },
 };
 const menuItemArray = ["/user/publish/manage", "/user/house-publish", "/user/publish/reserve"];

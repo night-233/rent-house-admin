@@ -10,6 +10,7 @@ const HousePublish = lazy(() => import("@views-client/user/public-manage/house-p
 const PublishManageLayout = lazy(() => import("@views-client/layout/PublishManageLayout"));
 const ReserveManage = lazy(() => import("@views-client/user/public-manage/reserve-manage"));
 const HouseManage = lazy(() => import("@views-client/user/public-manage/house-manage"));
+const HouseEdit = lazy(() => import("@views-client/user/public-manage/houses-edit"));
 
 
 const UserRoute =   [{
@@ -72,6 +73,11 @@ const UserRoute =   [{
             path: "/user/house-publish",
             exact: true,
             component: SuspenseComponent(HousePublish),
+        },
+        {
+            path: "/user/house-edit/:houseId",
+            exact: true,
+            component: SuspenseComponent(HouseEdit),
         }
     ]
 }];

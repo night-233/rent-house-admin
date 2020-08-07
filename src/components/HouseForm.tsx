@@ -172,7 +172,6 @@ const HouseForm = (props) => {
       tags: values.tags
     }
     onSubmit && onSubmit(houseForm);
-
   }
 
   // 数字校验

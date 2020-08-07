@@ -58,7 +58,9 @@ const ReserveCommonProps = {
             description: item.houseSubscribe?.description || "无",
             createTime: moment(item.houseSubscribe?.createTime).fromNow(),
             lastUpdateTime: moment(item.houseSubscribe?.lastUpdateTime).fromNow(),
-            telephone: item.houseSubscribe.telephone
+            telephone: item.houseSubscribe.telephone,
+            user: item.user,
+            agent: item.agent
         }));
     },
 };
