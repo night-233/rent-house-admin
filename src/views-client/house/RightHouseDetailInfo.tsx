@@ -40,10 +40,10 @@ const RightHouseDetailInfo = () => {
             </div>
             <div className="detail">
                 <div className="detail-block">
-                    <div className="name">交通</div>
+                    <div className="name">地址</div>
                     <Popover content={houseInfo?.houseDetail?.traffic}>
                         <div className="value">
-                            {houseInfo?.houseDetail?.traffic}
+                            {houseInfo?.houseDetail?.address}
                         </div>
                     </Popover>
                     <Popover content={<div style={{width: 300, color: "rgba(0,0,0,.6)"}}>

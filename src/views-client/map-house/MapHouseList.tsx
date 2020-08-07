@@ -42,7 +42,7 @@ const MapHouseList = ({ orderBy, sortDirection, onSortChange, houseData, onArriv
                         <span className="price"><span className="number">¥{item.price}</span>/月</span>
                       </div>
                       <div className="position">
-                        <i className="iconfont" style={{ fontSize: "12px", fontWeight: "bold" }}>&#xe620;</i> {item.houseDetail.traffic}
+                        <i className="iconfont" style={{ fontSize: "12px", fontWeight: "bold" }}>&#xe620;</i> {item.houseDetail.address}
                       </div>
                       <div className="tags">
                         {
@@ -67,7 +67,7 @@ const MapHouseList = ({ orderBy, sortDirection, onSortChange, houseData, onArriv
       {
         houseData.dirty && houseData.list.length === 0 &&
         <div className="no-house">
-          <img src={NoHousePng} />
+          <img src={NoHousePng} alt=""/>
           <p>地球上没有你要找的房子...</p>
         </div>
       }
