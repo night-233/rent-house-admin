@@ -58,6 +58,9 @@ const HousePublishForm = (props) => {
 
     const [form] = Form.useForm();
 
+    // 输入框引用
+    const [inputRefArray, setRefArray] = useState<any>([]);
+
     useEffect(() => {
         if(initData){
             if (initData) {
@@ -301,6 +304,15 @@ const HousePublishForm = (props) => {
         });
     };
 
+    // 处理户型楼层自动聚焦
+    const handleAutoFocusInputChange = (value, index, needLength) => {
+        console.log("value:" + value + "; index:" + index + "; needLength:" + needLength);
+        if(value?.length === needLength){
+            inputRefArray[index].blur();
+            inputRefArray[index + 1].focus();
+        }
+    };
+
     return (
         <Container>
             <Prompt
@@ -377,23 +389,23 @@ const HousePublishForm = (props) => {
                         <Form.Item
                             label={null}
                             name="room"
-                            rules={[{ required: true, message: '必填' }, numberValidate("正整数", /^\+?[1-9][0-9]*$/)]}
+                            rules={[{ required: true, message: '必填' }, numberValidate("正整数", /^[1-9]\d*$/)]}
                         >
-                            <Input  style={{...formStyle.input, width: 120}} suffix="室" className="input-center" maxLength={1}/>
+                            <Input ref={ref => inputRefArray[0] = ref} onChange={e => handleAutoFocusInputChange(e.target.value, 0, 1)}  style={{...formStyle.input, width: 120}} suffix="室" className="input-center" maxLength={1}/>
                         </Form.Item>
                         <Form.Item
                             label={null}
                             name="parlour"
-                            rules={[{ required: true, message: '必填' }, numberValidate("非负整数", /^\d+$/)]}
+                            rules={[{ required: true, message: '必填' }, numberValidate("非负整数", /^[1-9]\d*|0$/)]}
                         >
-                            <Input  style={{...formStyle.input, width: 120}} suffix="厅" className="input-center" maxLength={1}/>
+                            <Input ref={ref => inputRefArray[1] = ref} onChange={e => handleAutoFocusInputChange(e.target.value, 1, 1)}  style={{...formStyle.input, width: 120}} suffix="厅" className="input-center" maxLength={1}/>
                         </Form.Item>
                         <Form.Item
                             label={null}
                             name="bathroom"
-                            rules={[{ required: true, message: '必填' }, numberValidate("非负整数", /^\d+$/)]}
+                            rules={[{ required: true, message: '必填' }, numberValidate("非负整数", /^[1-9]\d*|0$/)]}
                         >
-                            <Input  style={{...formStyle.input, width: 120}} suffix="卫" className="input-center" maxLength={1}/>
+                            <Input  ref={ref => inputRefArray[2] = ref} onChange={e => handleAutoFocusInputChange(e.target.value, 2, 1)}  style={{...formStyle.input, width: 120}} suffix="卫" className="input-center" maxLength={1}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -408,17 +420,21 @@ const HousePublishForm = (props) => {
                         <Form.Item
                             label={null}
                             name="floor"
-                            rules={[{ required: true, message: '必填' }, numberValidate("非负整数", /^\+?[1-9][0-9]*$/)]}
+                            rules={[{ required: true, message: '必填' }, numberValidate("整数", /^-?[1-9]\d*$/)]}
                         >
-                            <Input style={{...formStyle.input, textAlign: "center", width: 120}} prefix="第" suffix="层" className="input-center"/>
+                            <Input ref={ref => inputRefArray[3] = ref} onChange={e => handleAutoFocusInputChange(e.target.value, 3, 2)}  style={{...formStyle.input, textAlign: "center", width: 120}}
+                                   prefix="第"
+                                   suffix="层" className="input-center"
+                                   maxLength={2}
+                            />
                         </Form.Item>
                         <Form.Item
                             label={null}
                             dependencies={["floor"]}
                             name="totalFloor"
-                            rules={[{ required: true, message: '必填' }, numberValidate("非负整数", /^\+?[1-9][0-9]*$/), totalFloorChecker]}
+                            rules={[{ required: true, message: '必填' }, numberValidate("正整数", /^[1-9]\d*$/), totalFloorChecker]}
                         >
-                            <Input style={{...formStyle.input, width: 120}} prefix="共" suffix="层" className="input-center"/>
+                            <Input ref={ref => inputRefArray[4] = ref}  style={{...formStyle.input, width: 120}} prefix="共" suffix="层" className="input-center" maxLength={2}/>
                         </Form.Item>
                     </Col>
                 </Row>
