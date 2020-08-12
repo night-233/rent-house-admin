@@ -11,7 +11,7 @@ interface MenuItemProps {
     icon: Element
 }
 
-interface MenuPathRenderProps {
+export interface MenuPathRenderProps {
     type?: ('default' | 'parent' | 'child');
     itemsMap: Object,
     itemKeyArray: Array<string>,

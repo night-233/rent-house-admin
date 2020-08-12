@@ -15,11 +15,11 @@ export function user (state = initState, action) {
   switch (action.type) {
     case LOGIN_IN:
       state.authed = true;
-      state.userInfo = action.payload
+      state.userInfo = action.payload;
       return state;
     case CHANGE_INFO:
       state.authed = true;
-      state.userInfo = action.payload
+      state.userInfo = action.payload;
       return state;
     case LOGIN_OUT:
       return {

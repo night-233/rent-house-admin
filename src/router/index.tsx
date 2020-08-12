@@ -1,46 +1,39 @@
 import React, { lazy, Suspense } from "react";
-import homeRoutes from './homeRoutes'
-import Login from '../views/login/index';
 import ClientRoutes from "./ClientRoutes";
 import UserRoutes from "./UserRoutes";
-import SuspenseComponent from "@components/SuspenseComponent";
 
-const Layout = lazy(() => import("../views/layout"));
-const Test1 = lazy(() => import("../views/test1"));
-const Test2 = lazy(() => import("../views/test2"));
+const Login = lazy(() => import("../views-client/login"));
+const NotFound = lazy(() => import("../views-client/error/NotFound"));
+const ForgetPassword = lazy(() => import("@/views-client/forget-password"));
 
 // 公用页面，不需要权限验证的
 let constantRoutes = [
+  {
+    path: "/",
+    exact: true,
+    redirect: "/client/home"
+  },
   {
     path: "/login",
     component: Login,
   },
   {
-    path: "/test1",
-    component: Test1
+    path: "/404",
+    component: NotFound
   },
   {
-    path: "/test2",
-    component: Test2
-  }
+    path: "/forget-password",
+    component: ForgetPassword
+  },
+  {
+    path: "*",
+    redirect: "/404"
+  },
 ];
 
-// 需要权限的路由
-let authRoutes = [
-  {
-    path: "/",
-    component: SuspenseComponent(Layout),
-    requiresAuth: true,
-    routes: [
-      ...homeRoutes
-    ]
-  }
-];
-constantRoutes = constantRoutes.map((item) => ({ ...item, requiresAuth: false }))
-authRoutes = authRoutes.map((item) => ({ ...item, requiresAuth: true }))
+constantRoutes = constantRoutes.map((item) => ({ ...item, requiresAuth: false }));
 export default [
-  ...constantRoutes,
   ...ClientRoutes,
-  ...UserRoutes,
-  ...authRoutes,
+    ...UserRoutes,
+  ...constantRoutes,
 ]

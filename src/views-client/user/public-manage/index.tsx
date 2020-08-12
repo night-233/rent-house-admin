@@ -1,8 +1,6 @@
 import React from "react";
-import styled from "styled-components";
-import MenuPathRender from "@components/MenuPathRender";
 import {CalendarFilled, HomeFilled, PlusSquareOutlined} from "@ant-design/icons/lib";
-import renderRoutes from "@router/routingGuard";
+import UserMenuItemLayout from "@views-client/layout/UserMenuItemLayout";
 
 
 const menuItemsMap = {
@@ -27,26 +25,16 @@ const menuItemsMap = {
 };
 const menuItemArray = ["/user/publish/manage", "/user/house-publish", "/user/publish/reserve"];
 /**
- *  发布管理布局
+ *  发布管理入口
  * Created by Administrator on 2020/8/4
  */
-const PublishManageLayout = (props) => {
+const PublishManageEntry = (props) => {
 
     const {route} = props;
 
     return (
-        <Container>
-            <div className="side-left">
-                <MenuPathRender itemsMap={menuItemsMap} itemKeyArray={menuItemArray} style={{textAlign: "center"}}/>
-            </div>
-            <div className="side-right">
-                {renderRoutes(route.routes)}
-            </div>
-        </Container>
+        <UserMenuItemLayout routes={route.routes} itemsMap={menuItemsMap} itemKeyArray={menuItemArray}/>
     )
 };
-const Container = styled.div`
 
-`;
-
-export default PublishManageLayout;
+export default PublishManageEntry;

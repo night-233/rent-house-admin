@@ -9,6 +9,8 @@ import renderRoutes from "@router/routingGuard";
 const UserLayout = (props) => {
 
     const {route} = props;
+
+
     return (
         <Container>
             {/*<Header fixed={false} showCity={false}/>*/}
@@ -32,23 +34,6 @@ const Container = styled.div`
         margin: 100px auto 0;
         font-size: 14px;
         line-height: 180%;
-    }
-    .side-left{
-        float: left;
-        width: 200px;
-        padding: 20px 0;
-        border: solid 1px #eee;
-        .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
-            border-right: 0px solid #f0f0f0; 
-        }
-    }
-    .side-right{
-        float: right;
-        position: relative;
-        width: 980px;
-        min-height: 500px;
-        border: solid 1px #eee;
-        padding: 15px 30px 0;
     }
     .ant-menu-horizontal{
         border-bottom: 0px;

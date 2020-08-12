@@ -2,20 +2,24 @@ import React, {lazy} from "react";
 import SuspenseComponent from "@components/SuspenseComponent";
 
 const UserLayout= lazy(() => import("@views-client/layout/UserLayout"));
-const UserCenterLayout= lazy(() => import("@views-client/layout/UserCenterLayout"));
 const UserStar= lazy(() => import("@views-client/user/user-center/star"));
+const UserCenterEntry = lazy(() => import("@views-client/user/user-center"));
 const UserReserve= lazy(() => import("@views-client/user/user-center/reserve"));
 const UserCenter= lazy(() => import("@views-client/user/user-center/center"));
 const HousePublish = lazy(() => import("@views-client/user/public-manage/house-publish"));
-const PublishManageLayout = lazy(() => import("@views-client/layout/PublishManageLayout"));
+const PublishManageEntry = lazy(() => import("@views-client/user/public-manage"));
 const ReserveManage = lazy(() => import("@views-client/user/public-manage/reserve-manage"));
 const HouseManage = lazy(() => import("@views-client/user/public-manage/house-manage"));
 const HouseEdit = lazy(() => import("@views-client/user/public-manage/houses-edit"));
+const AccountCenterEntry = lazy(() => import("@views-client/user/account-center"));
+const PersonInfo = lazy(() => import("@views-client/user/account-center/person-info"));
+const UserResetPassword = lazy(() => import("@views-client/user/account-center/reset-password"));
 
 
 const UserRoute =   [{
     path: "/user",
     component: SuspenseComponent(UserLayout),
+    requiresAuth: true,
     routes: [
         {
             path: "/user",
@@ -24,7 +28,7 @@ const UserRoute =   [{
         },
         {
             path: "/user/center",
-            component: SuspenseComponent(UserCenterLayout),
+            component: SuspenseComponent(UserCenterEntry),
             routes: [
                 {
                     path: "/user/center",
@@ -46,11 +50,15 @@ const UserRoute =   [{
                     exact: true,
                     component: SuspenseComponent(UserReserve),
                 },
+                {
+                    path: "*",
+                    redirect: "/404"
+                },
             ]
         },
         {
             path: "/user/publish",
-            component: SuspenseComponent(PublishManageLayout),
+            component: SuspenseComponent(PublishManageEntry),
             routes: [
                 {
                     path: "/user/publish",
@@ -67,6 +75,35 @@ const UserRoute =   [{
                     exact: true,
                     component: SuspenseComponent(ReserveManage),
                 },
+                {
+                    path: "*",
+                    redirect: "/404"
+                },
+            ]
+        },
+        {
+            path: "/user/account",
+            component: SuspenseComponent(AccountCenterEntry),
+            routes: [
+                {
+                    path: "/user/account",
+                    exact: true,
+                    redirect: "/user/account/person",
+                },
+                {
+                    path: "/user/account/person",
+                    exact: true,
+                    component: SuspenseComponent(PersonInfo)
+                },
+                {
+                    path: "/user/account/reset-password",
+                    exact: true,
+                    component: SuspenseComponent(UserResetPassword)
+                },
+                {
+                    path: "*",
+                    redirect: "/404"
+                },
             ]
         },
         {
@@ -78,7 +115,11 @@ const UserRoute =   [{
             path: "/user/house-edit/:houseId",
             exact: true,
             component: SuspenseComponent(HouseEdit),
-        }
+        },
+        {
+            path: "*",
+            redirect: "/404"
+        },
     ]
 }];
 export default UserRoute;

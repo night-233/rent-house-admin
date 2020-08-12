@@ -1,8 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import {CalendarFilled, HeartFilled, HomeFilled} from "@ant-design/icons/lib";
-import MenuPathRender from "@components/MenuPathRender";
-import renderRoutes from "@/router/routingGuard";
+import UserMenuItemLayout from "@views-client/layout/UserMenuItemLayout";
 
 const menuItemsMap = {
     "/user/center/center": {
@@ -26,25 +24,16 @@ const menuItemsMap = {
 };
 const menuItemArray = ["/user/center/center", "/user/center/star", "/user/center/reserve"];
 /**
- * 用户个人中心布局
+ * 用户个人中心入口
  * Created by Administrator on 2020/7/29
  */
-const UserCenterLayout = (props) => {
+const UserCenterEntry = (props) => {
 
     const {route} = props;
 
     return (
-        <Container>
-            <div className="side-left">
-                <MenuPathRender itemsMap={menuItemsMap} itemKeyArray={menuItemArray} style={{textAlign: "center"}}/>
-            </div>
-           <div className="side-right">
-                {renderRoutes(route.routes)}
-            </div>
-        </Container>
+        <UserMenuItemLayout itemKeyArray={menuItemArray} itemsMap={menuItemsMap} routes={route.routes}/>
     )
 };
-const Container = styled.div`
-`;
 
-export default UserCenterLayout;
+export default UserCenterEntry;

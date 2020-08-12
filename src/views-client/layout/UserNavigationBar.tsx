@@ -24,7 +24,7 @@ export const menuItemMap = {
     "/user/account": {
         key: "/user/account",
         name: "我的账户",
-        to: "/user/account/center",
+        to: "/user/account/person",
         icon: <AccountBookOutlined/>,
     }
 };

@@ -57,7 +57,7 @@ const PictureUploader = (props) => {
       reader.onload = () => resolve(reader.result);
       reader.onerror = error => reject(error);
     });
-  }
+  };
 
   // 处理图片预览
   const handlePreview = (file) => {
@@ -70,7 +70,7 @@ const PictureUploader = (props) => {
     setPreviewModalVisible(true);
     setPreviewTitle(file.name);
     setPreviewUid(file.uid)
-  }
+  };
   // 处理移除图片
   const handleRemove = (uid) => {
     const result = value.imageList.filter(item => item.uid !== uid);
@@ -79,24 +79,8 @@ const PictureUploader = (props) => {
       tmpCover = result.length > 0 ? result[0].uid : null;
     }
     handleChange({ imageList: result, cover: tmpCover })
-  }
-  // 图片上传校验
-  const beforeUpload = (file): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      if (limits) {
-        const currentType = file.type.split('/')[1];
-        if (!limits.types.some(item => item === currentType)) {
-          message.error("仅支持:" + limits.types.join(",") + "; 格式");
-          return reject();
-        }
-        if (file.size > limits.size) {
-          message.error("单张图片最大:" + Tools.unitConversion(limits.size));
-          return reject();
-        }
-      }
-      return resolve();
-    });
   };
+
   //  处理设置封面
   const handleSetCover = () => {
     handleChange({ cover: previewUid });
@@ -116,7 +100,6 @@ const PictureUploader = (props) => {
         }
         return item;
       })
-
     }
     let tmpCover = value.cover;
     if (!tmpCover) {
@@ -124,16 +107,7 @@ const PictureUploader = (props) => {
     }
     handleChange({ imageList: tmp, cover: tmpCover })
   };
-  // 处理上传图片
-  const handleUpload = ({ file, onError, onSuccess }) => {
-    return AdminApi.uploadPhoto(file).then(async (res) => {
-      if (res) {
-        onSuccess(res, file);
-      } else {
-        onError('上传失败')
-      }
-    })
-  }
+
 
   /**
    * 处理form改变
@@ -143,7 +117,7 @@ const PictureUploader = (props) => {
     if (onChange) {
       onChange({ ...value, ...changedValue });
     }
-  }
+  };
 
   return (
     <Container>
@@ -173,7 +147,7 @@ const PictureUploader = (props) => {
             multiple={true}
             showUploadList={false}
             onPreview={handlePreview}
-            beforeUpload={beforeUpload}
+            beforeUpload={(file) => beforeUpload(file, limits)}
             onChange={handleFileChange}
             customRequest={handleUpload}
           >
@@ -201,7 +175,36 @@ const PictureUploader = (props) => {
       </Modal>
     </Container>
   )
-}
+};
+
+// 处理上传图片
+export const handleUpload = ({ file, onError, onSuccess }) => {
+  return AdminApi.uploadPhoto(file).then(async (res) => {
+    if (res) {
+      onSuccess(res, file);
+    } else {
+      onError('上传失败')
+    }
+  })
+};
+
+// 图片上传校验
+export const beforeUpload = (file, limits): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (limits) {
+      const currentType = file.type.split('/')[1];
+      if (!limits.types.some(item => item === currentType)) {
+        message.error("仅支持:" + limits.types.join("，") + "; 格式");
+        return reject();
+      }
+      if (file.size > limits.size) {
+        message.error("单张图片最大:" + Tools.unitConversion(limits.size));
+        return reject();
+      }
+    }
+    return resolve();
+  });
+};
 /**
  * 上传图片按钮
  */

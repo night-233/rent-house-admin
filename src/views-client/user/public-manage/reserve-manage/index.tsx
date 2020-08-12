@@ -75,7 +75,7 @@ const ReserveManage = () => {
             render: (user) => <Tag color="#51c6cf" style={{cursor: "pointer"}} onClick={() => setUserInfoModal({
                 visible: true,
                 user: user
-            })}>{user?.name}</Tag>,
+            })}>{user?.nickName}</Tag>,
         }
     ];
 
@@ -213,10 +213,10 @@ const ReserveManage = () => {
                     <h3>用户信息</h3>
                     <div className="info">
                         <Avatar src={userInfoModal.user?.avatar} size={60} style={{marginRight: 20, marginLeft: 30}}>
-                            {userInfoModal.user?.name}
+                            {userInfoModal.user?.nickName}
                         </Avatar>
                         <div>
-                            <div className="name">{userInfoModal.user?.name}</div>
+                            <div className="name">{userInfoModal.user?.nickName}</div>
                             <div className="phone">{userInfoModal.user?.phoneNumber}</div>
                         </div>
                     </div>

@@ -118,5 +118,15 @@ const UserApi = {
       method: "delete",
     })
   },
+  // 上传头像
+  uploadPhoto (file){
+    const form = new FormData();
+    form.append('file', file);
+    return request({
+      url: this.urls().uploadPhoto,
+      method: 'post',
+      data: form
+    });
+  },
 };
 export default UserApi;

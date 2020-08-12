@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Redirect, Switch } from 'react-router-dom'
 import cookie from '@utils/cookie'
+import Login from "@views-client/login";
 
 const renderRoutes = (routes, authPath = '/login', switchProps = {}, extraProps = {}, ) => routes ? (
   <Switch {...switchProps}>
@@ -18,12 +19,11 @@ const renderRoutes = (routes, authPath = '/login', switchProps = {}, extraProps 
           if (!route.requiresAuth || token || route.path === authPath) {
             return <route.component {...props} {...extraProps} route={route} />
           }
-
-          return <Redirect to={{ pathname: authPath, state: { from: props.location } }} />
+          return <Login/>
         }}
       />
     ))}
   </Switch>
-) : null
+) : null;
 
 export default renderRoutes

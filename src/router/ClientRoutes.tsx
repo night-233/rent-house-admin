@@ -34,7 +34,11 @@ const ClientRoutes =   [{
             meta: {title: "地图找房"},
             exact: true,
             component: SuspenseComponent(MapHouse)
-        }
+        },
+        {
+            path: "*",
+            redirect: "/404"
+        },
     ]
 }];
 

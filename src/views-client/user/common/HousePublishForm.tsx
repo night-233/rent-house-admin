@@ -99,11 +99,6 @@ const HousePublishForm = (props) => {
         }
     }, [city]);
 
-    // 获取限制条件
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getLimits());
-    }, []);
 
     // 获取区县列表
     const getSupportRegions = (cityEnName) => {

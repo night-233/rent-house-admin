@@ -6,6 +6,7 @@ import {LoadingOutlined} from "@ant-design/icons/lib";
 import openApi from '@apis/open'
 import { useDispatch } from 'react-redux'
 import {loginIn} from "@/store/redux/user.redux";
+import SmsCodeButton from "@components/SmsCodeButton";
 /**
  * 登录注册模态框
  * @constructor
@@ -22,6 +23,8 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
         count: 60,
         active: false
     });
+
+    const [phone, setPhone] = useState();
 
     const [codeBtn, setCodeBtn] = useState({
         text: "获取验证码",
@@ -114,7 +117,7 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
         } else if (!timer.active && timer.count !== 0) {
             clearTimeout(timeout);
         }
-        return () => clearInterval(timeout);
+        return () => clearTimeout(timeout);
     }, [timer]);
 
     // 获取验证码点击
@@ -141,6 +144,7 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
         setCodeBtn({text: "获取验证码", disable: false});
         setFormButtonLoading(false);
         setCodeSending(false);
+        setPhone(undefined);
     };
 
     // 手机号注册校验
@@ -219,7 +223,7 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
                                 phoneRegisterValidator,
                                 ]}
                         >
-                            <Input  placeholder="请输入手机号" size="large" style={{height: 50, borderRadius: 0}}/>
+                            <Input  placeholder="请输入手机号" size="large" style={{height: 50, borderRadius: 0}} onChange={e => setPhone(e.target.value)}/>
                         </Form.Item>
                         {
                             type !== ModalModeType.PASSWORD_LOGIN &&
@@ -230,15 +234,16 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
                             >
                                 <div  style={{display: "flex"}}>
                                     <div style={{width: 260, marginRight: 10}}>
-                                        <Input placeholder="请输入验证码" size="large" style={{height: 50,  borderRadius: 0}} autoComplete="new-password"/>
+                                        <Input placeholder="请输入验证码" size="large" style={{height: 50,  borderRadius: 0}}/>
                                     </div>
-                                    <GetCodeBtn disable={codeBtn.disable}  onClick={() => {
+                                  {/*  <GetCodeBtn disable={codeBtn.disable}  onClick={() => {
                                         if(!codeBtn.disable){
                                             handleGetCodeClick()
                                         }
                                     }}>{codeSending && <LoadingOutlined style={{marginRight: 5}}/>}
                                     <span style={{userSelect: "none"}}>{codeBtn.text}</span>
-                                    </GetCodeBtn>
+                                    </GetCodeBtn>*/}
+                                    <SmsCodeButton phone={phone} operateType={type === ModalModeType.REGISTER ? "signUp" : "login"} style={{height: 50}}/>
                                 </div>
                             </Form.Item>
                         }

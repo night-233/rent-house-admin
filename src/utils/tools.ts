@@ -74,7 +74,10 @@ const Tools = {
       return "ASC";
     }
     return undefined;
-  }
+  },
+   checkPhone(phone) {
+      return /^1[3456789]\d{9}$/.test(phone);
+   }
 };
 
 export default Tools;

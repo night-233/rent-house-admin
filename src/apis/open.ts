@@ -2,7 +2,7 @@ import request from '@/utils/request';
 
 const base = '/dev';
 
-export default {
+const OpenApi = {
   urls () {
     return {
       userLogin: `${base}/open/login`,
@@ -12,6 +12,9 @@ export default {
       registerPhone: `${base}/open/registryByPhone`,
       judgeNickName: `${base}/open/nickName`,
       checkPhoneExist: `${base}/open/phone?phone=`,
+      getVerifyImage: `${base}/open/verifyImage?phone=`,
+      getResetPasswordToken: `${base}/open/getResetPasswordToken`,
+      resetPasswordByToken: `${base}/open/resetPasswordByToken`,
     };
   },
   getLimits () {
@@ -45,7 +48,7 @@ export default {
     });
   },
 
-  sendMessage (data: Object) {
+  sendMessage (data: any) {
     return request({
       url: this.urls().sendMessage,
       method: 'post',
@@ -69,4 +72,47 @@ export default {
       progress: false
     });
   },
+  getVerifyImage(phone: string){
+    return request({
+      url: this.urls().getVerifyImage + phone,
+      method: 'get',
+      noJweToken: true,
+      progress: false
+    });
+  },
+  checkVerifyImage(phone: string, x: number){
+    return request({
+      url: `${base}/open/checkImageCode?phone=${phone}&x=${x}`,
+      method: 'get',
+      noJweToken: true,
+      progress: false,
+      delStatus: false
+    });
+  },
+  getResetPasswordToken(phoneNumber: string, verifyCode: string){
+    return request({
+      url: this.urls().getResetPasswordToken,
+      method: 'post',
+      noJweToken: true,
+      progress: false,
+      data: {
+        phoneNumber: phoneNumber,
+        verifyCode: verifyCode
+      }
+    });
+  },
+  resetPasswordByToken(token: string, password: number){
+    return request({
+      url: this.urls().resetPasswordByToken,
+      method: 'post',
+      noJweToken: true,
+      progress: false,
+      data: {
+        token: token,
+        password: password
+      }
+    });
+  }
 };
+
+export default OpenApi;

@@ -64,6 +64,8 @@ const HouseList = (props: HouseListProps) => {
 };
 
 const Container = styled.div`
+    min-height: 584px;
+
 `;
 
 const ListContainer = styled.div`

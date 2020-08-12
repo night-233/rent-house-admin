@@ -51,11 +51,12 @@ const Container = styled.div`
         position: fixed;
         top: 0;
         left: 0;
+        padding-left: calc(100vw - 100%);
     `
     :
-        ``
+        `
+        `
     }
-    // padding-left: calc(100vw - 100%);
     height: 60px;
     line-height: 60px;
     color: #fff;

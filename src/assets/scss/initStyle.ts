@@ -33,7 +33,7 @@ export const InitStyle = createGlobalStyle`
 		line-height: 1;
 	}
 	html, body {
-    background: #f2f3f4;
+    background: #ffffff;
     width: 100%;
     height: 100%;
     text-align: left;
