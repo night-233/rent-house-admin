@@ -10,6 +10,7 @@ import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 import {SortDirectionEnum, SortTypeEnum} from "@components/HouseSortComponent";
 import SortOrderFilter from "@views-client/home/SortOrderFilter";
+import RecentList from "@views-client/home/RecentList";
 
 
 const initSearchParam = {
@@ -90,7 +91,7 @@ const ClientHome = () => {
                                onPageChange={(page) => handleParamsChange({page: page})}
                                onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
                     />
-                    {/*<RecentList/>*/}
+                    <RecentList/>
                     <Footer/>
             </ContentContainer>
         </>

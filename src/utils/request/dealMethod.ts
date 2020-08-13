@@ -1,11 +1,6 @@
-
-import React from 'react'
 import { message } from 'antd';
 import utils from '@utils/index';
-import { createBrowserHistory } from 'history';
-
-
-const history = createBrowserHistory()
+import cookie, {TokenKey} from "../cookie";
 
 function errorCreat (msg: string) {
   const err = new Error(msg)
@@ -102,6 +97,8 @@ export function dealResError (error: any) {
   }
   if (error.response?.status === 401) {
     message.error(error.message, 1, () => {
+
+        cookie.removeCookie(TokenKey);
         window.location.href = "/login";
     })
   } else {

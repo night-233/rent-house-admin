@@ -1,35 +1,25 @@
-var storageUtil = {
-  getSession (key: string) {
-    if (typeof (Storage) !== 'undefined' || typeof key !== 'string') {
-      let value = localStorage.getItem(key);
-      try {
-        value = JSON.parse(value || '{}');
-      } catch (e) {
-
-      }
-      return value !== 'undefined' ? value : '';
-    } else {
-      return false;
+const StorageUtil = {
+  set(key: string, data: any) {
+    if (!window.localStorage || !window.JSON || !key) {
+      return;
     }
+    localStorage.setItem(key, JSON.stringify(data));
   },
-  setSession (key: string, value: any) {
-    if (typeof (Storage) !== 'undefined' || typeof key !== 'string') {
-      if (typeof value !== 'string') {
-        value = JSON.stringify(value);
-      }
-      localStorage.setItem(key, value);
-      return true;
-    } else {
-      return false;
+  get (key: string) {
+    if (!window.localStorage || !window.JSON || !key) {
+      return;
     }
+    const item = localStorage.getItem(key);
+    if (!item) {
+      return;
+    }
+    return JSON.parse(item);
   },
-  removeSession (key: string) {
-    if (typeof (Storage) !== 'undefined' || typeof key !== 'string') {
-      localStorage.removeItem(key);
-      return true;
-    } else {
-      return false;
+  remove (key: string) {
+    if (!window.localStorage || !window.JSON || !key) {
+      return;
     }
+    localStorage.removeItem(key);
   },
   clearSession () {
     if (typeof (Storage) !== 'undefined') {
@@ -40,4 +30,4 @@ var storageUtil = {
     }
   }
 };
-export default storageUtil;
+export default StorageUtil;

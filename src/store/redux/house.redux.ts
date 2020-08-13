@@ -1,6 +1,8 @@
 // 设置房屋信息
 import HouseApi from "@apis/house";
 import UserApi from "@apis/user";
+import {RequestStatus} from "@base/RequestStatus";
+import {message} from "antd";
 
 const SET_HOUSE_DATA = 'SET_HOUSE_DATA';
 // 设置房屋loading状态
@@ -53,13 +55,17 @@ export const house = (state = initState, action) =>{
     }
 };
 
-export const getHouseById = (houseId: number) => {
+export const getHouseById = (houseId: number, history) => {
     return (dispatch, getState) => {
         dispatch(setHouseLoading(true));
         return  HouseApi.getHouseById(houseId).then(res => {
-            if(res){
-                dispatch(setHouseData(res));
+            if(res.code === RequestStatus.SUCCESS){
+                dispatch(setHouseData(res.data));
                 dispatch(setHouseLoading(false));
+            }else if(res.code === 50206){
+                history.replace("/404");
+            }else{
+                message.error(res.message);
             }
         })
     }

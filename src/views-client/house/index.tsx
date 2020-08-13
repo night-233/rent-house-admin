@@ -19,6 +19,10 @@ import {getHouseById, getHouseOperateById} from "../../store/redux/house.redux";
 import FullScreenLoading from "../../components/FullScreenLoading"
 import Footer from "../layout/Footer";
 import UserApi from "@apis/user";
+import {useHistory} from "react-router";
+import StorageUtil from "@utils/storage";
+
+export const BROWSER_HISTORY_KEY = "BROWSER_HISTORY";
 
 const HouseDetail = (props) => {
 
@@ -31,8 +35,25 @@ const HouseDetail = (props) => {
 
     const dispatch = useDispatch();
 
+    const history = useHistory();
+
     useEffect(() => {
-        dispatch(getHouseById(houseId));
+        let houseIdList = StorageUtil.get(BROWSER_HISTORY_KEY);
+        if(houseIdList && houseIdList instanceof Array){
+            houseIdList.unshift(houseId);
+            const set = new Set(houseIdList);
+            houseIdList = Array.from(set.values());
+            if(houseIdList.length > 6){
+                houseIdList.pop();
+            }
+        }else{
+            houseIdList = [houseId];
+        }
+        StorageUtil.set(BROWSER_HISTORY_KEY, houseIdList);
+    }, [houseId]);
+
+    useEffect(() => {
+        dispatch(getHouseById(houseId, history));
     }, []);
 
       useEffect(() => {

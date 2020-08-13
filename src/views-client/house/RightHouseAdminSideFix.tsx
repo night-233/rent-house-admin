@@ -47,7 +47,6 @@ const RightHouseAdminSideFix = ({isSticky}) => {
                 dispatch(setLoginModalCallback(() => setReserveModalVisible(true)));
             }
     };
-    console.log(user.authed);
 
     // 预约成功
     const handleReserveSuccess = () => {

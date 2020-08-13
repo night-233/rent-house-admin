@@ -80,7 +80,8 @@ const HouseApi = {
       url: `${base}/house/${id}`,
       method: "get",
       progress: true,
-      noJweToken: true
+      noJweToken: true,
+      delStatus: false
     })
   },
   // 地图找房获取房源信息
@@ -100,6 +101,16 @@ const HouseApi = {
       noJweToken: true
     });
   },
+  findAllByIds (houseIdList) {
+    return request({
+      url: `${base}/house/houses/ids`,
+      method: 'post',
+      noJweToken: true,
+      data: {
+        houseIdList: houseIdList
+      }
+    });
+  }
 };
 
 export default HouseApi;
