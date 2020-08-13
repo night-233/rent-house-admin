@@ -32,7 +32,8 @@ const initState = {
     location: {},
     loading: true,
     star: false,
-    reserve: false
+    reserve: false,
+    suggestHouses: [],
 };
 
 export const house = (state = initState, action) =>{

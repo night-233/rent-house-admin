@@ -20,7 +20,7 @@ interface HouseListProps {
  */
 const HouseList = (props: HouseListProps) => {
 
-    const {data, page = 1, onPageChange, pageSize = 10, onPageSizeChange, listLoading} = props;
+    const {data, page = 1, onPageChange, pageSize = 10, listLoading} = props;
 
     // 强制延迟加载检查
     useEffect(() => {
@@ -44,7 +44,7 @@ const HouseList = (props: HouseListProps) => {
                     {/* 分页器*/}
                     <PaginationContainer>
                         <Pagination
-                            hideOnSinglePage={false}
+                            hideOnSinglePage={true}
                             total={data.total}
                             pageSize={pageSize}
                             current={page}
@@ -52,7 +52,7 @@ const HouseList = (props: HouseListProps) => {
                             showSizeChanger
                             showQuickJumper
                             onChange={onPageChange}
-                            onShowSizeChange={onPageSizeChange}
+                            // onShowSizeChange={onPageSizeChange}
                             showTotal={total => `共${total}条数据`}
                         />
                         {/*<Button type="primary" style={{marginLeft: "15px"}}>确认</Button>*/}

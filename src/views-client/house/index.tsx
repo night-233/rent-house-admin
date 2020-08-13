@@ -43,7 +43,7 @@ const HouseDetail = (props) => {
             houseIdList.unshift(houseId);
             const set = new Set(houseIdList);
             houseIdList = Array.from(set.values());
-            if(houseIdList.length > 6){
+            if(houseIdList.length > 3){
                 houseIdList.pop();
             }
         }else{

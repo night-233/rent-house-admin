@@ -16,7 +16,7 @@ import RecentList from "@views-client/home/RecentList";
 const initSearchParam = {
     cityEnName: "",
     page: 1,
-    pageSize: 20,
+    pageSize: 9,
     orderBy: SortTypeEnum.DEFAULT,
     sortDirection: SortDirectionEnum.DESC,
     keyword: null
@@ -88,8 +88,14 @@ const ClientHome = () => {
                                listLoading={searchLoading}
                                page={searchParams.page}
                                pageSize={searchParams.pageSize}
-                               onPageChange={(page) => handleParamsChange({page: page})}
-                               onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
+                               onPageChange={(page, pageSize) => {
+                                   window.scrollTo({
+                                       top: 0,
+                                       behavior: 'smooth',
+                                   });
+                                   handleParamsChange({page: page, pageSize: pageSize})
+                               }}
+                               // onPageSizeChange={(current, size) => handleParamsChange({pageSize: size, page: 1})}
                     />
                     <RecentList/>
                     <Footer/>
