@@ -62,8 +62,7 @@ rent-house 项目是一套模仿自如的租房系统，前端基于React+TypeSc
 
 #### 技术问答
 
-## <img src="F:\idea\rent-house\images\qrcode.jpg" alt="qrcode" style="zoom: 25%;" />
-
+## <img src="images/qrcode.jpg" alt="qrcode"  width="200" height="200"/>
 
 
 ##  天涯何处无芳草，给颗星星好不好┭┮﹏┭┮
@@ -81,13 +80,9 @@ rent-house 项目是一套模仿自如的租房系统，前端基于React+TypeSc
 ![image-20200707163051367](images/image-20200707163051367.png)
 
 
-
 ![image-20200707163359418](images/image-20200707163359418.png)
 
 ![user-center](images/user-center.jpg)
-
-!(F:\idea\rent-house\images\forget-password.jpg) ![login-page](images/login-page.png)
-
 
 ![forget-password](images/forget-password.jpg)
 
