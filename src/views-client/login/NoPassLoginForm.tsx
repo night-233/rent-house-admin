@@ -52,7 +52,7 @@ const NoPassLoginForm = (props) => {
                     </Form.Item>
 
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    <span className="span-btn">账号登录</span>
+                    <span className="span-btn" onClick={() => onSwitchMode(ModalModeType.PASSWORD_LOGIN)}>账号登录</span>
                 </div>
                 <Button type="primary" htmlType="submit" style={LoginStyle.button} loading={loading}>
                     {loading ? "登录中" : "登录"}

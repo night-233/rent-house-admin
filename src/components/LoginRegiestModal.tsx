@@ -7,6 +7,7 @@ import openApi from '@apis/open'
 import { useDispatch } from 'react-redux'
 import {loginIn} from "@/store/redux/user.redux";
 import SmsCodeButton from "@components/SmsCodeButton";
+import {Link} from "react-router-dom";
 /**
  * 登录注册模态框
  * @constructor
@@ -256,6 +257,9 @@ const LoginRegisterModal = ({type, onTypeChange, visible, onCancel, onOk}) => {
                             >
                                 <Input.Password placeholder="请输入6-16位字母与数字组合密码" size="large" style={{height: 50,  borderRadius: 0}} autoComplete="new-password"/>
                             </Form.Item>
+                        }
+                        {
+                            type === ModalModeType.PASSWORD_LOGIN &&  <Link to="/forget-password" target="_blank" style={{cursor: "pointer", color: "#51c6cf", marginBottom: 20, display: "inline-block"}}>忘记密码？</Link>
                         }
                         <Form.Item>
                             <Button block size="large" type="primary" style={{height: 50, borderRadius: 0}} htmlType="submit" loading={formButtonLoading}>

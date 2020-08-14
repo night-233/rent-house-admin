@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import HouseDropdown from "@components/HouseDropdown";
 import StorageUtil from "@utils/storage";
 
-const USER_CITY_KEY = "USER_CITY";
+export const USER_CITY_KEY = "USER_CITY";
 /**
  * Created by Administrator on 2020/7/9
  * 支持城市下拉列表

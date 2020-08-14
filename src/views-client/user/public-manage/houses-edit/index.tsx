@@ -7,7 +7,10 @@ import Loading from "@components/Loading";
 import moment from "moment";
 import {useHistory} from "react-router";
 import {RequestStatus} from "@base/RequestStatus";
-
+import {useDispatch, useSelector} from 'react-redux'
+import StorageUtil from "@utils/storage";
+import {changeCity} from "@store/redux/common.redux";
+import {USER_CITY_KEY} from "@components/SupportCityDropMenu";
 /**
  * 房屋编辑
  * Created by Administrator on 2020/8/7
@@ -19,6 +22,10 @@ const HouseEdit = (props) => {
     const [houseForm, setHouseForm] = useState();
 
     const history = useHistory();
+
+    const city = useSelector(state => state.common.city);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if(houseId){
@@ -69,6 +76,10 @@ const HouseEdit = (props) => {
                         cover: cover
                     }
                 };
+                if(city.enName !== data.city.enName){
+                    StorageUtil.set(USER_CITY_KEY, data.city.enName);
+                    dispatch(changeCity({...data.city}));
+                }
                 setHouseForm(form);
             }else{
                 message.error(res.message);

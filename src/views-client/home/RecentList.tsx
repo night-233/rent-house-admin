@@ -29,7 +29,6 @@ const RecentList = () => {
         };
         window.addEventListener("storage", handler);
         return () => {
-            console.log('最近浏览销毁');
             window.removeEventListener("storage", handler);
         }
     }, []);

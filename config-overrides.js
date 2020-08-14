@@ -4,7 +4,7 @@ const path = require('path')
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const mockIp = '10.0.5.199:13000/mock';
 const IP = 'rent-house.touchfish.top';
-// const IP = 'localhost:8080';
+//const IP = 'localhost:8080';
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {
@@ -52,6 +52,7 @@ module.exports = {
       "@base": path.resolve(__dirname, 'src/base'),
       "@components": path.resolve(__dirname, 'src/components'),
       "@store": path.resolve(__dirname, 'src/store'),
+      "@router": path.resolve(__dirname, 'src/router'),
     }),
     fixBabelImports('import', {
       libraryName: 'antd',
