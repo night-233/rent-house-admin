@@ -8,7 +8,7 @@ import {changeLoginModalType, changeLoginModalVisible, setLoginModalCallback} fr
 import { useDispatch, useSelector } from 'react-redux'
 import {ModalModeType} from "@components/LoginRegiestModal";
 import {HeartFilled} from "@ant-design/icons/lib";
-import {decreaseHouseStarNumber, increaseHouseStarNumber, setHouseStar} from "@store/redux/house.redux";
+import {decreaseHouseStarNumber, getHouseById, increaseHouseStarNumber, setHouseStar} from "@store/redux/house.redux";
 import UserApi from "@apis/user";
 import QRCode from "qrcode.react";
 import {useHistory} from "react-router";
@@ -32,7 +32,7 @@ const HouseImagePreview = () => {
 
     const [previewSwiper, setPreviewSwiper] = useState<any>(null);
 
-
+    const history = useHistory();
 
 
     useEffect(() => {

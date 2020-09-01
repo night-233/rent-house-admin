@@ -13,12 +13,13 @@ const FullScreenLoading = (props) => {
     return (
         <>
             {
-                loading ?
+                loading &&
                     <Container>
                         <Loading/>
                     </Container>
-                    :
-                    children
+            }
+            {
+                <div style={{display: loading ? "hidden" : "block"}}>{children}</div>
             }
         </>
     )

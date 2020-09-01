@@ -40,14 +40,13 @@ interface MapBounds {
   rightBottomLongitude: number,
   rightBottomLatitude: number,
 }
-const base = '/dev';
 
 const HouseApi = {
 
   // 房屋列表搜索
   getHouseList (searchData: HouseSearchForm, cancelToken?: CancelTokenSource) {
     return request({
-      url: `${base}/house/houses`,
+      url: `/house/houses`,
       method: 'post',
       data: searchData,
       cancelToken: cancelToken?.token,
@@ -58,7 +57,7 @@ const HouseApi = {
   // 房源聚合
   getMapRegions (params) {
     return request({
-      url: `${base}/house/map/${params.cityEnName}/regions`,
+      url: `/house/map/${params.cityEnName}/regions`,
       method: 'get',
       params,
       noJweToken: true
@@ -68,7 +67,7 @@ const HouseApi = {
   // 搜索提示
   getAutoComplete (prefix: string) {
     return request({
-      url: `${base}/house/search/autocomplete?prefix=` + prefix,
+      url: `/house/search/autocomplete?prefix=` + prefix,
       method: "get",
       progress: false,
       noJweToken: true
@@ -77,7 +76,7 @@ const HouseApi = {
   // 通过房源id获取房源信息
   getHouseById (id: number) {
     return request({
-      url: `${base}/house/${id}`,
+      url: `/house/${id}`,
       method: "get",
       progress: true,
       noJweToken: true,
@@ -87,7 +86,7 @@ const HouseApi = {
   // 地图找房获取房源信息
   mapSearchHouseList (searchData: MapHouseSearchForm) {
     return request({
-      url: `${base}/house/map/city/houses`,
+      url: `/house/map/city/houses`,
       method: 'post',
       data: searchData,
       noJweToken: true
@@ -96,14 +95,14 @@ const HouseApi = {
   // 城市房源聚合
   mapCityHouseAgg (cityEnName: string) {
     return request({
-      url: `${base}/house/map/${cityEnName}/regions`,
+      url: `/house/map/${cityEnName}/regions`,
       method: 'get',
       noJweToken: true
     });
   },
   findAllByIds (houseIdList) {
     return request({
-      url: `${base}/house/houses/ids`,
+      url: `/house/houses/ids`,
       method: 'post',
       noJweToken: true,
       data: {

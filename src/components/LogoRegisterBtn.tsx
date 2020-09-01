@@ -42,6 +42,7 @@ const LoginRegisterBtn = () => {
     const handleLoginSuccess = () => {
         getClientUser();
         setLoginRegisterModalVisible(false);
+        debugger
         loginSuccessCallback && loginSuccessCallback();
     };
 

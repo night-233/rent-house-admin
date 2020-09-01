@@ -10,6 +10,8 @@ import {
     changeLoginModalVisible,
     setLoginModalCallback
 } from "@store/redux/common.redux";
+import {getHouseById} from "@store/redux/house.redux";
+import {useHistory} from "react-router";
 /**
  *  右侧房屋联系人
  */
@@ -29,6 +31,7 @@ const RightHouseAdminSideFix = ({isSticky}) => {
 
     const [reserveModalVisible, setReserveModalVisible] = useState(false);
 
+    const history = useHistory();
 
     // 处理预约看房点击
     const handleHouseClick = () => {
@@ -44,7 +47,6 @@ const RightHouseAdminSideFix = ({isSticky}) => {
             }else{
                 dispatch(changeLoginModalType(ModalModeType.CODE_LOGIN));
                 dispatch(changeLoginModalVisible(true));
-                dispatch(setLoginModalCallback(() => setReserveModalVisible(true)));
             }
     };
 

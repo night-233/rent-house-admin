@@ -61,6 +61,7 @@ const Container = styled.div`
     line-height: 60px;
     color: #fff;
     width: 100%;
+    min-width: 1152px;
     z-index: 11;
     -webkit-transition: none!important;
     transition: none!important;

@@ -1,24 +1,22 @@
 import request, {requestWithoutDealStatus} from '@/utils/request';
 
-const base = '/dev';
 
 const UserApi = {
   urls (key = '') {
     return {
-      getUserInfo: `${base}/user`,
-      test: `${base}/address/support/cities`,
-      uploadUserAvatar: `${base}/user/avatar/qiniu/${key}`,
-      postImage: `${base}/user/avatar/img`,
-      removeUserLogo: `${base}/user/avatar`,
-      updateUserInfo: `${base}/user/basicInfo`,
-      uploadPhoto: `${base}/user/upload/photo`,
-      starHouse: `${base}/user/house/${key}/star`,
-      cancelStarHouse: `${base}/user/house/${key}/star`,
-      getHouseOperate: `${base}/user/house/${key}/operate`,
-      getUserStarHouseList: `${base}/user/house/star/list`,
-      reserveHouse: `${base}/user/house/subscribe`,
-      getReserveHouseList: `${base}/user/house/subscribes`,
-      cancelReserveHouse: `${base}/user/house/${key}/subscribe`,
+      getUserInfo: `/user`,
+      test: `/address/support/cities`,
+      uploadUserAvatar: `/user/avatar/qiniu/${key}`,
+      postImage: `/user/avatar/img`,
+      removeUserLogo: `/user/avatar`,
+      updateUserInfo: `/user/basicInfo`,
+      uploadPhoto: `/user/upload/photo`,
+      starHouse: `/user/house/${key}/star`,
+      cancelStarHouse: `/user/house/${key}/star`,
+      getUserStarHouseList: `/user/house/star/list`,
+      reserveHouse: `/user/house/subscribe`,
+      getReserveHouseList: `/user/house/subscribes`,
+      cancelReserveHouse: `/user/house/${key}/subscribe`,
     };
   },
   updateUserInfo (data: Object) {
@@ -80,13 +78,6 @@ const UserApi = {
       method: "delete"
     })
   },
-  // 判断当前用户是否了指定房源
-  getHouseOperate (houseId){
-    return request({
-      url: this.urls(houseId).getHouseOperate,
-      method: "get"
-    })
-  },
   // 获取当前用户收藏的房源列表
   getUserStarHouseList (data){
     return request({
@@ -128,5 +119,6 @@ const UserApi = {
       data: form
     });
   },
+
 };
 export default UserApi;
