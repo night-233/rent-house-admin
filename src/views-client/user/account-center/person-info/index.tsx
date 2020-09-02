@@ -83,7 +83,7 @@ const PersonInfo = () => {
                 nickName: stateUser.nickName,
                 introduction: stateUser.introduction,
             }));
-        }, "修改信息失败", )
+        }, "修改信息失败", setFormLoading)
     };
 
     return (
@@ -151,7 +151,7 @@ const PersonInfo = () => {
                 <Col span={2} className="col-left">
                 </Col>
                 <Col className="col-right">
-                    <Button type="primary" style={{height: 40, width: 88, borderRadius: 5}} onClick={handleSave}>
+                    <Button type="primary" style={{height: 40, width: 88, borderRadius: 5}} onClick={handleSave} loading={formLoading}>
                         {formLoading ? "提交中" : " 保存"}
                     </Button>
                 </Col>
