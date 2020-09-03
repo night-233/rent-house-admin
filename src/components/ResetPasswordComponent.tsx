@@ -152,7 +152,7 @@ const ResetPasswordComponent = (props) => {
                         </div>
                         <div className="right-input">
                             {
-                                phone ? <span>{phone}</span>
+                                phone ? <span style={{height: 40, lineHeight: "40px"}}>{phone}</span>
                                     :
                                     <Input style={inputStyle} placeholder="请输入手机号" value={inputPhone} onChange={e => setInputPhone(e.target.value)}/>
                             }

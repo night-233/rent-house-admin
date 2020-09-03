@@ -17,7 +17,7 @@ const renderRoutes = (routes, authPath = '/login', switchProps = {}, extraProps 
           }
           const token = cookie.getCookie('Authorization') || false;
           if (!route.requiresAuth || token || route.path === authPath) {
-            return <route.component {...props} {...extraProps} route={route} />
+            return <route.component {...props} {...extraProps} route={route} {...route.props} />
           }
           return <Login/>
         }}

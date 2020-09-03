@@ -65,6 +65,7 @@ export const getHouseById = (houseId: number, history) => {
             }else if(res.code === 50206){
                 history.replace("/404");
             }else{
+                history.replace("/500");
                 message.error(res.message);
             }
         })
