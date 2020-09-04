@@ -62,21 +62,20 @@ const HousePublishForm = (props) => {
     const [inputRefArray, setRefArray] = useState<any>([]);
 
     useEffect(() => {
-        if(initData){
-            if (initData) {
-                form.setFieldsValue(initData);
-                if (initData.city) {
-                    getSupportRegions(initData.city);
-                    getSupportSubways(initData.city);
-                }
-                if (initData.subway) {
-                    getSupportSubwayStations(initData.subway);
-                    setSubwayStationDisable(false);
-                }
-                if(initData.subwayStation){
-                    setToSubwayDistanceDisable(false);
-                }
+        if (initData) {
+            form.setFieldsValue(initData);
+            if (initData.city) {
+                getSupportRegions(initData.city);
+                getSupportSubways(initData.city);
             }
+            if (initData.subway) {
+                getSupportSubwayStations(initData.subway);
+                setSubwayStationDisable(false);
+            }
+            if(initData.subwayStation){
+                setToSubwayDistanceDisable(false);
+            }
+            setDescriptionCount(initData.description?.length || 0)
         }
     }, [initData]);
 
