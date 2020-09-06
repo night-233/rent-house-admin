@@ -3,8 +3,8 @@ const path = require('path')
 
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const mockIp = '10.0.5.199:13000/mock';
-const IP = 'rent-house.touchfish.top';
-//const IP = 'localhost:8080';
+// const IP = 'rent-house.touchfish.top';
+const IP = 'localhost:8080';
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {
@@ -14,18 +14,18 @@ const addProxy = () => (configFunction) => {
       secure: true, // 如果是https接口，需要配置这个参数
       changeOrigin: true
     },
-    '/dev': {
+    '/api/baiduApi': {
+          target: `http://api.map.baidu.com/`, // 接口域名
+          pathRewrite: { '^/api/baiduApi': '/' },
+          secure: false, // 如果是https接口，需要配置这个参数
+          changeOrigin: true
+    },
+    '/api': {
       target: `http://${IP}/`, // 接口域名
-      pathRewrite: { '^/dev': '/' },
+      pathRewrite: { '^/api': '/' },
       secure: false, // 如果是https接口，需要配置这个参数
       changeOrigin: true
     },
-     '/baiduApi': {
-        target: `http://api.map.baidu.com/`, // 接口域名
-         pathRewrite: { '^/baiduApi': '/' },
-         secure: false, // 如果是https接口，需要配置这个参数
-         changeOrigin: true
-    }
   };
 
   return configFunction;

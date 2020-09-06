@@ -1,6 +1,5 @@
 // 设置房屋信息
 import HouseApi from "@apis/house";
-import UserApi from "@apis/user";
 import {RequestStatus} from "@base/RequestStatus";
 import {message} from "antd";
 
@@ -66,18 +65,8 @@ export const getHouseById = (houseId: number, history) => {
             }else if(res.code === 50206){
                 history.replace("/404");
             }else{
+                history.replace("/500");
                 message.error(res.message);
-            }
-        })
-    }
-};
-
-export const getHouseOperateById = (houseId: number) => {
-    return (dispatch, getState) => {
-        return  UserApi.getHouseOperate(houseId).then(res => {
-            if(res){
-               dispatch(setHouseStar(res.star));
-               dispatch(setHouseReserve(res.reserve));
             }
         })
     }

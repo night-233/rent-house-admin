@@ -3,7 +3,7 @@ import ClientRoutes from "./ClientRoutes";
 import UserRoutes from "./UserRoutes";
 
 const Login = lazy(() => import("../views-client/login"));
-const NotFound = lazy(() => import("../views-client/error/NotFound"));
+const ErrorPage = lazy(() => import("../views-client/error/ErrorPage"));
 const ForgetPassword = lazy(() => import("@/views-client/forget-password"));
 
 // 公用页面，不需要权限验证的
@@ -19,7 +19,14 @@ let constantRoutes = [
   },
   {
     path: "/404",
-    component: NotFound
+    component: ErrorPage
+  },
+  {
+    path: "/500",
+    component: ErrorPage,
+    props: {
+      code: 500
+    }
   },
   {
     path: "/forget-password",

@@ -1,6 +1,5 @@
 import request from '@/utils/request';
 
-const base = '/dev';
 /**
  * 地区与地铁接口
  */
@@ -10,7 +9,7 @@ const AddressApi = {
      */
     getSupportCities(){
         return request({
-            url:  `${base}/address/support/cities`,
+            url:  `/address/support/cities`,
             method: 'get',
             noJweToken: true
         });
@@ -20,7 +19,7 @@ const AddressApi = {
      */
     getSupportRegions(cityEnName:string){
         return request({
-            url:  `${base}/address/support/regions/${cityEnName}`,
+            url:  `/address/support/regions/${cityEnName}`,
             method: 'get',
             noJweToken: true
         });
@@ -30,7 +29,7 @@ const AddressApi = {
      */
     getSupportSubways(cityEnName:string){
         return request({
-            url:  `${base}/address/support/subways/${cityEnName}`,
+            url:  `/address/support/subways/${cityEnName}`,
             method: 'get',
             noJweToken: true
         });
@@ -40,7 +39,7 @@ const AddressApi = {
      */
     getSupportSubwayStations(subwayLineId:string){
         return request({
-            url:  `${base}/address/support/subwayStations/${subwayLineId}`,
+            url:  `/address/support/subwayStations/${subwayLineId}`,
             method: 'get',
             noJweToken: true
         });

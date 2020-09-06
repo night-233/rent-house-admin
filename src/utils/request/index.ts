@@ -5,10 +5,9 @@ import 'nprogress/nprogress.css';
 
 NProgress.configure({ showSpinner: false });
 
-axios.create({
-  baseURL: "",
-  timeout: 5000
-})
+axios.defaults.withCredentials = false;
+axios.defaults.timeout = 5000;
+axios.defaults.baseURL = "/api";
 
 interface Response {
   code: number,

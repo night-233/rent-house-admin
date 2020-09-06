@@ -1,20 +1,22 @@
 import request from '@/utils/request';
+import utils from "@utils";
+import {TokenKey} from "@utils/cookie";
 
-const base = '/dev';
 
 const OpenApi = {
-  urls () {
+  urls (key = '') {
     return {
-      userLogin: `${base}/open/login`,
-      getLimits: `${base}/open/limits`,
-      sendMessage: `${base}/open/sendSmsToPhone`,
-      loginInNoPwd: `${base}/open/noPassLogin`,
-      registerPhone: `${base}/open/registryByPhone`,
-      judgeNickName: `${base}/open/nickName`,
-      checkPhoneExist: `${base}/open/phone?phone=`,
-      getVerifyImage: `${base}/open/verifyImage?phone=`,
-      getResetPasswordToken: `${base}/open/getResetPasswordToken`,
-      resetPasswordByToken: `${base}/open/resetPasswordByToken`,
+      userLogin: `/open/login`,
+      getLimits: `/open/limits`,
+      sendMessage: `/open/sendSmsToPhone`,
+      loginInNoPwd: `/open/noPassLogin`,
+      registerPhone: `/open/registryByPhone`,
+      judgeNickName: `/open/nickName`,
+      checkPhoneExist: `/open/phone?phone=`,
+      getVerifyImage: `/open/verifyImage?phone=`,
+      getResetPasswordToken: `/open/getResetPasswordToken`,
+      resetPasswordByToken: `/open/resetPasswordByToken`,
+      logout: `/user/logout/${key}?token=${key}`,
     };
   },
   getLimits () {
@@ -82,7 +84,7 @@ const OpenApi = {
   },
   checkVerifyImage(phone: string, x: number){
     return request({
-      url: `${base}/open/checkImageCode?phone=${phone}&x=${x}`,
+      url: `/open/checkImageCode?phone=${phone}&x=${x}`,
       method: 'get',
       noJweToken: true,
       progress: false,
@@ -112,7 +114,15 @@ const OpenApi = {
         password: password
       }
     });
-  }
+  },
+  // 登出用户
+  logout (token){
+    return request({
+      url: this.urls(token).logout,
+      noJweToken: true,
+      method: 'delete',
+    });
+  },
 };
 
 export default OpenApi;

@@ -49,6 +49,8 @@ const SlideImageVerify = ({phone, onSuccess, visible, defaultActive = false}) =>
          if(!visible){
            setActive(false);
            setSuccess(false);
+         }else{
+             setActive(defaultActive);
          }
      }, [visible]);
 
@@ -135,15 +137,22 @@ const SlideImageVerify = ({phone, onSuccess, visible, defaultActive = false}) =>
                 <div className="slide-verify-container">
                         <div className="image-container">
                             <Spin spinning={loading}>
-                                <img alt="" src={"data:image/png;base64," + image.backImage} className="back-image"/>
-                                <img alt="" src={"data:image/png;base64," + image.slideImage} className={"slide-image " + (error && "img-error")}
-                                     style={{top: image.y, left: left - 5}}
-                                     onMouseDown={handleMoseDown}
-                                     onMouseUp={handleMouseUp}
-                                     draggable="false"
-                                />
-                                <ReloadOutlined className="reload-btn" onClick={() => getVerifyCode(setImage)}/>
+                                {
+                                    !image.backImage && loading ?
+                                        <div style={{height: 150, textAlign: "center", lineHeight: "150px"}}>图片加载中</div>
+                                        :
+                                        <>
+                                            <img alt="" src={"data:image/png;base64," + image.backImage} className="back-image"/>
+                                            <img alt="" src={"data:image/png;base64," + image.slideImage} className={"slide-image " + (error && "img-error")}
+                                                 style={{top: image.y, left: left - 5}}
+                                                 onMouseDown={handleMoseDown}
+                                                 onMouseUp={handleMouseUp}
+                                                 draggable="false"
+                                            />
+                                        </>
+                                }
                             </Spin>
+                            <ReloadOutlined className="reload-btn" onClick={() => getVerifyCode(setImage)}/>
                         </div>
                     <div className={"slide-container"}>
                         <div className={"drag-area " + (error && "area-error")} style={{width: left}}/>
@@ -195,12 +204,21 @@ const Container = styled.div`
       width: 300px;
       height: 150px;
       z-index: 99;
+      overflow: hidden;
       .slide-image{
           position: absolute;
           left: -5px;
           cursor: pointer;
           margin-bottom: 15px;
       }
+       .back-image{
+          width: 300px;
+          height: 150px;
+       } 
+       .slide-image {
+           height: 50px;
+           width: 50px; 
+       }
    }
    .reload-btn{
         width: 30px;
@@ -228,7 +246,7 @@ const Container = styled.div`
         height: 40px;
         line-height: 40px;
         box-sizing: content-box;
-        text-align: center;
+        text-align: center;          
         .slide-button{
             position: absolute;
             width: 40px;

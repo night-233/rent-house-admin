@@ -1,6 +1,7 @@
 import userApi from '@/apis/user'
 import openApi from '@/apis/open'
-import cookie from '@utils/cookie'
+import cookie, {TokenKey} from '@utils/cookie'
+import utils from "@utils";
 
 const LOGIN_IN = 'LOGIN_IN'
 const LOGIN_OUT = 'LOGIN_OUT'
@@ -42,12 +43,14 @@ export function loginIn (payload, token) {
 }
 
 export async function loginOut () {
-  cookie.removeCookie()
+  cookie.removeCookie();
   return { type: LOGIN_OUT }
 }
 
 export function logout() {
-  cookie.removeCookie();
+  const token = utils.cookie.getCookie(TokenKey);
+  openApi.logout(token);
+  utils.cookie.removeCookie();
   return { type: LOGIN_OUT }
 }
 

@@ -18,18 +18,16 @@ function errorLog (err: any, duration: number = 1, fn = () => { }) {
 // 处理请求拦截器 data, 并加上验证 headers
 export function dealAxiosRequestConfig (config) {
   const preConfig = Object.assign({}, config);
-  if (!preConfig.noJweToken) {
-    const token = utils.cookie.getCookie('Authorization');
+    const token = utils.cookie.getCookie(TokenKey);
     if (token) {
       preConfig.headers = {
         ...preConfig.headers,
         Authorization: `Bearer ${token}`
       };
-    } else {
+    } else if(!preConfig.noJweToken){
       return Promise.reject(new Error('身份认证过期'));
     }
-  }
-  delete preConfig.noJweToken
+  delete preConfig.noJweToken;
   return preConfig;
 }
 
