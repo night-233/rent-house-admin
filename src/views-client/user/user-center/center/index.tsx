@@ -41,10 +41,10 @@ const UserCenter= () => {
                     </div>
                     <div className="information">
                         <p className="p1">下午好，
-                            <Link to="/user/info"> <span className="name">{userInfo.name}</span></Link>
+                            <Link to="/user/account/person"> <span className="name">{userInfo.name}</span></Link>
                         </p>
                         <p style={{marginTop: 15, lineHeight: "14px"}}>
-                            <Link to="/user/info"> <span style={{fontSize: "14px", color: "#999999"}}>修改个人资料</span></Link>
+                            <Link to="/user/account/person"> <span style={{fontSize: "14px", color: "#999999"}}>修改个人资料</span></Link>
                         </p>
                         <p className="bind">
                     <span className="active" style={{marginRight: 20}}>

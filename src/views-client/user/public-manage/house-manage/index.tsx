@@ -240,7 +240,7 @@ const HouseInfo = ({data}) => {
             <div className="info">
                 <Link to={"/client/house/" + data.id} target="_blank">
                     <p className="title">
-                        {data.title}哈哈哈的发挥是单号发哈啊但是发射点发生
+                        {data.title}
                     </p>
                 </Link>
                 <p>{data.floor}/{data.totalFloor}层 | {data.area}平方米 | { data.houseDetail?.rentWay === 0 ? "合租" : "整租"}</p>
