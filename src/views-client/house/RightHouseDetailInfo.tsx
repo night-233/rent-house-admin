@@ -41,9 +41,7 @@ const RightHouseDetailInfo = () => {
             <div className="detail">
                 <div className="detail-block">
                     <div className="name">地址</div>
-                    <Popover content={houseInfo?.houseDetail?.traffic}>
-
-
+                    <Popover content={houseInfo?.houseDetail?.address}>
                         <div className="value">
                             {houseInfo?.houseDetail?.address}
                         </div>
