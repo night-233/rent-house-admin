@@ -1,19 +1,14 @@
-const { override, addWebpackAlias, fixBabelImports, addLessLoader, addDecoratorsLegacy, overrideDevServer, addWebpackExternals  } = require('customize-cra');
+const { override, addWebpackAlias, fixBabelImports, addLessLoader, addDecoratorsLegacy, overrideDevServer, addWebpackExternals, addWebpackPlugin  } = require('customize-cra');
 const path = require('path')
 
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const mockIp = '10.0.5.199:13000/mock';
-// const IP = 'rent-house.touchfish.top';
-const IP = 'localhost:8080';
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
+const ProgressBarPlugin = require("progress-bar-webpack-plugin");
+ const IP = 'rent-house.touchfish.top';
+//const IP = 'localhost:8080';
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {
-    '/mock': {
-      target: `http://${mockIp}/`, // 接口域名
-      pathRewrite: { '^/mock': '/11' },
-      secure: true, // 如果是https接口，需要配置这个参数
-      changeOrigin: true
-    },
     '/api/baiduApi': {
           target: `http://api.map.baidu.com/`, // 接口域名
           pathRewrite: { '^/api/baiduApi': '/' },
@@ -35,6 +30,22 @@ const addProxy = () => (configFunction) => {
 const addAnalyzer = () => config => {
     if (process.env.ANALYZER) {
         config.plugins.push(new BundleAnalyzerPlugin());
+    }
+    return config;
+};
+const isEnvProduction = process.env.NODE_ENV === "production";
+const addCompression = () => config => {
+    if (isEnvProduction) {
+        config.plugins.push(
+            // gzip压缩
+            new CompressionWebpackPlugin({
+                test: /\.(css|js)$/,
+                // 只处理比1kb大的资源
+                threshold: 1024,
+                // 只处理压缩率低于90%的文件
+                minRatio: 0.9
+            })
+        );
     }
 
     return config;
@@ -60,7 +71,6 @@ module.exports = {
       style: true
     }),
     addDecoratorsLegacy(),
-
     addLessLoader({
         javascriptEnabled: true,
         //下面这行很特殊，这里是更改主题的关键，这里我只更改了主色，当然还可以更改其他的，下面会详细写出。
@@ -84,10 +94,15 @@ module.exports = {
     addWebpackExternals({
         'BMap': 'BMap',
         'BMapLib':'BMapLib'
-    })
-  ),
+    }),
+    addAnalyzer(),
+    addCompression(),
+    addWebpackPlugin(
+          // 终端进度条显示
+          new ProgressBarPlugin()
+    ),
+),
   devServer: overrideDevServer(
     addProxy(),
-    addAnalyzer()
   )
-}
+};

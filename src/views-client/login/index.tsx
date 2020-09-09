@@ -9,7 +9,6 @@ import LoginForm from "@views-client/login/LoginForm";
 import NoPassLoginForm from "@views-client/login/NoPassLoginForm";
 import RegisterForm from "@views-client/login/RegisterForm";
 import {ModalModeType} from "@components/LoginRegiestModal";
-import {message} from "antd";
 
 /**
  * 登录页
@@ -34,6 +33,7 @@ const Login = () => {
             <Scrollbars>
                 <LoginHead/>
                 <div className="content">
+                    <img src="http://qiniu.touchfish.top/login-background.jpg" alt="" width="100%" height="100%" style={{position: "absolute"}} onError={(e:any) => {e.target.src=LoginBackJpg;}}/>
                     <div className="form-container">
                         <div className="form-modal">
                             {
@@ -78,9 +78,8 @@ const Container = styled.div`
     width: 100%;
     background: #FFFFFF;
     .content{
+        position: relative;
         height: 580px;
-        background: url(${LoginBackJpg}) 50% 50% no-repeat;
-        background-size: 100% 100%;
         .form-container{
             position: relative;
             width: 1200px;

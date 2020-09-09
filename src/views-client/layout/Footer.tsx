@@ -1,11 +1,10 @@
 import React, {useEffect} from "react";
 import styled from "styled-components";
-import QQCodePng from "@assets/img/qq-code.png";
 import WeChatCodePng from "@assets/img/wechat-code.png";
 import WeChatCodeCielPng from "@assets/img/wechat-code-ciel.png";
 import Swiper from "swiper"
 import "swiper/css/swiper.css"
-import LogoPng from "@assets/img/logo-user.png";
+import LogoPng from "@assets/img/logo.png";
 const Footer = () => {
 
     useEffect(() => {
@@ -46,11 +45,11 @@ const Footer = () => {
                     </div>
                     <div className="right-code">
                         <div className="img">
-                            <img src={WeChatCodeCielPng} alt="" width={100} height={100}/>
+                            <img src="http://qiniu.touchfish.top/wechat-code-ciel.png" onError={(e:any) => {e.target.src=WeChatCodeCielPng; e.target.onerror = null;}} />
                             <p>前端单身小姐姐</p>
                         </div>
                         <div className="img">
-                            <img src={WeChatCodePng} alt="" width={100} height={100}/>
+                            <img src="http://qiniu.touchfish.top/wechat-code.png" onError={(e:any) => {e.target.src=WeChatCodePng; e.target.onerror = null;}} />
                             <p>后端单身抠脚大汉</p>
                         </div>
 
@@ -139,6 +138,10 @@ const Container = styled.div`
                 width: 300px;
                 flex-direction: row-reverse;
                 .img{
+                    img{
+                        width: 100px;
+                        height: 100px;
+                    }
                     text-align: center;
                     margin-left: 20px;
                 }
