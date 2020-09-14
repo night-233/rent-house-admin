@@ -1,5 +1,4 @@
 //reducer.js
-// import { combineReducers } from 'redux-immutable';
 import { combineReducers } from 'redux-immer';
 import { user } from './redux/user.redux';
 import { common } from './redux/common.redux';
