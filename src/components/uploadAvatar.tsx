@@ -79,7 +79,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
     <>
       <Style>
         <div className='img-border global-flex-center'>
-          {!url && <TextAvatar name={name || 'admin'} avatar={url} width="64"></TextAvatar>}
+          {!url && <TextAvatar name={name || 'admin'} avatar={url} width="64"/>}
           <Upload
             customRequest={handleUpload}
             onRemove={handleRemove}
@@ -88,7 +88,7 @@ const UploadImg = ({ name, url, callback, limits }) => {
             listType="picture-card"
           >
             {
-              <i className="icon iconfont iconbianji"></i>
+              <i className="icon iconfont iconbianji"/>
             }
           </Upload>
         </div>

@@ -4,8 +4,8 @@ const path = require('path')
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const ProgressBarPlugin = require("progress-bar-webpack-plugin");
- const IP = 'rent-house.touchfish.top';
-//const IP = 'localhost:8080';
+ // const IP = 'rent-house.touchfish.top';
+const IP = 'localhost:8080';
 
 const addProxy = () => (configFunction) => {
   configFunction.proxy = {

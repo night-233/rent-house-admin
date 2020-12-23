@@ -124,35 +124,37 @@ const PictureUploader = (props) => {
       <UploadHintContainer>{hint || "请上传清晰、实拍的室内图片，请不要在图片上添加文字、数字、网址等内容，请勿上传名片、二维码、自拍照、风景照等与房源无关的图片，最多上传12张，每张最大10M"}</UploadHintContainer>
       <div className='global-center'>
         <FlipMove style={{ display: "flex", flexWrap: "wrap" }}>
-          {
-            value.imageList.map((file, index) => {
-              return (
-                <div key={file.uid} className='img-file-item'>
-                  <div className='img-wrap'>
-                    <img className='img-file' src={file.url || file.preview} alt="" />
-                    <div className='img-hover'>
-                      <span onClick={() => handlePreview(file)}><EyeOutlined className="thumbnail-icon" title="预览" /></span>
-                      <span onClick={() => handleRemove(file.uid)}><DeleteOutlined className="thumbnail-icon" title="删除" /></span>
+          <>
+            {
+              value.imageList.map((file, index) => {
+                return (
+                  <div key={file.uid} className='img-file-item'>
+                    <div className='img-wrap'>
+                      <img className='img-file' src={file.url || file.preview} alt="" />
+                      <div className='img-hover'>
+                        <span onClick={() => handlePreview(file)}><EyeOutlined className="thumbnail-icon" title="预览" /></span>
+                        <span onClick={() => handleRemove(file.uid)}><DeleteOutlined className="thumbnail-icon" title="删除" /></span>
+                      </div>
+                      {showCover && file.uid === value.cover && <div className='img-cover'>{coverProps.coverName}</div>}
                     </div>
-                    {showCover && file.uid === value.cover && <div className='img-cover'>{coverProps.coverName}</div>}
                   </div>
-                </div>
-              )
-            })
-          }
-          <Upload
-            style={{ display: "inline-block" }}
-            listType="picture-card"
-            fileList={value.imageList}
-            multiple={true}
-            showUploadList={false}
-            onPreview={handlePreview}
-            beforeUpload={(file) => beforeUpload(file, limits)}
-            onChange={handleFileChange}
-            customRequest={handleUpload}
-          >
-            {value.imageList.length >= maxNumber ? null : uploadButton}
-          </Upload>
+                )
+              })
+            }
+            <Upload
+              style={{ display: "inline-block" }}
+              listType="picture-card"
+              fileList={value.imageList}
+              multiple={true}
+              showUploadList={false}
+              onPreview={handlePreview}
+              beforeUpload={(file) => beforeUpload(file, limits)}
+              onChange={handleFileChange}
+              customRequest={handleUpload}
+            >
+              {value.imageList.length >= maxNumber ? null : uploadButton}
+            </Upload>
+          </>
         </FlipMove>
       </div>
       <Modal
